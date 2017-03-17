@@ -1,0 +1,12 @@
+.rvmrc
+.nvmrc
+.gemset
+.tmuxrc
+*.dump
+project_data/
+.ruby-version
+.ruby-gemset
+.autoenv.zsh
+node_modules/
+.env
+.eslintrc.*

@@ -1,0 +1,23 @@
+[user]
+	name = Diego Mónaco
+	email = dfmonaco@gmail.com
+[color]
+	status = auto
+	branch = auto
+	diff   = auto
+	ui = true
+[merge]
+	tool = meld
+[diff]
+	tool = meld
+[alias]
+	lg = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+
+
+	lg1 = log --pretty=oneline --abbrev-commit --decorate --date=relative
+[core]
+	excludesfile = /home/diego/.gitignore_global
+	editor = vim
+[push]
+	default = simple
+
