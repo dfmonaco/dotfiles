@@ -1,0 +1,12 @@
+keysym h = h H Left
+keysym j = j J Down
+keysym k = k K Up
+keysym l = l L Right
+
+keysym  a = a A aacute Aacute
+keysym  e = e E eacute Eacute
+keysym  u = u U uacute Uacute
+keysym  i = i I iacute Iacute
+keysym  n = n N ntilde Ntilde
+
+keysym Super_L = Mode_switch
