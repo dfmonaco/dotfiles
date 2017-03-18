@@ -7,7 +7,7 @@
 ########## Variables
 
 cwd=$(pwd)
-files=".ackrc .bash_profile .bashrc .gemrc .gitconfig .gitignore_global .irbrc .pryrc .railsrc .tmux.conf .vimrc .zshrc"
+files=".ackrc .bash_profile .bashrc .gemrc .gitconfig .gitignore_global .irbrc .pryrc .railsrc .tmux.conf .vimrc .zshrc .xmodmaprc .xinitrc"
 
 ##########
 
