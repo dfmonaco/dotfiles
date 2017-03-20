@@ -9,4 +9,7 @@ keysym  u = u U uacute Uacute
 keysym  i = i I iacute Iacute
 keysym  n = n N ntilde Ntilde
 
-keysym Super_L = Mode_switch
+clear lock
+
+keysym Caps_Lock = Mode_switch
+
