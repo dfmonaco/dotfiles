@@ -3,6 +3,9 @@ keysym j = j J Down
 keysym k = k K Up
 keysym l = l L Right
 
+keysym m = m M Prior
+keysym period = period greater Next
+
 keysym  a = a A aacute Aacute
 keysym  e = e E eacute Eacute
 keysym  i = i I iacute Iacute
@@ -13,4 +16,3 @@ keysym  n = n N ntilde Ntilde
 clear lock
 
 keysym Caps_Lock = Mode_switch
-

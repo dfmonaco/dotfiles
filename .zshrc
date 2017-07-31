@@ -51,6 +51,9 @@ alias -g rsnet='1256@usw-s001.rsync.net'
 alias po='systemctl poweroff'
 alias re='systemctl reboot'
 
+alias wxp='vboxmanage startvm "wxp"'
+alias wxpoff='vboxmanage controlvm "wxp" savestate'
+
 # Open new terminal on same directory
 if [[ $TERM == xterm-termite ]]; then
   . /etc/profile.d/vte.sh

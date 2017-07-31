@@ -28,9 +28,12 @@ Plug 'nsf/gocode', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
 Plug 'slim-template/vim-slim'
 
-
 " Syntax definitions
 Plug 'sheerun/vim-polyglot'
+Plug 'pangloss/vim-javascript'
+" Plug 'mxw/vim-jsx'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'mattn/emmet-vim'
 
 " Color schemes
 " Plug 'altercation/vim-colors-solarized'
@@ -461,6 +464,8 @@ au BufNewFile,BufRead *.less set filetype=less
 
 au BufNewFile,BufRead *.coffee set filetype=coffee
 
+au BufNewFile,BufRead *.axlsx set filetype=ruby
+
 au BufNewFile,BufRead {Gemfile,Rakefile,Thorfile,Guardfile,config.ru,.railsrc,.irbrc} set filetype=ruby
 "  ---------------------------------------------------------------------------
 "  Tags
@@ -563,3 +568,18 @@ let g:syntastic_javascript_checkers = ['eslint']
 "  Reload Chrome
 "  ---------------------------------------------------------------------------
 map <Leader>r :!/home/diego/.scripts/reload_chrome.sh<CR>
+
+"  ---------------------------------------------------------------------------
+"  Javascript
+"  -------------
+"
+let g:jsx_ext_required = 0 " Allow JSX in normal JS files
+
+"  ---------------------------------------------------------------------------
+"  Emmet
+"  -------------
+"
+
+let g:user_emmet_leader_key='<C-J>'
+
+let g:user_emmet_settings={'javascript.jsx': {'extends':'jsx,html'}}
