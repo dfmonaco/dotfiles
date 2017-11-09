@@ -11,10 +11,19 @@
 [diff]
 	tool = meld
 [alias]
-	lg = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
-
-
 	lg1 = log --pretty=oneline --abbrev-commit --decorate --date=relative
+
+  mm = "!f() { git merge $1 --no-ff; git branch -d $1; }; f"
+  s  = status
+  a  = add .
+	l  = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  c  = commit -v
+  i  = add -i
+  d  = diff
+  ds = diff --staged
+  co = checkout
+  cob = checkout -b
+
 [core]
 	excludesfile = /home/diego/.gitignore_global
 	editor = vim
