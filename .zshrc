@@ -72,3 +72,5 @@ SPACESHIP_RUBY_SYMBOL='>'
 export PATH="$PATH:$HOME/.rvm/bin"
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

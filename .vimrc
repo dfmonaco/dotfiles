@@ -14,7 +14,10 @@ Plug 'tpope/vim-eunuch'
 Plug 'benmills/vimux'
 Plug 'janko-m/vim-test'
 Plug 'ervandew/supertab'
-Plug 'kien/ctrlp.vim'
+" Plug 'kien/ctrlp.vim'
+" PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
+Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 Plug 'rking/ag.vim'
@@ -277,8 +280,8 @@ map <C-v> "+gP<CR>
 vmap <C-c> "+y
 
 " quickfix
-map N :cn<CR>
-map P :cp<CR>
+map J :cn<CR>
+map K :cp<CR>
 
 "  ---------------------------------------------------------------------------
 "  Function Keys
@@ -379,9 +382,13 @@ autocmd FileType ruby imap <buffer> <F8> <Plug>(seeing_is_believing-run)
 " vim-slime
 " let g:slime_target = "tmux"
 
+" fzf
+map <leader>f :GFiles<cr>
+map <leader>b :Buffers<cr>
+
 " ctrlp
-map <leader>f :CtrlP<cr>
-map <leader>b :CtrlPBuffer<cr>
+" map <leader>f :CtrlP<cr>
+" map <leader>b :CtrlPBuffer<cr>
 
 " set root directory
 " 'c' - the directory of the current file.
@@ -389,13 +396,13 @@ map <leader>b :CtrlPBuffer<cr>
 " 'a' - like c, but only if the current working directory outside of CtrlP
 "  is not a direct ancestor of the directory of the current file.
 "  0 or '' (empty string) - disable this feature.
-let g:ctrlp_working_path_mode = 'a'
+" let g:ctrlp_working_path_mode = 'a'
 
 " ignore following directories and files
-let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/](\.git|\.hg|\.svn|bin|node_modules|log|tmp|dummy)$',
-      \ 'file': '\v\.(exe|so|dll)$',
-      \ }
+" let g:ctrlp_custom_ignore = {
+"       \ 'dir':  '\v[\/](\.git|\.hg|\.svn|bin|node_modules|log|tmp|dummy)$',
+"       \ 'file': '\v\.(exe|so|dll)$',
+"       \ }
 
 " ag
 nnoremap <leader>a :Ag
@@ -588,7 +595,7 @@ let g:syntastic_javascript_checkers = ['eslint']
 "  ---------------------------------------------------------------------------
 "  Reload Chrome
 "  ---------------------------------------------------------------------------
-map <Leader>r :!/home/diego/.scripts/reload_chrome.sh<CR>
+map <Leader>r :!/home/diego/.scripts/reload_chrome.sh<CR><CR>
 
 "  ---------------------------------------------------------------------------
 "  Javascript
