@@ -1,0 +1,14 @@
+open_with q
+mkdir books
+rename inst-pending-credits.png
+rename inst-credits.png
+rename collection (3)jj.zip
+rename honorarios-andres.jpg
+mkdir colorear
+ls
+
+open_with evince
+open_with 
+rename shared
+rename projects_table.js
+delete
