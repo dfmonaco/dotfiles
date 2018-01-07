@@ -19,6 +19,7 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/git
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/command-not-found
+    zgen oh-my-zsh plugins/wd
     zgen load zsh-users/zsh-syntax-highlighting
 
     # completions

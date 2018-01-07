@@ -383,7 +383,7 @@ autocmd FileType ruby imap <buffer> <F8> <Plug>(seeing_is_believing-run)
 " let g:slime_target = "tmux"
 
 " fzf
-map <leader>f :GFiles<cr>
+map <leader>f :Files<cr>
 map <leader>b :Buffers<cr>
 
 " ctrlp
