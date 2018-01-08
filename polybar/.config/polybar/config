@@ -31,11 +31,11 @@ module-margin = 3
 font-0 = fixed:pixelsize=10;1
 font-1 = Unifont:fontformat=truetype:size=8:antialias=false;0
 font-2 = Wuncon Siji:pixelsize=10;1
-font-3 = FontAwesome:pixelsize=12;0
+font-3 = FontAwesome:pixelsize=10;1
 
 modules-left = i3
 modules-center = xwindow
-modules-right = filesystem xbacklight volume memory cpu wlan eth battery temperature date powermenu
+modules-right = filesystem volume memory cpu wlan eth battery temperature date powermenu
 
 tray-position = right
 tray-padding = 2
@@ -43,9 +43,113 @@ tray-padding = 2
 cursor-click = pointer
 cursor-scroll = ns-resize
 
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+; pin-workspaces = true
+
+; This will split the workspace name on ':'
+; Default: false
+; strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+; enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+; wrapping-scroll = false
+
+; Set the scroll cycle direction
+; Default: true
+; reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces
+; containing 'code' in the label
+; Default: false
+; fuzzy-match = true
+; ws-icon-[0-9]+ = label;icon
+; NOTE: The label needs to match the name of the i3 workspace
+; ws-icon-0 = 1;
+; ws-icon-1 = 2;
+; ws-icon-2 = 3;♜
+; ws-icon-3 = 4;♝
+; ws-icon-4 = 5;♞
+ws-icon-default = 
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+; format = <label-state> <label-mode>
+
+; Available tokens:
+;   %mode%
+; Default: %mode%
+; label-mode = %mode%
+; label-mode-padding = 2
+; label-mode-background = #e60053
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-focused = %name% %icon% 
+label-focused-foreground = #ffffff
+label-focused-background = #3f3f3f
+; label-focused-underline = #fba922
+label-focused-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-unfocused = %name% %icon%
+label-unfocused-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-visible = %name% %icon%
+label-visible-underline = #555555
+label-visible-padding = 2
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+; Default: %icon%  %name%
+label-urgent = %name% %icon%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 2
+
 [module/xwindow]
 type = internal/xwindow
+
 label = %title%
+label-maxlen = 50
 
 [module/filesystem]
 type = internal/fs
@@ -57,81 +161,45 @@ label-mounted =   %{F#0a81f5}%mountpoint%%{F-} %percentage_used%%
 label-unmounted = %mountpoint% not mounted
 label-unmounted-foreground = ${colors.foreground-alt}
 
-[module/xbacklight]
-type = internal/xbacklight
-
-format = <ramp> <label>
-label = %percentage%%
-
-ramp-0 = 🌕
-ramp-1 = 🌔
-ramp-2 = 🌓
-ramp-3 = 🌒
-ramp-4 = 🌑
-
 [module/volume]
 type = internal/volume
 
 format-volume = <ramp-volume> <label-volume>
 
-label-muted = muted
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
+label-muted = 
+ramp-volume-0 = 
+ramp-volume-1 = 
 
 [module/memory]
 type = internal/memory
-format = <label> <bar-used>
+format = <label>
 label = %gb_used%/%gb_free%
-
-bar-used-indicator =
-bar-used-width = 5
-bar-used-foreground-0 = #55aa55
-bar-used-foreground-1 = #557755
-bar-used-foreground-2 = #f5a70a
-bar-used-foreground-3 = #ff5555
-bar-used-fill = |
-bar-used-empty = |
-bar-used-empty-foreground = #444444
 
 [module/cpu]
 type = internal/cpu
-format = <label> <bar-load>
-label = CPU %percentage-cores%
-
-bar-load-width = 5
-bar-load-foreground-0 = #c1cb7f
-bar-load-foreground-1 = #d9c37f
-bar-load-foreground-2 = #e4a48j
-bar-load-foreground-3 = #ed9896
-bar-load-indicator = ■
-bar-load-indicator-font = 0
-bar-load-indicator-foreground = #55fdf6e3
-bar-load-fill = ■
-bar-load-fill-font = 0
-bar-load-empty = □
-bar-load-empty-font = 0
-bar-load-empty-foreground = #99586e75
+format = <label>
+label = %percentage-cores%
 
 [module/wlan]
 type = internal/network
 interface = wlp4s0
 
-format-connected = <ramp-signal> <label-connected>
+; format-connected = <ramp-signal> <label-connected>
+format-connected = <label-connected>
 format-disconnected = <label-disconnected>
 format-packetloss = <label-packetloss> <animation-packetloss>
 
 
-label-connected = %essid%  %upspeed%  %downspeed% [%signal%% / %quality%%]
+label-connected =   %essid%  %upspeed%  %downspeed% [%signal%% / %quality%%]
 label-disconnected = %ifname% Disconnected
 label-packetloss = Packetloss!
 
-ramp-signal-0 = 😱
-ramp-signal-1 = 😠
-ramp-signal-2 = 😒
-ramp-signal-3 = 😊
-ramp-signal-4 = 😃
-ramp-signal-5 = 😈
+; ramp-signal-0 = 😱
+; ramp-signal-1 = 😠
+; ramp-signal-2 = 😒
+; ramp-signal-3 = 😊
+; ramp-signal-4 = 😃
+; ramp-signal-5 = 😈
 
 animation-packetloss-0 = 
 animation-packetloss-1 = 📶
@@ -144,8 +212,7 @@ format-connected = <label-connected>
 format-disconnected = <label-disconnected>
 format-packetloss = <label-packetloss> <animation-packetloss>
 
-
-label-connected = %essid%  %upspeed%  %downspeed%
+label-connected = %linkspeed%  %upspeed%  %downspeed%
 label-disconnected = %ifname% Disconnected
 label-packetloss = Packetloss!
 
@@ -185,17 +252,17 @@ format-discharging = <ramp-capacity> <label-discharging>
 ;   %percentage% (default)
 ;   %time%
 ;   %consumption% (shows current charge rate in watts)
-label-charging = Charging %percentage%%
+label-charging =   %percentage%%
 
 ; Available tokens:
 ;   %percentage% (default)
 ;   %time%
 ;   %consumption% (shows current discharge rate in watts)
-label-discharging = Discharging %percentage%%
+label-discharging = %percentage%%
 
 ; Available tokens:
 ;   %percentage% (default)
-label-full = Fully charged
+label-full = 
 
 ; Only applies if <ramp-capacity> is used
 ramp-capacity-0 = 
@@ -235,7 +302,7 @@ date-alt = %A, %d %B %Y
 time-alt = %H:%M:%S
 ; Available tags:
 ;   <label> (default)
-format = 🕓 <label>
+format = <label>
 
 ; Available tokens:
 ;   %date%
@@ -297,104 +364,3 @@ ramp-1 = B
 ramp-2 = C
 ramp-foreground = #55
 
-[module/i3]
-type = internal/i3
-
-; Only show workspaces defined on the same output as the bar
-;
-; Useful if you want to show monitor specific workspaces
-; on different bars
-;
-; Default: false
-; pin-workspaces = true
-
-; This will split the workspace name on ':'
-; Default: false
-strip-wsnumbers = true
-
-; Sort the workspaces by index instead of the default
-; sorting that groups the workspaces by output
-; Default: false
-index-sort = true
-
-; Create click handler used to focus workspace
-; Default: true
-enable-click = false
-
-; Create scroll handlers used to cycle workspaces
-; Default: true
-enable-scroll = false
-
-; Wrap around when reaching the first/last workspace
-; Default: true
-wrapping-scroll = false
-
-; Set the scroll cycle direction
-; Default: true
-reverse-scroll = false
-
-; Use fuzzy (partial) matching on labels when assigning
-; icons to workspaces
-; Example: code;♚ will apply the icon to all workspaces
-; containing 'code' in the label
-; Default: false
-fuzzy-match = true
-; ws-icon-[0-9]+ = label;icon
-; NOTE: The label needs to match the name of the i3 workspace
-ws-icon-0 = 1;♚
-ws-icon-1 = 2;♛
-ws-icon-2 = 3;♜
-ws-icon-3 = 4;♝
-ws-icon-4 = 5;♞
-ws-icon-default = ♟
-
-; Available tags:
-;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
-;   <label-mode> (default)
-format = <label-state> <label-mode>
-
-; Available tokens:
-;   %mode%
-; Default: %mode%
-label-mode = %mode%
-label-mode-padding = 2
-label-mode-background = #e60053
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-;   %output%
-; Default: %icon%  %name%
-label-focused = %index%
-label-focused-foreground = #ffffff
-label-focused-background = #3f3f3f
-label-focused-underline = #fba922
-label-focused-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-unfocused = %index%
-label-unfocused-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-visible = %index%
-label-visible-underline = #555555
-label-visible-padding = 4
-
-; Available tokens:
-;   %name%
-;   %icon%
-;   %index%
-; Default: %icon%  %name%
-label-urgent = %index%
-label-urgent-foreground = #000000
-label-urgent-background = #bd2c40
-label-urgent-padding = 4
