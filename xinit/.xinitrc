@@ -35,4 +35,5 @@ fi
 
 xbindkeys
 xmodmap .xmodmaprc
+xbanish &
 exec i3

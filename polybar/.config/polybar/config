@@ -17,6 +17,9 @@ secondary = #e60053
 alert = #bd2c40
 
 [bar/top]
+monitor = HDMI1
+monitor-fallback = eDP1
+
 width = 100%
 height = 27
 
@@ -34,7 +37,7 @@ font-2 = Wuncon Siji:pixelsize=10;1
 font-3 = FontAwesome:pixelsize=10;1
 
 modules-left = i3
-modules-center = xwindow
+; modules-center = xwindow
 modules-right = filesystem volume memory cpu wlan eth battery temperature date powermenu
 
 tray-position = right

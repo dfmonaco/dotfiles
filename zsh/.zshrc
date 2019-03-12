@@ -20,13 +20,14 @@ if ! zgen saved; then
     zgen oh-my-zsh plugins/sudo
     zgen oh-my-zsh plugins/command-not-found
     zgen oh-my-zsh plugins/wd
+    zgen oh-my-zsh plugins/docker
     zgen load zsh-users/zsh-syntax-highlighting
 
     # completions
     zgen load zsh-users/zsh-completions src
 
     # theme
-    zgen load denysdovhan/spaceship-zsh-theme spaceship
+    zgen load denysdovhan/spaceship-prompt spaceship
 
     # save all to init script
     zgen save
@@ -55,6 +56,11 @@ alias re='systemctl reboot'
 
 alias wxp='vboxmanage startvm "wxp"'
 alias wxpoff='vboxmanage controlvm "wxp" savestate'
+
+alias l='i3lock -c 505050'
+
+# tmate
+alias tcopy='tmate -S /tmp/tmate.sock display -p "#{tmate_ssh}" | xclip -selection clipboard'
 
 # Open new terminal on same directory
 if [[ $TERM == xterm-termite ]]; then

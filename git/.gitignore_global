@@ -10,3 +10,4 @@ project_data/
 node_modules/
 .env
 .eslintrc.*
+.private_notes.txt
