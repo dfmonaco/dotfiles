@@ -14,7 +14,7 @@ Plug 'tpope/vim-eunuch'
 Plug 'benmills/vimux'
 Plug 'janko-m/vim-test'
 Plug 'ervandew/supertab'
-" Plug 'kien/ctrlp.vim'
+Plug 'junegunn/vim-easy-align'
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -131,6 +131,9 @@ set laststatus=2
 
 " show line numbers relative to cursor position
 set relativenumber
+
+" show current line number
+set number
 
 " automatically save your undo history when you write a file and restore undo history when you edit the file again.
 " set undofile
@@ -328,6 +331,12 @@ imap  <silent> <F10> <Esc> mmgg=G`m^zz
 " autocmd FileType ruby nmap <buffer> <F7> <Plug>(xmpfilter-run)
 " autocmd FileType ruby xmap <buffer> <F7> <Plug>(xmpfilter-run)
 " autocmd FileType ruby imap <buffer> <F7> <Plug>(xmpfilter-run)
+
+"  Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 
 " seeing_is_believing
 let g:xmpfilter_cmd = "seeing_is_believing"
