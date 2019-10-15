@@ -11,6 +11,7 @@ call plug#begin()
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
+Plug 'tpope/vim-surround'
 Plug 'benmills/vimux'
 Plug 'janko-m/vim-test'
 Plug 'ervandew/supertab'
@@ -248,6 +249,10 @@ imap <C-l> <ESC>$
 
 " Map ESC
 imap jj <ESC>
+
+" move vertically by visual line with j and k
+nnoremap j gj
+nnoremap k gk
 
 " Move between splits
 nnoremap <C-h> <C-w>h
