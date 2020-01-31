@@ -24,13 +24,15 @@ Plug 'airblade/vim-gitgutter'
 Plug 'rking/ag.vim'
 Plug 't9md/vim-ruby-xmpfilter'
 Plug 'tpope/vim-endwise'
-Plug 'scrooloose/syntastic'
-" Plug 'w0rp/ale'
+" Plug 'scrooloose/syntastic'
+Plug 'w0rp/ale'
 Plug 'chilicuil/vim-sml-coursera'
 Plug 'fatih/vim-go'
 Plug 'nsf/gocode', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
 Plug 'slim-template/vim-slim'
+Plug 'SirVer/ultisnips'
+Plug 'mlaursen/vim-react-snippets'
 
 " Syntax definitions
 Plug 'sheerun/vim-polyglot'
@@ -625,3 +627,31 @@ let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 let g:user_emmet_leader_key='<C-J>'
 
 let g:user_emmet_settings={'javascript.jsx': {'extends':'jsx,html'}}
+
+
+"  ---------------------------------------------------------------------------
+"  Terminal mode
+"  -------------
+"
+" Terminal-mode has its own |:tnoremap| namespace for mappings, this can be used
+" to automate any terminal interaction.
+
+" To map <Esc> to exit terminal-mode: >
+:tnoremap <Esc> <C-\><C-n>
+
+" To simulate |i_CTRL-R| in terminal-mode: >
+:tnoremap <expr> <C-R> '<C-\><C-N>"'.nr2char(getchar()).'pi'
+
+" To use `ALT+{h,j,k,l}` to navigate windows from any mode:
+    :tnoremap <C-h> <C-\><C-N><C-w>h
+    :tnoremap <C-j> <C-\><C-N><C-w>j
+    :tnoremap <C-k> <C-\><C-N><C-w>k
+    :tnoremap <C-l> <C-\><C-N><C-w>l
+    :inoremap <C-h> <C-\><C-N><C-w>h
+    :inoremap <C-j> <C-\><C-N><C-w>j
+    :inoremap <C-k> <C-\><C-N><C-w>k
+    :inoremap <C-l> <C-\><C-N><C-w>l
+    :nnoremap <C-h> <C-w>h
+    :nnoremap <C-j> <C-w>j
+    :nnoremap <C-k> <C-w>k
+    :nnoremap <C-l> <C-w>l

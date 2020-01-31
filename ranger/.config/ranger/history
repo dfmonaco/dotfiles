@@ -8,7 +8,8 @@ mkdir colorear
 ls
 
 open_with evince
-open_with 
 rename shared
 rename projects_table.js
 delete
+open_with 
+open_with libreoffice
