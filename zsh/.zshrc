@@ -78,6 +78,9 @@ SPACESHIP_RUBY_SYMBOL='>'
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
+# Suppress ruby 2.7 warnings
+export RUBYOPT='-W:no-deprecated -W:no-experimental'
+
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

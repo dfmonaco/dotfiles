@@ -33,6 +33,7 @@ Plug 'scrooloose/nerdtree'
 Plug 'slim-template/vim-slim'
 Plug 'SirVer/ultisnips'
 Plug 'mlaursen/vim-react-snippets'
+Plug 'gorodinskiy/vim-coloresque'
 
 " Syntax definitions
 Plug 'sheerun/vim-polyglot'
@@ -655,3 +656,9 @@ let g:user_emmet_settings={'javascript.jsx': {'extends':'jsx,html'}}
     :nnoremap <C-j> <C-w>j
     :nnoremap <C-k> <C-w>k
     :nnoremap <C-l> <C-w>l
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+
