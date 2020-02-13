@@ -38,8 +38,8 @@ Plug 'gorodinskiy/vim-coloresque'
 " Syntax definitions
 Plug 'sheerun/vim-polyglot'
 Plug 'pangloss/vim-javascript'
-" Plug 'mxw/vim-jsx'
 Plug 'maxmellon/vim-jsx-pretty'
+Plug 'elzr/vim-json'
 Plug 'mattn/emmet-vim'
 
 " Color schemes
@@ -627,7 +627,7 @@ let g:jsx_ext_required = 0 " Allow JSX in normal JS files
 
 let g:user_emmet_leader_key='<C-J>'
 
-let g:user_emmet_settings={'javascript.jsx': {'extends':'jsx,html'}}
+let g:user_emmet_settings={'javascript': {'extends':'jsx,html'}}
 
 
 "  ---------------------------------------------------------------------------
