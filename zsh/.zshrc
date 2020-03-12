@@ -5,35 +5,37 @@ SAVEHIST=1000
 # Set editor
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export BROWSER="/usr/bin/google-chrome-stable"
 
-# load zgen
-source "${HOME}/.zgen/zgen.zsh"
+source ~/.zplug/init.zsh
 
-# if the init scipt doesn't exist
-if ! zgen saved; then
-    echo "Creating a zgen save"
+# plugins
+zplug "plugins/git", from:oh-my-zsh 
+zplug "plugins/sudo", from:oh-my-zsh
+zplug "plugins/command-not-found", from:oh-my-zsh
+zplug "plugins/wd", from:oh-my-zsh
+zplug "plugins/docker", from:oh-my-zsh
+zplug "plugins/vi-mode", from:oh-my-zsh
 
-    zgen oh-my-zsh
+# completions
+zplug "zsh-users/zsh-syntax-highlighting"
 
-    # plugins
-    zgen oh-my-zsh plugins/git
-    zgen oh-my-zsh plugins/sudo
-    zgen oh-my-zsh plugins/command-not-found
-    zgen oh-my-zsh plugins/wd
-    zgen oh-my-zsh plugins/docker
-    zgen load zsh-users/zsh-syntax-highlighting
+# theme
+zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
-    # completions
-    zgen load zsh-users/zsh-completions src
-
-    # theme
-    zgen load denysdovhan/spaceship-prompt spaceship
-
-    # save all to init script
-    zgen save
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    printf "Install? [y/N]: "
+    if read -q; then
+        echo; zplug install
+    fi
 fi
 
+# Then, source plugins and add commands to $PATH
+zplug load
+
 # Alias
+alias cat='bat'
 # editor
 # alias vi='nvim'
 # alias vim='nvim'
@@ -74,6 +76,7 @@ export LC_ALL=en_US.UTF-8
 # RUBY
 SPACESHIP_RUBY_SHOW=true
 SPACESHIP_RUBY_SYMBOL='>'
+# SPACESHIP_VI_MODE_SHOW=false
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"

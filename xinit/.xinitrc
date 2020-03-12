@@ -35,4 +35,5 @@ fi
 
 # xbindkeys
 # xbanish &
+autorandr --change
 exec i3
