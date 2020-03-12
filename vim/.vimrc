@@ -38,7 +38,8 @@ Plug 'nsf/gocode', {'rtp': 'vim/'}
 Plug 'scrooloose/nerdtree'
 Plug 'slim-template/vim-slim'
 Plug 'SirVer/ultisnips'
-Plug 'mlaursen/vim-react-snippets'
+Plug 'epilande/vim-react-snippets'
+" Plug 'mlaursen/vim-react-snippets'
 Plug 'gorodinskiy/vim-coloresque'
 
 " Syntax definitions
@@ -406,6 +407,7 @@ autocmd FileType ruby imap <buffer> <F8> <Plug>(seeing_is_believing-run)
 " let g:slime_target = "tmux"
 
 " fzf
+map <leader>g :GFiles --exclude-standard --others --cached<cr>
 map <leader>f :Files<cr>
 map <leader>b :Buffers<cr>
 
@@ -664,7 +666,26 @@ let g:user_emmet_settings={'javascript': {'extends':'jsx,html'}}
     :nnoremap <C-l> <C-w>l
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
-let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsExpandTrigger="<c-l>"
+" let g:UltiSnipsJumpForwardTrigger="<c-b>"
+" let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 
+
+
+" ALE config
+"
+
+" let g:ale_fixers = {
+" \   'javascript': ['prettier', 'eslint'],
+" \   '*': ['remove_trailing_lines', 'trim_whitespace'],
+" \}
+
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+" let g:ale_lint_on_enter = 0
+" let g:ale_lint_on_text_changed = 'never'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+" let g:ale_linters_explicit = 1
+" let g:ale_lint_on_save = 1
+" let g:ale_fix_on_save = 1

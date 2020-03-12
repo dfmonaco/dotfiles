@@ -79,7 +79,7 @@ SPACESHIP_RUBY_SYMBOL='>'
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # Suppress ruby 2.7 warnings
-export RUBYOPT='-W:no-deprecated -W:no-experimental'
+# export RUBYOPT='-W:no-deprecated -W:no-experimental'
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
