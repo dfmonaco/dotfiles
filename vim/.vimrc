@@ -295,7 +295,7 @@ nmap <leader><Esc> :q!<CR>
 
 " EXTERNAL COPY / PASTE
 map <C-v> "+gP<CR>
-vmap <C-c> "+y
+vnoremap <C-c> "+y
 
 " quickfix
 map J :cn<CR>
@@ -607,6 +607,7 @@ nmap <silent> <leader>tv :TestVisit<CR>
 "  ---------------------------------------------------------------------------
 abbr pd require 'pry-debugger'; binding.pry
 abbr pbb require 'pry-byebug'; binding.pry
+abbr lll JSON.stringify(obj, null, 2)
 
 "  ---------------------------------------------------------------------------
 "  File Types
