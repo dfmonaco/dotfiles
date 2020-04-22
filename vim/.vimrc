@@ -19,7 +19,7 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
 Plug 'benmills/vimux'
-Plug 'janko-m/vim-test'
+Plug 'janko/vim-test'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-easy-align'
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
@@ -568,33 +568,33 @@ endfunction
 " TESTING inside Vim!
 
 " vimux conf
-let g:VimuxOrientation = "v"
-let g:VimuxHeight = "50"
+" let g:VimuxOrientation = "v"
+" let g:VimuxHeight = "50"
 
 " Run the current file with ruby
-map <Leader>rr :call VimuxRunCommand("clear; ruby " . bufname("%"))<CR>
+" map <Leader>rr :call VimuxRunCommand("clear; ruby " . bufname("%"))<CR>
 
 " Run the current file with rspec
-map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
+" map <Leader>rb :call VimuxRunCommand("clear; rspec " . bufname("%"))<CR>
 "
 " Prompt for a command to run
-map <Leader>rp :VimuxPromptCommand<CR>
+" map <Leader>rp :VimuxPromptCommand<CR>
 
 " Run last command executed by VimuxRunCommand
-map <Leader>rl :VimuxRunLastCommand<CR>
+" map <Leader>rl :VimuxRunLastCommand<CR>
 
 " Inspect runner pane
-map <Leader>ri :VimuxInspectRunner<CR>
+" map <Leader>ri :VimuxInspectRunner<CR>
 
 " Close vim tmux runner opened by VimuxRunCommand
-map <Leader>rq :VimuxCloseRunner<CR>
+" map <Leader>rq :VimuxCloseRunner<CR>
 
 " Interrupt any command running in the runner pane
-map <Leader>rs :VimuxInterruptRunner<CR>
+" map <Leader>rs :VimuxInterruptRunner<CR>
 
 " vim-test config
 "
-let test#strategy = "vimux"
+let test#strategy = "vimterminal"
 
 nmap <silent> <leader>tn :TestNearest<CR>
 nmap <silent> <leader>tf :TestFile<CR>
@@ -607,7 +607,7 @@ nmap <silent> <leader>tv :TestVisit<CR>
 "  ---------------------------------------------------------------------------
 abbr pd require 'pry-debugger'; binding.pry
 abbr pbb require 'pry-byebug'; binding.pry
-abbr lll JSON.stringify(obj, null, 2)
+abbr lll console.log(JSON.stringify(obj, null, 2))
 
 "  ---------------------------------------------------------------------------
 "  File Types
@@ -692,3 +692,21 @@ highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
 " let g:ale_linters_explicit = 1
 " let g:ale_lint_on_save = 1
 " let g:ale_fix_on_save = 1
+"
+" Git
+let g:gitgutter_sign_added = '+'
+let g:gitgutter_sign_modified = '>'
+let g:gitgutter_sign_removed = 'x'
+let g:gitgutter_sign_removed_first_line = '^'
+let g:gitgutter_sign_modified_removed = '<'
+
+let g:gitgutter_override_sign_column_highlight = 1
+highlight SignColumn guibg=bg
+highlight SignColumn ctermbg=bg
+
+" Update sign column every quarter second
+set updatetime=250
+
+" Jump between hunks
+nmap gn <Plug>(GitGutterNextHunk)
+nmap gp <Plug>(GitGutterPrevHunk)
