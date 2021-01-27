@@ -27,6 +27,7 @@ Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+Plug 'jreybert/vimagit'
 Plug 'rking/ag.vim'
 Plug 't9md/vim-ruby-xmpfilter'
 Plug 'tpope/vim-endwise'
@@ -41,6 +42,10 @@ Plug 'SirVer/ultisnips'
 Plug 'epilande/vim-react-snippets'
 " Plug 'mlaursen/vim-react-snippets'
 Plug 'gorodinskiy/vim-coloresque'
+Plug 'Yggdroot/indentLine'
+Plug 'wellle/targets.vim'
+Plug 'michaeljsmith/vim-indent-object'
+Plug 'rhysd/clever-f.vim'
 
 " Syntax definitions
 Plug 'sheerun/vim-polyglot'
@@ -212,9 +217,6 @@ set statusline=%F%m%r%h%w[%L]%y[%p%%][%04v][%{fugitive#statusline()}]
 "  ---------------------------------------------------------------------------
 "  Mappings
 "  ---------------------------------------------------------------------------
-
-" Fugitive
-nmap <leader>gs :Gstatus<cr>
 
 " Delete current file
 nnoremap <C-d> :call delete(expand('%'))<CR>
@@ -409,9 +411,9 @@ autocmd FileType ruby imap <buffer> <F8> <Plug>(seeing_is_believing-run)
 " let g:slime_target = "tmux"
 
 " fzf
-map <leader>g :GFiles --exclude-standard --others --cached<cr>
-map <leader>f :Files<cr>
-map <leader>b :Buffers<cr>
+map <leader>go :GFiles --exclude-standard --others --cached<cr>
+map <leader>fo :Files<cr>
+map <leader>bo :Buffers<cr>
 
 " ctrlp
 " map <leader>f :CtrlP<cr>
@@ -708,5 +710,19 @@ highlight SignColumn ctermbg=bg
 set updatetime=250
 
 " Jump between hunks
-nmap gn <Plug>(GitGutterNextHunk)
-nmap gp <Plug>(GitGutterPrevHunk)
+nmap <leader>gn <Plug>(GitGutterNextHunk)
+nmap <leader>gp <Plug>(GitGutterPrevHunk)
+
+" Fugitive
+nmap <leader>gs :Gstatus<CR>
+nmap <leader>gl :Gclog<CR>
+
+" Magit
+nmap <leader>gss :Magit<CR>
+
+" Indent Line
+let g:indentLine_enabled = 0
+let g:indentLine_char = '│'
+let g:indentLine_color_term = 239
+nmap <leader>ils :IndentLinesToggle<CR>
+" let g:indentLine_char_list = ['|', '¦', '┆', '┊']

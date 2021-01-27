@@ -1,6 +1,6 @@
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+HISTFILE=~/.zsh_history
+HISTSIZE=1000000000
+SAVEHIST=1000000000
 
 # Set editor
 export VISUAL=vim
@@ -87,3 +87,4 @@ export PATH="$PATH:$HOME/.rvm/bin"
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
