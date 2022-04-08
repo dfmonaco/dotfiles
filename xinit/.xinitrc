@@ -36,4 +36,6 @@ fi
 # xbindkeys
 # xbanish &
 autorandr --change
+docker start postgres-13.4
+docker start redis
 exec i3
