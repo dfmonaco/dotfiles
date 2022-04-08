@@ -18,12 +18,13 @@ Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-surround'
-Plug 'benmills/vimux'
+" Plug 'benmills/vimux'
 Plug 'janko/vim-test'
 Plug 'ervandew/supertab'
 Plug 'junegunn/vim-easy-align'
 " PlugInstall and PlugUpdate will clone fzf in ~/.fzf and run install script
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -411,9 +412,10 @@ autocmd FileType ruby imap <buffer> <F8> <Plug>(seeing_is_believing-run)
 " let g:slime_target = "tmux"
 
 " fzf
-map <leader>go :GFiles --exclude-standard --others --cached<cr>
-map <leader>fo :Files<cr>
-map <leader>bo :Buffers<cr>
+map <leader>go :GFiles! --exclude-standard --others --cached<cr>
+map <leader>gs :GFiles?!<cr>
+map <leader>fo :Files!<cr>
+map <leader>bo :Buffers!<cr>
 
 " ctrlp
 " map <leader>f :CtrlP<cr>

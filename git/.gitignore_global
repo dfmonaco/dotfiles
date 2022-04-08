@@ -8,6 +8,7 @@ project_data/
 .ruby-gemset
 .autoenv.zsh
 node_modules/
+config/credentials/test.yml.enc
 .env
 .eslintrc.*
 .private_notes.txt

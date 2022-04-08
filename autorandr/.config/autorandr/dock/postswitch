@@ -2,4 +2,4 @@
 
  i3-msg '[workspace="^(1|4)"] move workspace to output eDP1;'
  i3-msg '[workspace="^(2|5)"] move workspace to output DP1-1;'
- i3-msg '[workspace="^(3|6)"] move workspace to output DP1-3;'
+ i3-msg '[workspace="^(3|6)"] move workspace to output DP1-2;'

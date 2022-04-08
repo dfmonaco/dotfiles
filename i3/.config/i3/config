@@ -9,7 +9,7 @@ font xft:URWGothic-Book 11
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec alacritty
 
 # reload chrome
 bindsym --release $mod+p exec --no-startup-id /home/diego/.scripts/reload_chrome.sh 
