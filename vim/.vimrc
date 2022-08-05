@@ -14,6 +14,7 @@ endif
 
 call plug#begin()
 
+Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-eunuch'

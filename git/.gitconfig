@@ -24,6 +24,9 @@
   co = checkout
   cob = checkout -b
 
+[alias]
+	tag-deploy = ! sh -c 'git tag "v${0}_`date +%Y-%m-%d-%H.%M.%S`"'
+
 [core]
 	excludesfile = /home/diego/.gitignore_global
 	editor = vim
