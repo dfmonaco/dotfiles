@@ -15,7 +15,7 @@ bindsym $mod+Return exec alacritty
 bindsym --release $mod+p exec --no-startup-id /home/diego/.scripts/reload_chrome.sh 
 
 # kill focused window
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 
 # start program launcher
 bindsym $mod+d exec --no-startup-id dmenu_run
@@ -53,7 +53,7 @@ bindsym $mod+b workspace back_and_forth
 bindsym $mod+Shift+b move container to workspace back_and_forth; workspace back_and_forth
 
 # split orientation
-bindsym $mod+q split toggle;exec notify-send 'toggle split orientation'
+# bindsym $mod+q split toggle;exec notify-send 'toggle split orientation'
 
 # toggle fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
