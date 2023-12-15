@@ -40,6 +40,10 @@ alias cat='bat'
 # alias vi='nvim'
 # alias vim='nvim'
 
+# ruby
+alias be='bundle exec'
+alias rails='bundle exec rails'
+
 # git
 alias gs='git status'
 alias ga='git add .'
@@ -81,13 +85,16 @@ SPACESHIP_RUBY_SYMBOL='>'
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 
+export PATH="$PATH:`yarn global bin`"
+
 # Suppress ruby 2.7 warnings
 # export RUBYOPT='-W:no-deprecated -W:no-experimental'
 
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Set up Node Version Manager
 source /usr/share/nvm/init-nvm.sh
 
+eval "$(rbenv init - zsh)"

@@ -14,6 +14,7 @@ endif
 
 call plug#begin()
 
+Plug 'chrisbra/csv.vim'
 Plug 'ConradIrwin/vim-bracketed-paste'
 Plug 'bling/vim-airline'
 Plug 'tpope/vim-commentary'
@@ -60,11 +61,16 @@ Plug 'mattn/emmet-vim'
 " Plug 'altercation/vim-colors-solarized'
 Plug 'morhetz/gruvbox'
 
+
+Plug 'Exafunction/codeium.vim', { 'branch': 'main' }
+
 " Add plugins to &runtimepath
 call plug#end()
 
 " indent rules by filetype
 filetype plugin indent on    " required
+
+filetype plugin on
 
 "  ---------------------------------------------------------------------------
 "  General
