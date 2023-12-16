@@ -61,6 +61,16 @@ vim.opt.gdefault = true
 -- When there is a previous search pattern, highlight all its matches.
 vim.opt.hlsearch = true
 
+-- The current mode (e.g., insert mode, normal mode) will not be displayed in the statusline.
+vim.opt.showmode = false
+
+--- Render colors more accurately and with greater precision
+vim.opt.termguicolors = true
+
+-- disable netrw 
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 -- Mappings
 
 -- Set space as the leader key
@@ -97,6 +107,15 @@ vim.keymap.set('n', '<leader><leader>', '<c-^>')
 -- Autoindent the whole file
 vim.keymap.set('n', '<leader>=', 'gg=G')
 
+-- PLUGINS
+-- Telescope
+vim.keymap.set('n', '<leader>?', '<cmd>Telescope oldfiles<cr>')
+vim.keymap.set('n', '<leader><space>', '<cmd>Telescope buffers<cr>')
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
+vim.keymap.set('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>')
+vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>')
+
 -- ========================================================================== --
 -- ==                           USER COMMANDS                              == --
 -- ========================================================================== --
@@ -119,4 +138,250 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   callback = function()
     vim.highlight.on_yank({higroup = 'Visual', timeout = 200})
   end,
+})
+
+-- ========================================================================== --
+-- ==                           PLUGINS                           == --
+-- ========================================================================== --
+
+local lazy = {}
+
+-- Function to install lazy.nvim if it's not already installed
+function lazy.install(path)
+  -- Check if the path directory exists
+  if not vim.loop.fs_stat(path) then
+    print('Installing lazy.nvim....')
+    -- Run a shell command to clone the lazy.nvim repository from GitHub
+    vim.fn.system({
+      'git',
+      'clone',
+      '--filter=blob:none',
+      'https://github.com/folke/lazy.nvim.git',
+      '--branch=stable', -- latest stable release
+      path,
+    })
+  end
+end
+
+-- Function to set up the plugins
+function lazy.setup(plugins)
+  -- Check if the plugins are already set up
+  if vim.g.plugins_ready then
+    return -- Return without doing anything
+  end
+
+  -- Install lazy.nvim if it's not already installed
+  lazy.install(lazy.path)
+
+  -- Prepend the path to the Neovim runtime path
+  vim.opt.rtp:prepend(lazy.path)
+
+  -- Set up the plugins using the lazy module
+  require('lazy').setup(plugins, lazy.opts)
+
+  -- Set the plugins_ready flag to true to indicate that the plugins are set up
+  vim.g.plugins_ready = true
+end
+
+-- Set the path where lazy.nvim will be installed
+lazy.path = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+
+-- Empty table to store options for the lazy module
+lazy.opts = {}
+
+-- Set up the plugins
+lazy.setup({
+  --
+  -- THEMING
+  --
+  -- Provides the Tokyo Night theme for Neovim.
+  {'folke/tokyonight.nvim'},
+  -- Offers the One Dark theme for Neovim.
+  {'joshdick/onedark.vim'},
+  -- Implements the Monokai theme for Neovim.
+  {'tanvirtin/monokai.nvim'},
+  -- Presents the Dark+ theme for Neovim.
+  {'lunarvim/darkplus.nvim'},
+  -- Provides icons for files, directories, etc., in Neovim.
+  {'kyazdani42/nvim-web-devicons'},
+  -- Configurable status line for Neovim.
+  {'nvim-lualine/lualine.nvim'},
+  -- Enhanced buffer line (tab line) for Neovim.
+  {'akinsho/bufferline.nvim'},
+  -- Displays indent lines in Neovim.
+  {'lukas-reineke/indent-blankline.nvim'},
+
+  --
+  -- UTILITIES
+  --
+  -- All-in-one Lua utility functions for Neovim. (needed by telescope)
+  {'nvim-lua/plenary.nvim'},
+  -- Language parsing and manipulation for Neovim.
+  {'nvim-treesitter/nvim-treesitter'},
+  -- Additional text objects for treesitter.
+  {'nvim-treesitter/nvim-treesitter-textobjects'},
+  -- Commenting plugin for Neovim.
+  {'numToStr/Comment.nvim'},
+  -- Adds mappings to easily manipulate surroundings.
+  {'tpope/vim-surround'},
+  -- Extends text objects to support additional targets.
+  {'wellle/targets.vim'},
+  -- Repeats supported plugin commands with '.'
+  {'tpope/vim-repeat'},
+  -- Provides easy toggling of terminal in Neovim.
+  {'akinsho/toggleterm.nvim'},
+
+  --
+  -- FILE MANAGEMENT
+  --
+  -- File explorer that lets you edit your filesystem like a normal Neovim buffer.
+  {'stevearc/oil.nvim'},
+  -- Fuzzy finder extension for Neovim.
+  {'nvim-telescope/telescope.nvim', branch = '0.1.x'},
+  -- Native FZF integration for Telescope.
+  {'nvim-telescope/telescope-fzf-native.nvim', build = 'make'},
+
+  --
+  --- GIT
+  --
+  -- Git signs and hunk management for Neovim.
+  {'lewis6991/gitsigns.nvim'},
+  -- Git wrapper for Neovim.
+  {'tpope/vim-fugitive'},
+})
+
+
+-- ========================================================================== --
+-- ==                         PLUGIN CONFIGURATION                         == --
+-- ========================================================================== --
+
+---
+-- Colorscheme
+---
+vim.cmd.colorscheme('darkplus')
+
+---
+-- lualine.nvim (statusline)
+---
+-- See :help lualine.txt
+require('lualine').setup({
+  options = {
+    theme = 'darkplus',
+    icons_enabled = true,
+    component_separators = '|',
+    section_separators = ''
+  },
+})
+
+---
+-- bufferline
+---
+-- See :help bufferline-settings
+require('bufferline').setup({
+  options = {
+    mode = 'buffers',
+    offsets = {
+      {filetype = 'NvimTree'}
+    },
+  },
+  -- :help bufferline-highlights
+  highlights = {
+    buffer_selected = {
+      italic = false
+    },
+    indicator_selected = {
+      -- Set the foreground color based on the 'Function' highlight group's foreground attribute.
+      fg = {attribute = 'fg', highlight = 'Function'},
+      italic = false
+    }
+  }
+})
+
+---
+-- Indent-blankline
+---
+-- See :help ibl.setup()
+require('ibl').setup({
+  enabled = true,
+  scope = {
+    enabled = false,
+  },
+  indent = {
+    char = '▏',
+  }
+})
+
+
+---
+-- oil
+---
+require("oil").setup({})
+
+---
+-- Telescope
+---
+-- See :help telescope.builtin
+require('telescope').load_extension('fzf')
+
+---
+-- Gitsigns
+---
+-- See :help gitsigns-usage
+require('gitsigns').setup({
+ signs = {
+    add          = { text = '+' },
+    change       = { text = '#' },
+    delete       = { text = '-' },
+    topdelete    = { text = '‾' },
+    changedelete = { text = '~' },
+    untracked    = { text = '┆' },
+  },
+})
+
+
+---
+-- Treesitter
+---
+require('nvim-treesitter.configs').setup({
+
+  highlight = {
+    enable = true,
+  },
+
+  textobjects = {
+    select = {
+      -- Enable text objects selection with lookahead.
+      enable = true,
+      lookahead = true,
+      keymaps = {
+        -- Define key mappings for various text objects.
+        ['af'] = '@function.outer',
+        ['if'] = '@function.inner',
+        ['ac'] = '@class.outer',
+        ['ic'] = '@class.inner',
+      }
+    },
+  },
+
+  ensure_installed = {
+    'javascript',
+    'typescript',
+    'tsx',
+    'lua',
+    'vim',
+    'vimdoc',
+    'css',
+    'json',
+    'ruby',
+  },
+})
+
+---
+-- toggleterm
+---
+-- See :help toggleterm-roadmap
+require('toggleterm').setup({
+  open_mapping = '<C-g>',
+  direction = 'horizontal',
+  shade_terminals = true
 })
