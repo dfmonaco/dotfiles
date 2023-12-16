@@ -94,18 +94,29 @@ vim.keymap.set('n', '<leader>w', '<cmd>write<cr>')
 -- Switch between last two buffers
 vim.keymap.set('n', '<leader><leader>', '<c-^>')
 
+-- Autoindent the whole file
+vim.keymap.set('n', '<leader>=', 'gg=G')
 
--- Function to reload init.lua file
-function ReloadInit()
-    vim.cmd('luafile ' .. vim.fn.stdpath('config') .. '/init.lua')
+-- ========================================================================== --
+-- ==                           USER COMMANDS                              == --
+-- ========================================================================== --
+
+local group = vim.api.nvim_create_augroup('user_cmds', {clear = true})
+
+vim.api.nvim_create_autocmd('BufWritePost', {
+  desc = 'Reload init.lua',
+  group = group,
+  pattern = 'init.lua',
+  callback = function()
+    vim.cmd('source $MYVIMRC')
     print('Reloaded init.lua')
-end
+  end,
+})
 
--- Register autocommand to trigger reload on BufWritePost (when saving the file)
-vim.api.nvim_exec([[
-    augroup AutoReloadInit
-        autocmd!
-        autocmd BufWritePost $MYVIMRC lua ReloadInit()
-    augroup END
-]], false)
-
+vim.api.nvim_create_autocmd('TextYankPost', {
+  desc = 'Highlight on yank',
+  group = group,
+  callback = function()
+    vim.highlight.on_yank({higroup = 'Visual', timeout = 200})
+  end,
+})
