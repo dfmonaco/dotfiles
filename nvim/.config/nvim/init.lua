@@ -103,6 +103,12 @@ vim.keymap.set('n', '<leader><leader>', '<c-^>')
 -- Autoindent the whole file
 vim.keymap.set('n', '<leader>=', 'gg=G')
 
+-- Navigate between splits
+vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true })
+vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true })
+vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true })
+vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true })
+
 -- PLUGINS
 -- Telescope
 vim.keymap.set('n', '<leader>?', '<cmd>Telescope oldfiles<cr>')
@@ -111,6 +117,35 @@ vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
 vim.keymap.set('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>')
 vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>')
+
+-- Neotest 
+-- Run the nearest test
+vim.keymap.set('n', '<leader>t',
+  function () require('neotest').run.run() end, { expr = true }
+)
+
+-- Run the current file
+vim.keymap.set('n', '<leader>tf',
+  function () require('neotest').run.run(vim.fn.expand('%')) end, { expr = true }
+)
+
+-- Display output of the nearest test
+vim.keymap.set('n', '<leader>to',
+  function () require('neotest').output.open({enter = true}) end, { expr = true }
+)
+
+-- Toggle test summary 
+vim.api.nvim_set_keymap(
+  'n', '<leader>ts', '<cmd>lua require("neotest").summary.toggle()<cr>',
+  {noremap = true, silent = true}
+)
+
+-- Toggle output panel
+vim.api.nvim_set_keymap(
+  'n', '<leader>tp', '<cmd>lua require("neotest").output_panel.toggle()<cr>',
+  {noremap = true, silent = true}
+)
+
 
 -- ========================================================================== --
 -- ==                           USER COMMANDS                              == --
@@ -247,6 +282,15 @@ lazy.setup({
   {'nvim-telescope/telescope.nvim', branch = '0.1.x'},
   -- Native FZF integration for Telescope.
   {'nvim-telescope/telescope-fzf-native.nvim', build = 'make'},
+  -- A framework for interacting with tests within NeoVim.
+  { 
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "antoinemadec/FixCursorHold.nvim",
+      "olimorris/neotest-rspec",
+    }
+  },
 
   --
   --- GIT
@@ -327,6 +371,10 @@ require('ibl').setup({
   }
 })
 
+---
+-- Comment.nvim
+---
+require('Comment').setup({})
 
 ---
 -- oil
@@ -401,3 +449,14 @@ require('toggleterm').setup({
   direction = 'horizontal',
   shade_terminals = true
 })
+
+
+---
+-- neotest
+---
+require("neotest").setup({
+  adapters = {
+    require("neotest-rspec"),
+  },
+})
+
