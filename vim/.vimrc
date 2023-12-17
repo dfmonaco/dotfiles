@@ -76,8 +76,8 @@ filetype plugin on
 "  General
 "  ---------------------------------------------------------------------------
 
-let mapleader = ","
-let g:mapleader = ","
+let mapleader = " "
+let g:mapleader = " "
 
 " modeline support may execute any of a number of frighteningly arbitrary Vim commands embedded in the file.
 set modelines=0
