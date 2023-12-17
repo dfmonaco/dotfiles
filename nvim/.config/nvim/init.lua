@@ -135,11 +135,15 @@ vim.keymap.set('n', '<leader><space>', '<cmd>Telescope buffers<cr>',
   {desc = 'Find existing buffers'}
 )
 
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope git_files<cr>',
+  {desc = 'Find files in git repo'}
+)
+
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>',
   {desc = 'Find files'}
 )
 
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>',
+vim.keymap.set('n', '<leader>fs', '<cmd>Telescope live_grep<cr>',
   {desc = 'Find string in files'}
 )
 
