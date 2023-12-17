@@ -563,7 +563,16 @@ require('mason-lspconfig').setup({
 -- lspconfig
 ---
 
-require('lspconfig').lua_ls.setup({})
+require('lspconfig').lua_ls.setup({
+  settings = {
+    Lua = {
+      diagnostics = {
+        globals = { 'vim' }
+      }
+    }
+  }
+})
+
 
 -- textDocument/diagnostic support until 0.10.0 is released
 local _timers = {}
