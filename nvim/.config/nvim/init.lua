@@ -58,9 +58,6 @@ vim.opt.relativenumber = true
 -- This means that	all matches in a line are substituted instead of one.
 vim.opt.gdefault = true
 
--- When there is a previous search pattern, highlight all its matches.
-vim.opt.hlsearch = true
-
 -- The current mode (e.g., insert mode, normal mode) will not be displayed in the statusline.
 vim.opt.showmode = false
 
@@ -74,76 +71,112 @@ local keymap_opts = { noremap = true, silent = true }
 -- Set space as the leader key
 vim.g.mapleader = ' '
 
--- Edit .init.lua
-vim.keymap.set('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>')
+vim.keymap.set('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>',
+ {desc = 'Edit init.lua'}
+)
 
--- Select entire buffer without changing the jumplist
-vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
+vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
+ {desc = 'Select entire buffer'}
+)
 
--- Clear search highlight
-vim.keymap.set('n', '<leader>ch', ':noh<cr>')
+vim.keymap.set('n', '<tab>', ':bn<CR>',
+ {desc = 'Next buffer'}
+)
 
--- Switch between buffers with Tab
-vim.keymap.set('n', '<tab>', ':bn<CR>')
-vim.keymap.set('n', '<C-tab>', ':bp<CR>')
+vim.keymap.set('n', '<C-tab>', ':bp<CR>',
+ {desc = 'Previous buffer'}
+)
 
--- Close buffer
-vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>')
+vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>',
+ {desc = 'Delete buffer'}
+)
 
--- Copy selected text to system clipboard
-vim.keymap.set({'n', 'x'}, 'gy', '"+y')
+vim.keymap.set({'n', 'x'}, 'gy', '"+y',
+ {desc = 'Yank to system clipboard'}
+)
 
--- Paste from system clipboard
-vim.keymap.set({'n', 'x'}, 'gp', '"+p')
+vim.keymap.set({'n', 'x'}, 'gp', '"+p',
+ {desc = 'Paste from system clipboard'}
+)
 
--- Write changes
-vim.keymap.set('n', '<leader>w', '<cmd>write<cr>')
+vim.keymap.set('n', '<leader>w', '<cmd>write<cr>',
+ {desc = 'Write file'}
+)
 
--- Switch between last two buffers
-vim.keymap.set('n', '<leader><leader>', '<c-^>')
+vim.keymap.set('n', '<leader><leader>', '<c-^>',
+ {desc = 'Last buffer'}
+)
 
--- Autoindent the whole file
-vim.keymap.set('n', '<leader>=', 'gg=G')
+vim.keymap.set('n', '<leader>=', 'gg=G',
+ {desc = 'Autoindent the whole file'}
+)
 
--- Navigate between splits
-vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true })
-vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true })
-vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true })
-vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true })
+vim.keymap.set('n', '<C-h>', '<C-w>h',
+ {desc = 'Previous window'}
+)
+
+vim.keymap.set('n', '<C-j>', '<C-w>j',
+ {desc = 'Next window'}
+)
+
+vim.keymap.set('n', '<C-k>', '<C-w>k',
+ {desc = 'Previous window'}
+)
+
+vim.keymap.set('n', '<C-l>', '<C-w>l',
+ {desc = 'Next window'}
+)
 
 -- PLUGINS
 -- Telescope
-vim.keymap.set('n', '<leader>?', '<cmd>Telescope oldfiles<cr>')
-vim.keymap.set('n', '<leader><space>', '<cmd>Telescope buffers<cr>')
-vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>')
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>')
-vim.keymap.set('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>')
-vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>')
+vim.keymap.set('n', '<leader>?', '<cmd>Telescope oldfiles<cr>',
+  {desc = 'Find recently opened files'}
+)
+
+vim.keymap.set('n', '<leader><space>', '<cmd>Telescope buffers<cr>',
+  {desc = 'Find existing buffers'}
+)
+
+vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>',
+  {desc = 'Find files'}
+)
+
+vim.keymap.set('n', '<leader>fg', '<cmd>Telescope live_grep<cr>',
+  {desc = 'Find string in files'}
+)
+
+vim.keymap.set('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>',
+  {desc = 'Find diagnostics'}
+)
+
+vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>',
+  {desc = 'Find string in current buffer'}
+)
 
 -- Neotest 
--- Run the nearest test
 vim.keymap.set('n', '<leader>t',
-  function () require('neotest').run.run() end
+  function () require('neotest').run.run() end,
+  {desc = 'Run nearest test'}
 )
 
--- Run the current file
 vim.keymap.set('n', '<leader>tf',
-  function () require('neotest').run.run(vim.fn.expand('%')) end
+  function () require('neotest').run.run(vim.fn.expand('%')) end,
+  {desc = 'Run file'}
 )
 
--- Display output of the nearest test
 vim.keymap.set('n', '<leader>to',
-  function () require('neotest').output.open({enter = true}) end
+  function () require('neotest').output.open({enter = true}) end,
+  {desc = 'Open test output'}
 )
 
--- Toggle test summary 
 vim.keymap.set('n', '<leader>ts',
-  function () require('neotest').summary.toggle() end
+  function () require('neotest').summary.toggle() end,
+  {desc = 'Toggle test summary'}
 )
 
--- Toggle output panel
 vim.keymap.set('n', '<leader>tp',
-  function () require('neotest').output_panel.toggle() end
+  function () require('neotest').output_panel.toggle() end,
+  {desc = 'Toggle test output panel'}
 )
 
 -- ========================================================================== --
@@ -158,7 +191,6 @@ vim.api.nvim_create_autocmd('BufWritePost', {
   pattern = 'init.lua',
   callback = function()
     vim.cmd('source $MYVIMRC')
-    print('Reloaded init.lua')
   end,
 })
 
@@ -265,8 +297,9 @@ lazy.setup({
     'Exafunction/codeium.vim', 
     event = 'BufEnter',
     config = function ()
-      vim.keymap.set('i', '<C-Bslash>', function () return vim.fn['codeium#Accept']() end, { expr = true })
-      vim.keymap.set('i', '<C-]>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true })
+      vim.keymap.set('i', '<C-h>', function () return vim.fn['codeium#Accept']() end, { expr = true })
+      vim.keymap.set('i', '<C-j>', function() return vim.fn['codeium#CycleCompletions'](1) end, { expr = true })
+      vim.keymap.set('i', '<C-k>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true })
       vim.keymap.set('i', '<C-BS>', function() return vim.fn['codeium#Clear']() end, { expr = true })
     end,
   },
