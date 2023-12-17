@@ -155,6 +155,7 @@ vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>'
   {desc = 'Find string in current buffer'}
 )
 
+
 -- Neotest 
 vim.keymap.set('n', '<leader>t',
   function () require('neotest').run.run() end,
@@ -556,6 +557,7 @@ require('mason-lspconfig').setup({
   ensure_installed = {
     "lua_ls",
     "ruby_ls",
+    -- "standardrb",
   }
 })
 
@@ -573,6 +575,7 @@ require('lspconfig').lua_ls.setup({
   }
 })
 
+-- require('lspconfig').standardrb.setup({})
 
 -- textDocument/diagnostic support until 0.10.0 is released
 local _timers = {}
