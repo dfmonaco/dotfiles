@@ -274,6 +274,8 @@ lazy.setup({
   {'akinsho/bufferline.nvim'},
   -- Displays indent lines in Neovim.
   {'lukas-reineke/indent-blankline.nvim'},
+  -- Provides syntax highlighting for Slim templates in Neovim.
+  {'slim-template/vim-slim'},
 
   --
   -- UTILITIES
