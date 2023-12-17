@@ -69,6 +69,8 @@ vim.opt.termguicolors = true
 
 -- Mappings
 
+local keymap_opts = { noremap = true, silent = true }
+
 -- Set space as the leader key
 vim.g.mapleader = ' '
 
@@ -121,31 +123,28 @@ vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>'
 -- Neotest 
 -- Run the nearest test
 vim.keymap.set('n', '<leader>t',
-  function () require('neotest').run.run() end, { expr = true }
+  function () require('neotest').run.run() end
 )
 
 -- Run the current file
 vim.keymap.set('n', '<leader>tf',
-  function () require('neotest').run.run(vim.fn.expand('%')) end, { expr = true }
+  function () require('neotest').run.run(vim.fn.expand('%')) end
 )
 
 -- Display output of the nearest test
 vim.keymap.set('n', '<leader>to',
-  function () require('neotest').output.open({enter = true}) end, { expr = true }
+  function () require('neotest').output.open({enter = true}) end
 )
 
 -- Toggle test summary 
-vim.api.nvim_set_keymap(
-  'n', '<leader>ts', '<cmd>lua require("neotest").summary.toggle()<cr>',
-  {noremap = true, silent = true}
+vim.keymap.set('n', '<leader>ts',
+  function () require('neotest').summary.toggle() end
 )
 
 -- Toggle output panel
-vim.api.nvim_set_keymap(
-  'n', '<leader>tp', '<cmd>lua require("neotest").output_panel.toggle()<cr>',
-  {noremap = true, silent = true}
+vim.keymap.set('n', '<leader>tp',
+  function () require('neotest').output_panel.toggle() end
 )
-
 
 -- ========================================================================== --
 -- ==                           USER COMMANDS                              == --
