@@ -67,10 +67,6 @@ vim.opt.showmode = false
 --- Render colors more accurately and with greater precision
 vim.opt.termguicolors = true
 
--- disable netrw 
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
 -- Mappings
 
 -- Set space as the leader key
@@ -282,6 +278,15 @@ require('lualine').setup({
     component_separators = '|',
     section_separators = ''
   },
+  sections = {
+    lualine_c = {
+      {
+        function()
+          return vim.call('codeium#GetStatusString')
+        end,
+      },
+    }
+  }
 })
 
 ---
