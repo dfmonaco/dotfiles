@@ -1,0 +1,6 @@
+diagnostics:
+  enable: true
+  # Disabling specific RuboCop cop by name
+  disabled:
+    - 'Style/StringLiterals'
+
