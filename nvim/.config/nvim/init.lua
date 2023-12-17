@@ -69,6 +69,28 @@ vim.opt.termguicolors = true
 -- Set space as the leader key
 vim.g.mapleader = ' '
 
+local opts = {}
+vim.api.nvim_set_keymap("v", "<C-r>", "<CMD>SearchReplaceSingleBufferVisualSelection<CR>", opts)
+vim.api.nvim_set_keymap("v", "<C-s>", "<CMD>SearchReplaceWithinVisualSelection<CR>", opts)
+vim.api.nvim_set_keymap("v", "<C-b>", "<CMD>SearchReplaceWithinVisualSelectionCWord<CR>", opts)
+
+vim.api.nvim_set_keymap("n", "<leader>rs", "<CMD>SearchReplaceSingleBufferSelections<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>ro", "<CMD>SearchReplaceSingleBufferOpen<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rw", "<CMD>SearchReplaceSingleBufferCWord<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rW", "<CMD>SearchReplaceSingleBufferCWORD<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>re", "<CMD>SearchReplaceSingleBufferCExpr<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rf", "<CMD>SearchReplaceSingleBufferCFile<CR>", opts)
+
+vim.api.nvim_set_keymap("n", "<leader>rbs", "<CMD>SearchReplaceMultiBufferSelections<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rbo", "<CMD>SearchReplaceMultiBufferOpen<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rbw", "<CMD>SearchReplaceMultiBufferCWord<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rbW", "<CMD>SearchReplaceMultiBufferCWORD<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rbe", "<CMD>SearchReplaceMultiBufferCExpr<CR>", opts)
+vim.api.nvim_set_keymap("n", "<leader>rbf", "<CMD>SearchReplaceMultiBufferCFile<CR>", opts)
+
+-- show the effects of a search / replace in a live preview window
+vim.o.inccommand = "split"
+
 vim.keymap.set('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>',
  {desc = 'Edit init.lua'}
 )
@@ -341,6 +363,7 @@ lazy.setup({
       vim.keymap.set('i', '<C-BS>', function() return vim.fn['codeium#Clear']() end, { expr = true })
     end,
   },
+  -- Provides which-key integration for Neovim.
   {
     "folke/which-key.nvim",
     event = "VeryLazy",
@@ -349,6 +372,15 @@ lazy.setup({
       vim.o.timeoutlen = 300
     end,
   },
+  -- Provides diagnostics panel
+  {
+    "folke/trouble.nvim",
+    dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    },
+  },
+  -- Provides search and replace 
+  { "roobert/search-replace.nvim",},
 
   --
   -- LSP
@@ -367,7 +399,7 @@ lazy.setup({
   -- Native FZF integration for Telescope.
   {'nvim-telescope/telescope-fzf-native.nvim', build = 'make'},
   -- A framework for interacting with tests within NeoVim.
-  { 
+  {
     "nvim-neotest/neotest",
     dependencies = {
       "nvim-lua/plenary.nvim",
@@ -576,3 +608,13 @@ require('lspconfig').lua_ls.setup({
 
 
 require('lspconfig').solargraph.setup({})
+
+---
+-- trouble
+---
+require('trouble').setup({})
+
+---
+-- search-replace.nvim
+---
+require('search-replace').setup({})
