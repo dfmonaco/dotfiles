@@ -3,7 +3,7 @@ HISTSIZE=1000000000
 SAVEHIST=1000000000
 
 # Set editor
-export VISUAL=vim
+export VISUAL=nvim
 export EDITOR="$VISUAL"
 export BROWSER="/usr/bin/google-chrome-stable"
 
