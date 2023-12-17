@@ -64,32 +64,13 @@ vim.opt.showmode = false
 --- Render colors more accurately and with greater precision
 vim.opt.termguicolors = true
 
+--- Show the effects of a search / replace in a live preview window
+vim.o.inccommand = "split"
+
 -- Mappings
 
 -- Set space as the leader key
 vim.g.mapleader = ' '
-
-local opts = {}
-vim.api.nvim_set_keymap("v", "<C-r>", "<CMD>SearchReplaceSingleBufferVisualSelection<CR>", opts)
-vim.api.nvim_set_keymap("v", "<C-s>", "<CMD>SearchReplaceWithinVisualSelection<CR>", opts)
-vim.api.nvim_set_keymap("v", "<C-b>", "<CMD>SearchReplaceWithinVisualSelectionCWord<CR>", opts)
-
-vim.api.nvim_set_keymap("n", "<leader>rs", "<CMD>SearchReplaceSingleBufferSelections<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>ro", "<CMD>SearchReplaceSingleBufferOpen<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rw", "<CMD>SearchReplaceSingleBufferCWord<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rW", "<CMD>SearchReplaceSingleBufferCWORD<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>re", "<CMD>SearchReplaceSingleBufferCExpr<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rf", "<CMD>SearchReplaceSingleBufferCFile<CR>", opts)
-
-vim.api.nvim_set_keymap("n", "<leader>rbs", "<CMD>SearchReplaceMultiBufferSelections<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rbo", "<CMD>SearchReplaceMultiBufferOpen<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rbw", "<CMD>SearchReplaceMultiBufferCWord<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rbW", "<CMD>SearchReplaceMultiBufferCWORD<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rbe", "<CMD>SearchReplaceMultiBufferCExpr<CR>", opts)
-vim.api.nvim_set_keymap("n", "<leader>rbf", "<CMD>SearchReplaceMultiBufferCFile<CR>", opts)
-
--- show the effects of a search / replace in a live preview window
-vim.o.inccommand = "split"
 
 vim.keymap.set('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>',
  {desc = 'Edit init.lua'}
@@ -202,6 +183,59 @@ vim.keymap.set('n', '<leader>ts',
 vim.keymap.set('n', '<leader>tp',
   function () require('neotest').output_panel.toggle() end,
   {desc = 'Toggle test output panel'}
+)
+
+-- Search/replace
+vim.keymap.set('v', '<C-r>', '<CMD>SearchReplaceSingleBufferVisualSelection<CR>',
+  { desc = 'Visual search/replace in buffer' }
+)
+
+vim.keymap.set('v', '<C-s>', '<CMD>SearchReplaceWithinVisualSelection<CR>',
+  { desc = 'Search/replace within visual selection' }
+)
+
+vim.keymap.set('v', '<C-b>', '<CMD>SearchReplaceWithinVisualSelectionCWord<CR>',
+  { desc = 'Search/replace within visual selection for word' }
+)
+
+vim.keymap.set('n', '<leader>rs', '<CMD>SearchReplaceSingleBufferSelections<CR>',
+  { desc = 'Search/replace in buffer' }
+)
+
+vim.keymap.set('n', '<leader>ro', '<CMD>SearchReplaceSingleBufferOpen<CR>',
+  { desc = 'Search/replace in buffer open' }
+)
+
+vim.keymap.set('n', '<leader>rw', '<CMD>SearchReplaceSingleBufferCWord<CR>',
+  { desc = 'Search/replace in buffer for word' }
+)
+
+vim.keymap.set('n', '<leader>rW', '<CMD>SearchReplaceSingleBufferCWORD<CR>',
+  { desc = 'Search/replace in buffer for WORD' }
+)
+
+vim.keymap.set('n', '<leader>re', '<CMD>SearchReplaceSingleBufferCExpr<CR>',
+  { desc = 'Search/replace in buffer for CExpr' }
+)
+
+vim.keymap.set('n', '<leader>rbs', '<CMD>SearchReplaceMultiBufferSelections<CR>',
+  { desc = 'Search/replace in multiple buffers' }
+)
+
+vim.keymap.set('n', '<leader>rbo', '<CMD>SearchReplaceMultiBufferOpen<CR>',
+  { desc = 'Search/replace in multiple buffers open' }
+)
+
+vim.keymap.set('n', '<leader>rbw', '<CMD>SearchReplaceMultiBufferCWord<CR>',
+  { desc = 'Search/replace in multiple buffers for word' }
+)
+
+vim.keymap.set('n', '<leader>rbW', '<CMD>SearchReplaceMultiBufferCWORD<CR>',
+  { desc = 'Search/replace in multiple buffers for WORD' }
+)
+
+vim.keymap.set('n', '<leader>rbe', '<CMD>SearchReplaceMultiBufferCExpr<CR>',
+  { desc = 'Search/replace in multiple buffers for CExpr' }
 )
 
 -- ========================================================================== --
