@@ -271,6 +271,14 @@ lazy.setup({
       vim.keymap.set('i', '<leader>-', function() return vim.fn['codeium#Clear']() end, { expr = true })
     end,
   },
+  {
+    "folke/which-key.nvim",
+    event = "VeryLazy",
+    init = function()
+      vim.o.timeout = true
+      vim.o.timeoutlen = 300
+    end,
+  },
 
   --
   -- FILE MANAGEMENT
@@ -458,4 +466,9 @@ require("neotest").setup({
     require("neotest-rspec"),
   },
 })
+
+---
+-- which-key
+---
+require('which-key').setup({})
 
