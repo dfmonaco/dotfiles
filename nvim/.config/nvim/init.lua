@@ -174,27 +174,27 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Telescope current_buffer_fuzzy_find<cr>'
 -- Neotest 
 vim.keymap.set('n', '<leader>tt',
   function () require('neotest').run.run() end,
-  {desc = 'Run nearest test'}
+  {desc = 'Run nearest [t]est'}
 )
 
 vim.keymap.set('n', '<leader>tf',
   function () require('neotest').run.run(vim.fn.expand('%')) end,
-  {desc = 'Run file'}
+  {desc = 'Run [f]ile'}
 )
 
 vim.keymap.set('n', '<leader>to',
   function () require('neotest').output.open({enter = true}) end,
-  {desc = 'Open test output'}
+  {desc = 'Open test [o]utput'}
 )
 
 vim.keymap.set('n', '<leader>ts',
   function () require('neotest').summary.toggle() end,
-  {desc = 'Toggle test summary'}
+  {desc = 'Toggle test [s]ummary'}
 )
 
 vim.keymap.set('n', '<leader>tp',
   function () require('neotest').output_panel.toggle() end,
-  {desc = 'Toggle test output panel'}
+  {desc = 'Toggle test output [p]anel'}
 )
 
 -- Search/replace
@@ -202,53 +202,18 @@ vim.keymap.set('v', '<C-r>', '<CMD>SearchReplaceSingleBufferVisualSelection<CR>'
   { desc = 'Visual search/replace in buffer' }
 )
 
-vim.keymap.set('v', '<C-s>', '<CMD>SearchReplaceWithinVisualSelection<CR>',
-  { desc = 'Search/replace within visual selection' }
-)
-
-vim.keymap.set('v', '<C-b>', '<CMD>SearchReplaceWithinVisualSelectionCWord<CR>',
-  { desc = 'Search/replace within visual selection for word' }
-)
-
-vim.keymap.set('n', '<leader>rs', '<CMD>SearchReplaceSingleBufferSelections<CR>',
-  { desc = 'Search/replace in buffer' }
-)
-
-vim.keymap.set('n', '<leader>ro', '<CMD>SearchReplaceSingleBufferOpen<CR>',
-  { desc = 'Search/replace in buffer open' }
-)
-
 vim.keymap.set('n', '<leader>rw', '<CMD>SearchReplaceSingleBufferCWord<CR>',
-  { desc = 'Search/replace in buffer for word' }
+  { desc = 'Search/replace in buffer for [w]ord' }
 )
 
 vim.keymap.set('n', '<leader>rW', '<CMD>SearchReplaceSingleBufferCWORD<CR>',
-  { desc = 'Search/replace in buffer for WORD' }
+  { desc = 'Search/replace in buffer for [W]WORD' }
 )
 
-vim.keymap.set('n', '<leader>re', '<CMD>SearchReplaceSingleBufferCExpr<CR>',
-  { desc = 'Search/replace in buffer for CExpr' }
-)
-
-vim.keymap.set('n', '<leader>rbs', '<CMD>SearchReplaceMultiBufferSelections<CR>',
-  { desc = 'Search/replace in multiple buffers' }
-)
-
-vim.keymap.set('n', '<leader>rbo', '<CMD>SearchReplaceMultiBufferOpen<CR>',
-  { desc = 'Search/replace in multiple buffers open' }
-)
-
-vim.keymap.set('n', '<leader>rbw', '<CMD>SearchReplaceMultiBufferCWord<CR>',
-  { desc = 'Search/replace in multiple buffers for word' }
-)
-
-vim.keymap.set('n', '<leader>rbW', '<CMD>SearchReplaceMultiBufferCWORD<CR>',
-  { desc = 'Search/replace in multiple buffers for WORD' }
-)
-
-vim.keymap.set('n', '<leader>rbe', '<CMD>SearchReplaceMultiBufferCExpr<CR>',
-  { desc = 'Search/replace in multiple buffers for CExpr' }
-)
+-- Spectre
+vim.keymap.set('n', '<leader>rp', '<cmd>lua require("spectre").toggle()<CR>', {
+    desc = "Toggle Search/Replace [p]anel",
+})
 
 -- ========================================================================== --
 -- ==                           USER COMMANDS                              == --
@@ -291,37 +256,37 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
     -- It shows information about the symbol under the cursor
     bufmap('n', '<leader>li', '<cmd>lua vim.lsp.buf.hover()<cr>',
-      {desc = 'Show info'}
+      {desc = 'Show [i]nfo'}
     )
 
     -- It jumps to the definition of the symbol under the cursor
     bufmap('n', '<leader>ld', '<cmd>lua vim.lsp.buf.definition()<cr>',
-      {desc = 'Go to definition'}
+      {desc = 'Go to [d]efinition'}
     )
 
     -- Lists all the implementations of the symbol under the cursor
     bufmap('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>',
-      {desc = 'List implementations'}
+      {desc = 'List [i]mplementations'}
     )
 
     -- Lists all the references of the symbol under the cursor in the quickfix
     bufmap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>',
-      {desc = 'List references'}
+      {desc = 'List [r]eferences'}
     )
 
     -- Displays the signature of the function
     bufmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.signature_help()<cr>',
-      {desc = 'Show signature'}
+      {desc = 'Show [s]ignature'}
     )
 
     -- Formats the buffer using the current language server
     bufmap({'n', 'x'}, '<leader>lf', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
-      {desc = 'Format buffer'}
+      {desc = 'Buffer [f]ormat'}
     )
 
     -- Selects a code action available at the current cursor position
     bufmap('n', '<leader>la', '<cmd>lua vim.lsp.buf.code_action()<cr>',
-      {desc = 'Select code action'}
+      {desc = 'Select code [a]ction'}
     )
   end
 })
@@ -658,12 +623,11 @@ require("neotest").setup({
 ---
 -- require('which-key').setup({})
 require('which-key').register({
-  ['<leader>f'] = { name = '[F]ind' },
-  ['<leader>e'] = { name = '[E]dit' },
-  ['<leader>r'] = { name = '[R]eplace' },
-  ['<leader>rb'] = { name = '[B]uffers' },
-  ['<leader>t'] = { name = '[T]est' },
-  ['<leader>l'] = { name = '[L]sp', _ = 'which_key_ignore' },
+  ['<leader>f'] = { name = '[f]ind' },
+  ['<leader>e'] = { name = '[e]dit' },
+  ['<leader>r'] = { name = '[r]eplace' },
+  ['<leader>t'] = { name = '[t]est' },
+  ['<leader>l'] = { name = '[l]sp', _ = 'which_key_ignore' },
 })
 
 ---
@@ -703,3 +667,14 @@ require('trouble').setup({})
 -- search-replace.nvim
 ---
 require('search-replace').setup({})
+
+---
+-- vim-spectre
+---
+require('spectre').setup({
+  highlight = {
+    ui = "String",
+    search = "DiffChange",
+    replace = "DiffDelete",
+  }
+})
