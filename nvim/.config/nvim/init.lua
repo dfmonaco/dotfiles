@@ -112,6 +112,14 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
  {desc = 'Select entire buffer'}
 )
 
+vim.keymap.set('n', '<leader>q', '<cmd>q<cr>',
+ {desc = 'Quit'}
+)
+
+vim.keymap.set('n', '<leader>x', '<cmd>q!<cr>',
+ {desc = 'Quit without saving'}
+)
+
 vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>',
  {desc = 'Delete buffer'}
 )
