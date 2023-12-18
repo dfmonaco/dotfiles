@@ -105,7 +105,11 @@ vim.keymap.set('n', '<C-l>', '<C-w>l',
 )
 
 vim.keymap.set('n', '<leader>ei', '<cmd>e $MYVIMRC<cr>',
- {desc = 'Edit init.lua'}
+ {desc = 'Edit [i]nit.lua'}
+)
+
+vim.keymap.set('n', '<leader>ez', '<cmd>e $HOME/.zshrc<cr>',
+ {desc = 'Edit [z]shrc'}
 )
 
 vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
@@ -139,31 +143,31 @@ vim.keymap.set('n', '<leader>=', 'gg=G',
 -- PLUGINS
 -- Telescope
 vim.keymap.set('n', '<leader>fr', '<cmd>Telescope oldfiles<cr>',
-  {desc = 'Find recently opened files'}
+  {desc = 'Find [r]ecently opened files'}
 )
 
 vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>',
-  {desc = 'Find existing buffers'}
+  {desc = 'Find existing [b]uffers'}
 )
 
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope git_files<cr>',
-  {desc = 'Find files in git repo'}
+  {desc = 'Find files in [g]it repo'}
 )
 
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>',
-  {desc = 'Find files'}
+  {desc = 'Find [f]iles'}
 )
 
 vim.keymap.set('n', '<leader>fs', '<cmd>Telescope live_grep<cr>',
-  {desc = 'Find string in files'}
+  {desc = 'Find [s]tring in files'}
 )
 
 vim.keymap.set('n', '<leader>fd', '<cmd>Telescope diagnostics<cr>',
-  {desc = 'Find diagnostics'}
+  {desc = 'Find [d]iagnostics'}
 )
 
-vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>',
-  {desc = 'Find string in current buffer'}
+vim.keymap.set('n', '<leader>fh', '<cmd>Telescope current_buffer_fuzzy_find<cr>',
+  {desc = 'Find string [h]ere'}
 )
 
 
@@ -405,19 +409,11 @@ lazy.setup({
   {'nvim-treesitter/nvim-treesitter'},
   -- Additional text objects for treesitter.
   {'nvim-treesitter/nvim-treesitter-textobjects'},
-  -- Commenting plugin for Neovim.
-  {'numToStr/Comment.nvim'},
-  -- Adds mappings to easily manipulate surroundings.
-  {'tpope/vim-surround'},
-  -- Extends text objects to support additional targets.
-  {'wellle/targets.vim'},
-  -- Repeats supported plugin commands with '.'
-  {'tpope/vim-repeat'},
   -- Provides easy toggling of terminal in Neovim.
   {'akinsho/toggleterm.nvim'},
   -- AI code completion
   {
-    'Exafunction/codeium.vim', 
+    'Exafunction/codeium.vim',
     event = 'BufEnter',
     config = function ()
       vim.keymap.set('i', '<C-h>', function () return vim.fn['codeium#Accept']() end, { expr = true })
@@ -435,15 +431,26 @@ lazy.setup({
       vim.o.timeoutlen = 300
     end,
   },
-  -- Provides diagnostics panel
-  {
-    "folke/trouble.nvim",
-    dependencies = {
-    "nvim-tree/nvim-web-devicons",
-    },
-  },
+
+  ---
+  -- TEXT MANIPULATION
+  ---
   -- Provides search and replace 
   { "roobert/search-replace.nvim",},
+  -- Commenting plugin for Neovim.
+  {'numToStr/Comment.nvim'},
+  -- Adds mappings to easily manipulate surroundings.
+  {'tpope/vim-surround'},
+  -- Extends text objects to support additional targets.
+  {'wellle/targets.vim'},
+  -- Repeats supported plugin commands with '.'
+  {'tpope/vim-repeat'},
+  -- A search panel for Neovim.
+  {'nvim-pack/nvim-spectre',
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    }
+  },
 
   --
   -- LSP
@@ -451,6 +458,13 @@ lazy.setup({
   {"williamboman/mason.nvim"},
   {"williamboman/mason-lspconfig.nvim"},
   {'neovim/nvim-lspconfig'},
+  -- Provides diagnostics panel
+  {
+    "folke/trouble.nvim",
+    dependencies = {
+    "nvim-tree/nvim-web-devicons",
+    },
+  },
 
   --
   -- FILE MANAGEMENT

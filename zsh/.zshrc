@@ -37,7 +37,7 @@ zplug load
 # Alias
 alias cat='bat'
 # editor
-# alias vi='nvim'
+alias e='nvim'
 # alias vim='nvim'
 
 # ruby
