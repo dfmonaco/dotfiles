@@ -215,6 +215,14 @@ vim.keymap.set('n', '<leader>rp', '<cmd>lua require("spectre").toggle()<CR>', {
     desc = "Toggle Search/Replace [p]anel",
 })
 
+-- Trouble
+vim.keymap.set("n", "<leader>lp", function() require("trouble").toggle() end,
+  { desc = "Toggle diagnostics [p]anel" }
+)
+vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end,
+  { desc = "Toggle LSP [R]eferences" }
+)
+
 -- ========================================================================== --
 -- ==                           USER COMMANDS                              == --
 -- ========================================================================== --
