@@ -112,6 +112,10 @@ vim.keymap.set('n', '<leader>ez', '<cmd>e $HOME/.zshrc<cr>',
  {desc = 'Edit [z]shrc'}
 )
 
+vim.keymap.set('n', '<leader>er', '<cmd>e $HOME/.config/rubocop/config.yml<cr>',
+ {desc = 'Edit [r]rubocop'}
+)
+
 vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
  {desc = 'Select entire buffer'}
 )
@@ -246,6 +250,17 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Fix Telescope bug
+-- https://github.com/nvim-telescope/telescope.nvim/issues/2027#issuecomment-1561836585
+-- https://github.com/nvim-telescope/telescope.nvim/issues/2766
+vim.api.nvim_create_autocmd("WinLeave", {
+  callback = function()
+    if vim.bo.ft == "TelescopePrompt" and vim.fn.mode() == "i" then
+      vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "i", false)
+    end
+  end,
+})
+
 
 ---
 -- LSP Keybindings
@@ -372,6 +387,8 @@ lazy.setup({
   {'lukas-reineke/indent-blankline.nvim'},
   -- Provides syntax highlighting for Slim templates in Neovim.
   {'slim-template/vim-slim'},
+  -- Colorscheme switcher
+  {'zaldih/themery.nvim'},
 
   --
   -- UTILITIES
@@ -475,7 +492,7 @@ lazy.setup({
 ---
 -- Colorscheme
 ---
-vim.cmd.colorscheme('darkplus')
+vim.cmd.colorscheme('tokyonight')
 
 ---
 -- lualine.nvim (statusline)
@@ -664,7 +681,9 @@ require('lspconfig').lua_ls.setup({
 })
 
 
-require('lspconfig').solargraph.setup({})
+require('lspconfig').solargraph.setup({
+  filetypes = { 'ruby' },
+})
 
 ---
 -- trouble
@@ -685,4 +704,17 @@ require('spectre').setup({
     search = "DiffChange",
     replace = "DiffDelete",
   }
+})
+
+---
+-- themery
+--
+require('themery').setup({
+  themes = {
+    'tokyonight',
+    'onedark',
+    'monokai',
+    'darkplus',
+  },
+  livePreview = true,
 })
