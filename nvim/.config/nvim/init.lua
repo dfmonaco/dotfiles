@@ -72,14 +72,6 @@ vim.o.inccommand = "split"
 -- Set space as the leader key
 vim.g.mapleader = ' '
 
-vim.keymap.set('n', '<leader>ev', '<cmd>e $MYVIMRC<cr>',
- {desc = 'Edit init.lua'}
-)
-
-vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
- {desc = 'Select entire buffer'}
-)
-
 vim.keymap.set('n', '<tab>', ':bn<CR>',
  {desc = 'Next buffer'}
 )
@@ -88,28 +80,12 @@ vim.keymap.set('n', '<C-tab>', ':bp<CR>',
  {desc = 'Previous buffer'}
 )
 
-vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>',
- {desc = 'Delete buffer'}
-)
-
 vim.keymap.set({'n', 'x'}, 'gy', '"+y',
  {desc = 'Yank to system clipboard'}
 )
 
 vim.keymap.set({'n', 'x'}, 'gp', '"+p',
  {desc = 'Paste from system clipboard'}
-)
-
-vim.keymap.set('n', '<leader>w', '<cmd>write<cr>',
- {desc = 'Write file'}
-)
-
-vim.keymap.set('n', '<leader><leader>', '<c-^>',
- {desc = 'Last buffer'}
-)
-
-vim.keymap.set('n', '<leader>=', 'gg=G',
- {desc = 'Autoindent the whole file'}
 )
 
 vim.keymap.set('n', '<C-h>', '<C-w>h',
@@ -128,13 +104,37 @@ vim.keymap.set('n', '<C-l>', '<C-w>l',
  {desc = 'Next window'}
 )
 
+vim.keymap.set('n', '<leader>ei', '<cmd>e $MYVIMRC<cr>',
+ {desc = 'Edit init.lua'}
+)
+
+vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
+ {desc = 'Select entire buffer'}
+)
+
+vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>',
+ {desc = 'Delete buffer'}
+)
+
+vim.keymap.set('n', '<leader>w', '<cmd>write<cr>',
+ {desc = 'Write file'}
+)
+
+vim.keymap.set('n', '<leader><leader>', '<c-^>',
+ {desc = 'Last buffer'}
+)
+
+vim.keymap.set('n', '<leader>=', 'gg=G',
+ {desc = 'Autoindent the whole file'}
+)
+
 -- PLUGINS
 -- Telescope
-vim.keymap.set('n', '<leader>?', '<cmd>Telescope oldfiles<cr>',
+vim.keymap.set('n', '<leader>fr', '<cmd>Telescope oldfiles<cr>',
   {desc = 'Find recently opened files'}
 )
 
-vim.keymap.set('n', '<leader><space>', '<cmd>Telescope buffers<cr>',
+vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>',
   {desc = 'Find existing buffers'}
 )
 
@@ -160,7 +160,7 @@ vim.keymap.set('n', '<leader>fs', '<cmd>Telescope current_buffer_fuzzy_find<cr>'
 
 
 -- Neotest 
-vim.keymap.set('n', '<leader>t',
+vim.keymap.set('n', '<leader>tt',
   function () require('neotest').run.run() end,
   {desc = 'Run nearest test'}
 )
@@ -613,7 +613,14 @@ require("neotest").setup({
 ---
 -- which-key
 ---
-require('which-key').setup({})
+-- require('which-key').setup({})
+require('which-key').register({
+  ['<leader>f'] = { name = '[F]ind' },
+  ['<leader>e'] = { name = '[E]dit' },
+  ['<leader>r'] = { name = '[R]eplace' },
+  ['<leader>rb'] = { name = '[B]uffers' },
+  ['<leader>t'] = { name = '[T]est' },
+})
 
 ---
 -- mason
