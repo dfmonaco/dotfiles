@@ -57,6 +57,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gco='git checkout'
 alias -g rsnet='1256@usw-s001.rsync.net'
+alias lg='lazygit'
 
 
 alias po='systemctl poweroff'
