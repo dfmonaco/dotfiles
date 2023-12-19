@@ -113,7 +113,7 @@ vim.keymap.set('n', '<leader>ez', '<cmd>e $HOME/.zshrc<cr>',
 )
 
 vim.keymap.set('n', '<leader>er', '<cmd>e $HOME/.config/rubocop/config.yml<cr>',
- {desc = 'Edit [r]rubocop'}
+ {desc = 'Edit [r]ubocop'}
 )
 
 vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
@@ -121,7 +121,7 @@ vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>',
 )
 
 vim.keymap.set('n', '<leader>q', '<cmd>q<cr>',
- {desc = 'Quit'}
+ {desc = '[q]uit'}
 )
 
 vim.keymap.set('n', '<leader>x', '<cmd>q!<cr>',
@@ -129,11 +129,11 @@ vim.keymap.set('n', '<leader>x', '<cmd>q!<cr>',
 )
 
 vim.keymap.set('n', '<leader>d', '<cmd>bdelete<cr>',
- {desc = 'Delete buffer'}
+ {desc = 'Buffer [d]elete'}
 )
 
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>',
- {desc = 'Write file'}
+ {desc = '[w]rite file'}
 )
 
 vim.keymap.set('n', '<leader><leader>', '<c-^>',
@@ -151,7 +151,7 @@ vim.keymap.set('n', '<leader>fr', '<cmd>Telescope oldfiles<cr>',
 )
 
 vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>',
-  {desc = 'Find existing [b]uffers'}
+  {desc = 'Find current [b]uffers'}
 )
 
 vim.keymap.set('n', '<leader>fg', '<cmd>Telescope git_files<cr>',
@@ -219,24 +219,24 @@ vim.keymap.set('n', '<leader>rW', '<CMD>SearchReplaceSingleBufferCWORD<CR>',
 )
 
 -- Spectre
-vim.keymap.set('n', '<leader>rp', '<cmd>lua require("spectre").toggle()<CR>', {
+vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").toggle()<CR>', {
     desc = "Toggle Search/Replace [p]anel",
 })
 
 vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-    desc = "Search current word"
+    desc = "Search current [w]ord on all files"
 })
 
-vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-    desc = "Search on current file"
+vim.keymap.set('n', '<leader>sb', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+    desc = "Search current word on current [b]uffer"
 })
 
 -- Trouble
 vim.keymap.set("n", "<leader>lp", function() require("trouble").toggle() end,
   { desc = "Toggle diagnostics [p]anel" }
 )
-vim.keymap.set("n", "gR", function() require("trouble").toggle("lsp_references") end,
-  { desc = "Toggle LSP [R]eferences" }
+vim.keymap.set("n", "<leader>lr", function() require("trouble").toggle("lsp_references") end,
+  { desc = "Toggle LSP [r]eferences" }
 )
 
 -- ========================================================================== --
@@ -303,12 +303,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     bufmap('n', '<leader>li', '<cmd>lua vim.lsp.buf.implementation()<cr>',
       {desc = 'List [i]mplementations'}
     )
-
-    -- Lists all the references of the symbol under the cursor in the quickfix
-    bufmap('n', '<leader>lr', '<cmd>lua vim.lsp.buf.references()<cr>',
-      {desc = 'List [r]eferences'}
-    )
-
     -- Displays the signature of the function
     bufmap('n', '<leader>ls', '<cmd>lua vim.lsp.buf.signature_help()<cr>',
       {desc = 'Show [s]ignature'}
@@ -630,52 +624,54 @@ require('gitsigns').setup({
 
     -- Navigation
     map('n', ']c', function()
-      if vim.wo.diff then return ']c' end
+      if vim.wo.diff then return ']h' end
       vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, {expr=true, desc = 'Next hunk'})
 
     map('n', '[c', function()
-      if vim.wo.diff then return '[c' end
+      if vim.wo.diff then return '[h' end
       vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
-    end, {expr=true})
+    end, {expr=true, desc = 'Previous hunk'})
 
     -- Actions
+    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end,
+      {desc = 'Hunk [s]tage in selection'}
+    )
+    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end,
+      {desc = 'Hunk [r]eset in selection'}
+    )
+
     map('n', '<leader>hs', gs.stage_hunk,
-      {desc = 'Stage hunk'}
+      {desc = 'Hunk [s]tage'}
     )
     map('n', '<leader>hr', gs.reset_hunk,
-      {desc = 'Reset hunk'}
-    )
-    map('v', '<leader>hs', function() gs.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end,
-      {desc = 'Stage hunk in selection'})
-    map('v', '<leader>hr', function() gs.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end,
-      {desc = 'Reset hunk in selection'}
+      {desc = 'Hunk [r]eset'}
     )
     map('n', '<leader>hS', gs.stage_buffer,
-      {desc = 'Stage buffer'}
+      {desc = 'Hunk [S]tage all in buffer'}
     )
     map('n', '<leader>hu', gs.undo_stage_hunk,
-      {desc = 'Undo stage hunk'}
+      {desc = 'Hunk [u]ndo stage'}
     )
     map('n', '<leader>hR', gs.reset_buffer,
-      {desc = 'Reset buffer'}
+      {desc = 'Hunk [R]eset all in buffer'}
     )
     map('n', '<leader>hp', gs.preview_hunk,
-      {desc = 'Preview hunk'}
+      {desc = 'Hunk [p]review'}
     )
     map('n', '<leader>hb', function() gs.blame_line{full=true} end,
-      {desc = 'Blame line'}
+      {desc = 'Line [b]lame'}
     )
     map('n', '<leader>hd', gs.diffthis,
-      {desc = 'Diff this hunk'}
+      {desc = 'Hunk [d]iff'}
     )
     map('n', '<leader>hD', function() gs.diffthis('~') end,
-      {desc = 'Diff this buffer'}
+      {desc = 'Hunk [D]iff all in buffer'}
     )
-    map('n', '<leader>td', gs.toggle_deleted,
-      {desc = 'Toggle deleted hunk'}
+    map('n', '<leader>ht', gs.toggle_deleted,
+      {desc = 'Hunk [t]oggle deleted'}
     )
 
     -- Text object
@@ -742,7 +738,7 @@ local Terminal  = require('toggleterm.terminal').Terminal
 
 vim.keymap.set("n", "<leader>g", function()
   Terminal:new({ cmd = "lazygit", hidden = true }):toggle()
-end, { noremap = true, silent = true, expr = true })
+end, { noremap = true, silent = true, expr = true, desc = "[g]it" })
 
 ---
 -- neotest
@@ -762,6 +758,8 @@ require('which-key').register({
   ['<leader>e'] = { name = '[e]dit' },
   ['<leader>r'] = { name = '[r]eplace' },
   ['<leader>t'] = { name = '[t]est' },
+  ['<leader>s'] = { name = '[s]earch' },
+  ['<leader>h'] = { name = '[h]unk', _ = 'which_key_ignore' },
   ['<leader>l'] = { name = '[l]sp', _ = 'which_key_ignore' },
 })
 
