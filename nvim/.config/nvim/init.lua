@@ -727,10 +727,22 @@ require('nvim-treesitter.configs').setup({
 -- See :help toggleterm-roadmap
 require('toggleterm').setup({
   open_mapping = '<C-g>',
-  direction = 'horizontal',
-  shade_terminals = true
+  direction = 'float',
+  shade_terminals = true,
+  size = function(term)
+    if term.direction == "horizontal" then
+      return 15
+    elseif term.direction == "vertical" then
+      return vim.o.columns * 0.5
+    end
+  end,
 })
 
+local Terminal  = require('toggleterm.terminal').Terminal
+
+vim.keymap.set("n", "<leader>g", function()
+  Terminal:new({ cmd = "lazygit", hidden = true }):toggle()
+end, { noremap = true, silent = true, expr = true })
 
 ---
 -- neotest
