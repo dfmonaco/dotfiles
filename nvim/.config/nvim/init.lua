@@ -498,7 +498,7 @@ lazy.setup({
 ---
 -- Colorscheme
 ---
-vim.cmd.colorscheme('tokyonight')
+vim.cmd.colorscheme('darkplus')
 
 ---
 -- lualine.nvim (statusline)
