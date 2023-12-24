@@ -481,6 +481,12 @@ lazy.setup({
       dependencies = { "nvim-telescope/telescope.nvim" },
   },
 
+  -- Improved input and select
+  {
+    'stevearc/dressing.nvim',
+  },
+  -- Improved notifications
+  { 'rcarriga/nvim-notify' },
   ---
   -- TEXT MANIPULATION
   ---
@@ -557,6 +563,7 @@ lazy.setup({
 -- ==                         PLUGIN CONFIGURATION                         == --
 -- ========================================================================== --
 
+vim.notify = require("notify")
 ---
 -- Colorscheme
 ---
@@ -980,6 +987,23 @@ require("pantran").setup{
 --- neoclip
 --
 require('neoclip').setup({})
+
+--
+--- dressing
+--
+require("dressing").setup({
+  input = {
+    enabled = true,
+    prompt = "➤ ",
+    relative = "editor",
+    position = "center",
+  },
+  select = {
+    enabled = true,
+    backend = { "telescope", "fzf", "builtin" },
+  },
+})
+
 --
 --- browse
 --
