@@ -440,6 +440,7 @@ lazy.setup({
       vim.o.timeoutlen = 300
     end,
   },
+  { "ii14/neorepl.nvim" },
 
   ---
   -- TEXT MANIPULATION
