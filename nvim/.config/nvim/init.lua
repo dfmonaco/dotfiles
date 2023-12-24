@@ -514,6 +514,11 @@ lazy.setup({
     'linrongbin16/lsp-progress.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
+  {
+    'creativenull/efmls-configs-nvim',
+    version = 'v1.x.x', -- version is optional, but recommended
+    dependencies = { 'neovim/nvim-lspconfig' }
+  },
 
   --
   -- FILE MANAGEMENT
@@ -832,6 +837,7 @@ require('mason-lspconfig').setup({
   ensure_installed = {
     "lua_ls",
     "solargraph",
+    "efm",
   }
 })
 
@@ -854,6 +860,35 @@ require('lspconfig').solargraph.setup({
   filetypes = { 'ruby' },
 })
 
+--- 
+-- efmls
+--
+local languages = require('efmls-configs.defaults').languages()
+-- To extend and add additional tools or to override existing
+-- defaults registered:
+
+languages = vim.tbl_extend('force', languages, {
+  -- you custom languages, or overrides
+  slim = {
+    require('efmls-configs.linters.slim_lint')
+  }
+})
+
+local efmls_config = {
+  filetypes = vim.tbl_keys(languages),
+  settings = {
+    rootMarkers = { '.git/' },
+    languages = languages,
+  },
+  init_options = {
+    documentFormatting = true,
+    documentRangeFormatting = true,
+  },
+}
+
+require('lspconfig').efm.setup(
+  vim.tbl_extend('force', efmls_config, {})
+)
 ---
 -- trouble
 ---
