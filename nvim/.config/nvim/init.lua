@@ -187,6 +187,10 @@ vim.keymap.set('n', '<leader>fh', '<cmd>Telescope current_buffer_fuzzy_find<cr>'
   {desc = 'Find string [h]ere'}
 )
 
+vim.keymap.set('n', '<leader>fy', '<cmd>Telescope neoclip<cr>',
+  {desc = 'Find [y]anks'}
+)
+
 
 -- Neotest 
 vim.keymap.set('n', '<leader>tt',
@@ -470,6 +474,8 @@ lazy.setup({
   },
   -- Translate text
   { "potamides/pantran.nvim" },
+  -- Clipboard manager
+  { "AckslD/nvim-neoclip.lua" },
 
   ---
   -- TEXT MANIPULATION
@@ -930,3 +936,8 @@ require("pantran").setup{
     }
   }
 }
+
+--
+--- neoclip
+--
+require('neoclip').setup({})
