@@ -167,12 +167,12 @@ vim.keymap.set('n', '<leader>fb', '<cmd>Telescope buffers<cr>',
   {desc = 'Find current [b]uffers'}
 )
 
-vim.keymap.set('n', '<leader>fg', '<cmd>Telescope git_files<cr>',
-  {desc = 'Find files in [g]it repo'}
+vim.keymap.set('n', '<leader>fa', '<cmd>Telescope git_files<cr>',
+  {desc = 'Find [a]ll files'}
 )
 
 vim.keymap.set('n', '<leader>ff', '<cmd>Telescope find_files<cr>',
-  {desc = 'Find [f]iles'}
+  {desc = 'Find git [f]iles'}
 )
 
 vim.keymap.set('n', '<leader>fs', '<cmd>Telescope live_grep<cr>',
@@ -636,13 +636,13 @@ require('gitsigns').setup({
     end
 
     -- Navigation
-    map('n', ']c', function()
+    map('n', ']h', function()
       if vim.wo.diff then return ']h' end
       vim.schedule(function() gs.next_hunk() end)
       return '<Ignore>'
     end, {expr=true, desc = 'Next hunk'})
 
-    map('n', '[c', function()
+    map('n', '[h', function()
       if vim.wo.diff then return '[h' end
       vim.schedule(function() gs.prev_hunk() end)
       return '<Ignore>'
@@ -685,6 +685,9 @@ require('gitsigns').setup({
     )
     map('n', '<leader>ht', gs.toggle_deleted,
       {desc = 'Hunk [t]oggle deleted'}
+    )
+    map('n', '<leader>ha', ':Gitsigns setloclist<CR>',
+      {desc = 'Hunk show [a]ll'}
     )
 
     -- Text object
@@ -749,7 +752,7 @@ require('toggleterm').setup({
 
 local Terminal  = require('toggleterm.terminal').Terminal
 
-vim.keymap.set("n", "<leader>g", function()
+vim.keymap.set("n", "<leader>og", function()
   Terminal:new({ cmd = "lazygit", hidden = true }):toggle()
 end, { noremap = true, silent = true, expr = true, desc = "[g]it" })
 
@@ -774,6 +777,7 @@ require('which-key').register({
   ['<leader>s'] = { name = '[s]earch' },
   ['<leader>h'] = { name = '[h]unk', _ = 'which_key_ignore' },
   ['<leader>l'] = { name = '[l]sp', _ = 'which_key_ignore' },
+  ['<leader>o'] = { name = '[o]open', _ = 'which_key_ignore' },
 })
 
 ---
