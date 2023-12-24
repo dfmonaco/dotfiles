@@ -1011,15 +1011,15 @@ require('browse').setup({})
 
 local bookmarks = {
   ["search"] = {
-    ["code"] = "https://github.com/search?q=%s&type=code",
-    ["repo"] = "https://github.com/search?q=%s&type=repositories",
-    ["issues"] = "https://github.com/search?q=%s&type=issues",
-    ["pulls"] = "https://github.com/search?q=%s&type=pullrequests",
+    ["github"] = "https://github.com/search?q=%s&type=repositories",
     ["youtube"] = "https://www.youtube.com/results?search_query=%s",
     ["stackoverflow"] = "https://stackoverflow.com/search?q=%s",
     ["google"] = "https://www.google.com/search?q=%s",
     ["wikipedia"] = "https://en.wikipedia.org/w/index.php?search=%s",
-  }
+  },
+  ["pulls"] = {
+    ["amg"] = "https://github.com/Miltheory/kronickle-directv-assetcenter/pulls"
+  },
 }
 
 vim.keymap.set("n", "<leader>b",
