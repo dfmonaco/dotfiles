@@ -21,7 +21,7 @@ zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "zsh-users/zsh-syntax-highlighting"
 
 # theme
-zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
+# zplug "denysdovhan/spaceship-prompt", use:spaceship.zsh, from:github, as:theme
 
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
@@ -101,3 +101,21 @@ export PATH="$PATH:`yarn global bin`"
 source /usr/share/nvm/init-nvm.sh
 
 eval "$(rbenv init - zsh)"
+
+# Load pyenv automatically by appending
+# the following to
+# ~/.zprofile (for login shells)
+# and ~/.zshrc (for interactive shells) :
+
+export PYENV_ROOT="$HOME/.pyenv"
+[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init -)"
+
+# Starship Prompt
+eval "$(starship init zsh)"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/home/diego/google-cloud-sdk/path.zsh.inc' ]; then . '/home/diego/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/home/diego/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/diego/google-cloud-sdk/completion.zsh.inc'; fi
