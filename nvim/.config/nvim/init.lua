@@ -269,17 +269,6 @@ else
 		end,
 	})
 
-	-- Fix Telescope bug
-	-- https://github.com/nvim-telescope/telescope.nvim/issues/2027#issuecomment-1561836585
-	-- https://github.com/nvim-telescope/telescope.nvim/issues/2766
-	vim.api.nvim_create_autocmd("WinLeave", {
-		callback = function()
-			if vim.bo.ft == "TelescopePrompt" and vim.fn.mode() == "i" then
-				vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "i", false)
-			end
-		end,
-	})
-
 	---
 	-- LSP Keybindings
 	---
@@ -427,8 +416,6 @@ else
 		{ "slim-template/vim-slim" },
 		-- { "zaldih/themery.nvim" }, [Theme switcher] {{{3
 		{ "zaldih/themery.nvim" },
-		-- { "nvim-lua/plenary.nvim" }, [All-in-one Lua utility functions (required by Telescope)] {{{3
-		{ "nvim-lua/plenary.nvim" },
 		-- { "nvim-treesitter/nvim-treesitter" }, [Language parsing and manipulation] {{{3
 		{ "nvim-treesitter/nvim-treesitter" },
 		-- { "nvim-treesitter/nvim-treesitter-textobjects" }, [Additional text objects for treesitter] {{{3
@@ -591,6 +578,7 @@ else
       cmd = "Telescope",
       version = false,
 			dependencies = {
+		    { "nvim-lua/plenary.nvim" },
         { "nvim-telescope/telescope-fzf-native.nvim",
           build = "make",
         },
