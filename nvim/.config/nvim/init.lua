@@ -58,8 +58,7 @@ if vim.g.vscode then
 
 else
 
--- EDITOR SETTINGS {{{1
-	-- Configurations {{{2
+-- EDITOR CONFIGURATION {{{1
 
   -- Set folding method
   vim.opt.foldmethod = "marker"
@@ -189,7 +188,7 @@ else
 	end
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
--- USER COMMANDS {{{1
+-- EVENT CALLBACKS {{{1
 	local group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 
 	vim.api.nvim_create_autocmd("TextYankPost", {
@@ -257,7 +256,7 @@ else
   vim.opt.rtp:prepend(lazypath)
 
 	require('lazy').setup({
-	-- Plugin Install {{{2
+	-- Plugin Settings {{{2
 		-- { "folke/tokyonight.nvim" }, [Theme] {{{3
 		{ "folke/tokyonight.nvim" },
 		-- { "joshdick/onedark.vim" }, [Theme] {{{3
