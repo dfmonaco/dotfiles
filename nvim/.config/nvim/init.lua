@@ -189,55 +189,6 @@ else
 	end
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
--- Plugins {{{3
--- Search/Replace {{{4
-	vim.keymap.set(
-		"v",
-		"<C-r>",
-		"<CMD>SearchReplaceSingleBufferVisualSelection<CR>",
-		{ desc = "Visual search/replace in buffer" }
-	)
-
-	vim.keymap.set(
-		"v",
-		"<C-s>",
-		"<CMD>SearchReplaceWithinVisualSelection<CR>",
-		{ desc = "Search/replace within visual selection" }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>rw",
-		"<CMD>SearchReplaceSingleBufferCWord<CR>",
-		{ desc = "Search/replace in buffer for [w]ord" }
-	)
-
-	vim.keymap.set(
-		"n",
-		"<leader>rW",
-		"<CMD>SearchReplaceSingleBufferCWORD<CR>",
-		{ desc = "Search/replace in buffer for [W]WORD" }
-	)
--- Spectre {{{4
-	vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").toggle()<CR>', {
-		desc = "Toggle Search/Replace [p]anel",
-	})
-
-	vim.keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-		desc = "Search current [w]ord on all files",
-	})
-
-	vim.keymap.set("n", "<leader>sb", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-		desc = "Search current word on current [b]uffer",
-	})
--- Trouble{{{4
-	vim.keymap.set("n", "<leader>lp", function()
-		require("trouble").toggle()
-	end, { desc = "Toggle diagnostics [p]anel" })
-	vim.keymap.set("n", "<leader>lr", function()
-		require("trouble").toggle("lsp_references")
-	end, { desc = "Toggle LSP [r]eferences" })
-
 -- USER COMMANDS {{{1
 	local group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 
@@ -395,7 +346,20 @@ else
 		-- { "slim-template/vim-slim" }, [Provides syntax highlighting for Slim templates] {{{3
 		{ "slim-template/vim-slim" },
 		-- { "zaldih/themery.nvim" }, [Theme switcher] {{{3
-		{ "zaldih/themery.nvim" },
+		{
+      "zaldih/themery.nvim",
+      config = function()
+        require("themery").setup({
+          themes = {
+            "tokyonight",
+            "onedark",
+            "monokai",
+            "darkplus",
+          },
+          livePreview = true,
+        })
+      end,
+    },
 		-- { "nvim-treesitter/nvim-treesitter" }, [Language parsing and manipulation] {{{3
 		{ "nvim-treesitter/nvim-treesitter",
       config = function()
@@ -489,6 +453,19 @@ else
 				vim.o.timeout = true
 				vim.o.timeoutlen = 300
 			end,
+      config = function()
+        require("which-key").register({
+          ["<leader>f"] = { name = "[f]ind" },
+          ["<leader>e"] = { name = "[e]dit" },
+          ["<leader>r"] = { name = "[r]eplace" },
+          ["<leader>t"] = { name = "[t]est" },
+          ["<leader>s"] = { name = "[s]earch" },
+          ["<leader>h"] = { name = "[h]unk", _ = "which_key_ignore" },
+          ["<leader>l"] = { name = "[l]sp", _ = "which_key_ignore" },
+          ["<leader>o"] = { name = "[o]open", _ = "which_key_ignore" },
+          ["<leader>i"] = { name = "[i]insert", _ = "which_key_ignore" },
+        })
+      end,
 		},
 		-- { "ii14/neorepl.nvim" }, [Lua/Vim Repl] {{{3
 		{ "ii14/neorepl.nvim" },
@@ -519,17 +496,112 @@ else
 			},
 		},
 		-- { "potamides/pantran.nvim" }, [Translation engine] {{{3
-		{ "potamides/pantran.nvim" },
+		{
+      "potamides/pantran.nvim",
+      config = function()
+        require("pantran").setup({
+          -- Default engine to use for translation. To list valid engine names run
+          -- `:lua =vim.tbl_keys(require("pantran.engines"))`.
+          default_engine = "argos",
+          -- Configuration for individual engines goes here.
+          engines = {
+            argos = {
+              -- Default languages can be defined on a per engine basis. In this case
+              -- `:lua require("pantran.async").run(function()
+              -- vim.pretty_print(require("pantran.engines").yandex:languages()) end)`
+              -- can be used to list available language identifiers.
+              default_source = "auto",
+              default_target = "en",
+            },
+          },
+          controls = {
+            mappings = {
+              edit = {
+                n = {
+                  -- Use this table to add additional mappings for the normal mode in
+                  -- the translation window. Either strings or function references are
+                  -- supported.
+                  ["j"] = "gj",
+                  ["k"] = "gk",
+                },
+                i = {
+                  -- Similar table but for insert mode. Using 'false' disables
+                  -- existing keybindings.
+                  ["<C-y>"] = false,
+                  ["<C-a>"] = require("pantran.ui.actions").yank_close_translation,
+                },
+              },
+              -- Keybindings here are used in the selection window.
+              select = {
+                n = {
+                  -- ...
+                },
+              },
+            },
+          },
+        })
+      end,
+    },
 		-- { "AckslD/nvim-neoclip.lua" }, [Clipboard manager] {{{3
-		{ "AckslD/nvim-neoclip.lua" },
+		{
+      "AckslD/nvim-neoclip.lua",
+      config = function()
+	      require("neoclip").setup({})
+      end,
+    },
 		-- { "lalitmee/browse.nvim" }, [Browser integration] {{{3
 		{
 			"lalitmee/browse.nvim",
 			dependencies = { "nvim-telescope/telescope.nvim" },
+      config = function()
+        require("browse").setup({})
+
+        local bookmarks = {
+          ["search"] = {
+            ["github"] = "https://github.com/search?q=%s&type=repositories",
+            ["youtube"] = "https://www.youtube.com/results?search_query=%s",
+            ["stackoverflow"] = "https://stackoverflow.com/search?q=%s",
+            ["google"] = "https://www.google.com/search?q=%s",
+            ["wikipedia"] = "https://en.wikipedia.org/w/index.php?search=%s",
+          },
+          ["pulls"] = {
+            ["amg"] = "https://github.com/Miltheory/kronickle-directv-assetcenter/pulls",
+            ["bs"] = "https://github.com/Miltheory/kronickle-directv-brandspace/pulls",
+            ["cs"] = "https://github.com/Miltheory/kronickle-directv-creativeservices/pulls",
+            ["legal"] = "https://github.com/Miltheory/kronickle-dtv-legal/pulls",
+            ["att"] = "https://github.com/Miltheory/kronickle-att/pulls",
+          },
+          ["sites"] = {
+            ["amg"] = "https://kronickle-dev.herokuapp.com",
+            ["bs"] = "https://kronickle-brandspace-dev.herokuapp.com",
+            ["cs"] = "https://kronickle-directv-cs-dev.herokuapp.com",
+            ["legal"] = "https://kronickle-dtv-legal-dev.herokuapp.com",
+            ["att"] = "https://kronickle-att-dev.herokuapp.com",
+          },
+        }
+
+        vim.keymap.set("n", "<leader>b", function()
+          require("browse").open_bookmarks({ bookmarks = bookmarks })
+        end, { desc = "[b]rowse bookmarks" })
+      end,
 		},
 		-- { "stevearc/dressing.nvim" }, [Improved input and select] {{{3
 		{
 			"stevearc/dressing.nvim",
+      config = function()
+        require("dressing").setup({
+          input = {
+            enabled = true,
+            prompt = "➤ ",
+            relative = "editor",
+            position = "center",
+          },
+          select = {
+            enabled = true,
+            backend = { "telescope", "fzf", "builtin" },
+          },
+        })
+      end,
 		},
     --  { "rcarriga/nvim-notify" }, [Improved notifications] {{{3
     {
@@ -561,7 +633,36 @@ else
       end,
     },
 		-- { "roobert/search-replace.nvim" }, [Search and replace] {{{3
-		{ "roobert/search-replace.nvim" },
+		{
+      "roobert/search-replace.nvim",
+      keys = {
+        {
+          "<C-r>",
+          "<CMD>SearchReplaceSingleBufferVisualSelection<CR>",
+          mode = "v",
+          { desc = "Visual search/replace in buffer" }
+        },
+        {
+          "<C-s>",
+          "<CMD>SearchReplaceWithinVisualSelection<CR>",
+          mode = "v",
+          { desc = "Search/replace within visual selection" }
+        },
+        {
+          "<leader>rw",
+          "<CMD>SearchReplaceSingleBufferCWord<CR>",
+          { desc = "Search/replace in buffer for [w]ord" }
+        },
+        {
+          "<leader>rW",
+          "<CMD>SearchReplaceSingleBufferCWORD<CR>",
+          { desc = "Search/replace in buffer for [W]WORD" }
+        },
+      },
+      config = function()
+	      require("search-replace").setup({})
+      end,
+    },
 		-- { "numToStr/Comment.nvim" }, [Commenting] {{{3
 		{
       "numToStr/Comment.nvim",
@@ -579,31 +680,123 @@ else
 		{ "nvim-pack/nvim-spectre",
       dependencies = {
         "nvim-lua/plenary.nvim",
-      }
+      },
+      keys = {
+        { "<leader>sp", '<cmd>lua require("spectre").toggle()<CR>', {
+          desc = "Toggle Search/Replace [p]anel",
+        }},
+        { "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+          desc = "Search current [w]ord on all files",
+        }},
+        { "<leader>sb", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+          desc = "Search current word on current [b]uffer",
+        }},
+      },
+      config = function()
+        require("spectre").setup({
+          highlight = {
+            ui = "String",
+            search = "DiffChange",
+            replace = "DiffDelete",
+          },
+        })
+      end,
 		},
 		-- { "williamboman/mason.nvim" }, [LSP Manager] {{{3
-		{ "williamboman/mason.nvim" },
+		{
+      "williamboman/mason.nvim",
+      config = function()
+	      require("mason").setup({})
+      end,
+    },
 		-- { "williamboman/mason-lspconfig.nvim" }, [LSP Manager config] {{{3
-		{ "williamboman/mason-lspconfig.nvim" },
+		{
+      "williamboman/mason-lspconfig.nvim",
+      config = function()
+        require("mason-lspconfig").setup({
+          ensure_installed = {
+            "lua_ls",
+            "solargraph",
+            "efm",
+          },
+        })
+      end,
+    },
 		-- { "neovim/nvim-lspconfig" }, [LSP config] {{{3
-		{ "neovim/nvim-lspconfig" },
+		{ "neovim/nvim-lspconfig",
+      config = function()
+        require("lspconfig").lua_ls.setup({
+          settings = {
+            Lua = {
+              diagnostics = {
+                globals = { "vim" },
+              },
+            },
+          },
+        })
+        require("lspconfig").solargraph.setup({
+          filetypes = { "ruby" },
+        })
+        require("lspconfig").pyright.setup({})
+      end,
+    },
 		-- { "folke/trouble.nvim"}, [Diagnostics panel] {{{3
 		{
 			"folke/trouble.nvim",
 			dependencies = {
 				"nvim-tree/nvim-web-devicons",
 			},
+      keys = {
+        { "<leader>lp", function()
+            require("trouble").toggle()
+          end, { desc = "Toggle diagnostics [p]anel" }
+        },
+        { "<leader>lr", function()
+            require("trouble").toggle("lsp_references")
+          end, { desc = "Toggle LSP [r]eferences" }
+        },
+      },
+      config = function()
+	      require("trouble").setup({})
+      end,
 		},
 		-- { "linrongbin16/lsp-progress.nvim" }, [LSP progress] {{{3
 		{
 			"linrongbin16/lsp-progress.nvim",
 			dependencies = { "nvim-tree/nvim-web-devicons" },
+      config = function()
+	      require("lsp-progress").setup({})
+      end,
 		},
 		-- { "creativenull/efmls-configs-nvim" }, [Language server config] {{{3
 		{
 			"creativenull/efmls-configs-nvim",
 			version = "v1.x.x", -- version is optional, but recommended
 			dependencies = { "neovim/nvim-lspconfig" },
+      config = function()
+        local languages = require("efmls-configs.defaults").languages()
+        -- To extend and add additional tools or to override existing
+        -- defaults registered:
+        languages = vim.tbl_extend("force", languages, {
+          -- you custom languages, or overrides
+          slim = {
+            require("efmls-configs.linters.slim_lint"),
+          },
+        })
+        local efmls_config = {
+          filetypes = vim.tbl_keys(languages),
+          settings = {
+            rootMarkers = { ".git/" },
+            languages = languages,
+          },
+          init_options = {
+            documentFormatting = true,
+            documentRangeFormatting = true,
+          },
+        }
+
+        require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, {}))
+      end,
 		},
 		-- { "stevearc/oil.nvim" }, [File explorer that lets you edit your filesystem] {{{3
 		{
@@ -679,6 +872,17 @@ else
               },
             },
           },
+        })
+
+        -- Fix Telescope bug
+        -- https://github.com/nvim-telescope/telescope.nvim/issues/2027#issuecomment-1561836585
+        -- https://github.com/nvim-telescope/telescope.nvim/issues/2766
+        vim.api.nvim_create_autocmd("WinLeave", {
+          callback = function()
+            if vim.bo.ft == "TelescopePrompt" and vim.fn.mode() == "i" then
+              vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes("<Esc>", true, false, true), "i", false)
+            end
+          end,
         })
 			end,
 		},
@@ -796,214 +1000,4 @@ else
 		-- { "tpope/vim-fugitive" }, [Git wrapper] {{{3
 		{ "tpope/vim-fugitive" },
 	})
-	-- which-key {{{3
-	---
-	-- require('which-key').setup({})
-	require("which-key").register({
-		["<leader>f"] = { name = "[f]ind" },
-		["<leader>e"] = { name = "[e]dit" },
-		["<leader>r"] = { name = "[r]eplace" },
-		["<leader>t"] = { name = "[t]est" },
-		["<leader>s"] = { name = "[s]earch" },
-		["<leader>h"] = { name = "[h]unk", _ = "which_key_ignore" },
-		["<leader>l"] = { name = "[l]sp", _ = "which_key_ignore" },
-		["<leader>o"] = { name = "[o]open", _ = "which_key_ignore" },
-		["<leader>i"] = { name = "[i]insert", _ = "which_key_ignore" },
-	})
-
-	---
-	-- mason {{{3
-	---
-	require("mason").setup({})
-	require("mason-lspconfig").setup({
-		ensure_installed = {
-			"lua_ls",
-			"solargraph",
-			"efm",
-		},
-	})
-
-	---
-	-- lspconfig {{{3
-	---
-
-	require("lspconfig").lua_ls.setup({
-		settings = {
-			Lua = {
-				diagnostics = {
-					globals = { "vim" },
-				},
-			},
-		},
-	})
-
-	require("lspconfig").solargraph.setup({
-		filetypes = { "ruby" },
-	})
-
-	require("lspconfig").pyright.setup({})
-
-	---
-	-- efmls {{{3
-	--
-	local languages = require("efmls-configs.defaults").languages()
-	-- To extend and add additional tools or to override existing
-	-- defaults registered:
-
-	languages = vim.tbl_extend("force", languages, {
-		-- you custom languages, or overrides
-		slim = {
-			require("efmls-configs.linters.slim_lint"),
-		},
-	})
-
-	local efmls_config = {
-		filetypes = vim.tbl_keys(languages),
-		settings = {
-			rootMarkers = { ".git/" },
-			languages = languages,
-		},
-		init_options = {
-			documentFormatting = true,
-			documentRangeFormatting = true,
-		},
-	}
-
-	require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, {}))
-	---
-	-- trouble {{{3
-	---
-	require("trouble").setup({})
-
-	---
-	-- search-replace.nvim {{{3
-	---
-	require("search-replace").setup({})
-
-	---
-	-- vim-spectre {{{3
-	---
-	require("spectre").setup({
-		highlight = {
-			ui = "String",
-			search = "DiffChange",
-			replace = "DiffDelete",
-		},
-	})
-
-	---
-	-- themery {{{3
-	--
-	require("themery").setup({
-		themes = {
-			"tokyonight",
-			"onedark",
-			"monokai",
-			"darkplus",
-		},
-		livePreview = true,
-	})
-	---
-	-- lsp-progress {{{3
-	--
-	require("lsp-progress").setup({})
-
-	--
-	--- pantran {{{3
-	--
-	require("pantran").setup({
-		-- Default engine to use for translation. To list valid engine names run
-		-- `:lua =vim.tbl_keys(require("pantran.engines"))`.
-		default_engine = "argos",
-		-- Configuration for individual engines goes here.
-		engines = {
-			argos = {
-				-- Default languages can be defined on a per engine basis. In this case
-				-- `:lua require("pantran.async").run(function()
-				-- vim.pretty_print(require("pantran.engines").yandex:languages()) end)`
-				-- can be used to list available language identifiers.
-				default_source = "auto",
-				default_target = "en",
-			},
-		},
-		controls = {
-			mappings = {
-				edit = {
-					n = {
-						-- Use this table to add additional mappings for the normal mode in
-						-- the translation window. Either strings or function references are
-						-- supported.
-						["j"] = "gj",
-						["k"] = "gk",
-					},
-					i = {
-						-- Similar table but for insert mode. Using 'false' disables
-						-- existing keybindings.
-						["<C-y>"] = false,
-						["<C-a>"] = require("pantran.ui.actions").yank_close_translation,
-					},
-				},
-				-- Keybindings here are used in the selection window.
-				select = {
-					n = {
-						-- ...
-					},
-				},
-			},
-		},
-	})
-
-	--
-	--- neoclip {{{3
-	--
-	require("neoclip").setup({})
-
-	--
-	--- dressing {{{3
-	--
-	require("dressing").setup({
-		input = {
-			enabled = true,
-			prompt = "➤ ",
-			relative = "editor",
-			position = "center",
-		},
-		select = {
-			enabled = true,
-			backend = { "telescope", "fzf", "builtin" },
-		},
-	})
-
-	--
-	--- browse {{{3
-	--
-	require("browse").setup({})
-
-	local bookmarks = {
-		["search"] = {
-			["github"] = "https://github.com/search?q=%s&type=repositories",
-			["youtube"] = "https://www.youtube.com/results?search_query=%s",
-			["stackoverflow"] = "https://stackoverflow.com/search?q=%s",
-			["google"] = "https://www.google.com/search?q=%s",
-			["wikipedia"] = "https://en.wikipedia.org/w/index.php?search=%s",
-		},
-		["pulls"] = {
-			["amg"] = "https://github.com/Miltheory/kronickle-directv-assetcenter/pulls",
-			["bs"] = "https://github.com/Miltheory/kronickle-directv-brandspace/pulls",
-			["cs"] = "https://github.com/Miltheory/kronickle-directv-creativeservices/pulls",
-			["legal"] = "https://github.com/Miltheory/kronickle-dtv-legal/pulls",
-			["att"] = "https://github.com/Miltheory/kronickle-att/pulls",
-		},
-		["sites"] = {
-			["amg"] = "https://kronickle-dev.herokuapp.com",
-			["bs"] = "https://kronickle-brandspace-dev.herokuapp.com",
-			["cs"] = "https://kronickle-directv-cs-dev.herokuapp.com",
-			["legal"] = "https://kronickle-dtv-legal-dev.herokuapp.com",
-			["att"] = "https://kronickle-att-dev.herokuapp.com",
-		},
-	}
-
-	vim.keymap.set("n", "<leader>b", function()
-		require("browse").open_bookmarks({ bookmarks = bookmarks })
-	end, { desc = "[b]rowse bookmarks" })
 end
