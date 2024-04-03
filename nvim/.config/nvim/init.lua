@@ -61,6 +61,9 @@ else
 -- EDITOR SETTINGS {{{1
 	-- Configurations {{{2
 
+  -- Set folding method
+  vim.opt.foldmethod = "marker"
+
 	-- Show line numbers
 	vim.opt.number = true
 
@@ -282,15 +285,6 @@ else
 -- USER COMMANDS {{{1
 	local group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		desc = "Reload init.lua",
-		group = group,
-		pattern = "init.lua",
-		callback = function()
-			vim.cmd("source $MYVIMRC")
-		end,
-	})
-
 	vim.api.nvim_create_autocmd("TextYankPost", {
 		desc = "Highlight on yank",
 		group = group,
@@ -353,89 +347,119 @@ else
 -- PLUGINS {{{1
 -- Lazy Config {{{2
 
-	local lazy = {}
+  local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+  if not (vim.uv or vim.loop).fs_stat(lazypath) then
+    vim.fn.system({
+      "git",
+      "clone",
+      "--filter=blob:none",
+      "https://github.com/folke/lazy.nvim.git",
+      "--branch=stable", -- latest stable release
+      lazypath,
+    })
+  end
+  vim.opt.rtp:prepend(lazypath)
 
-	-- Function to install lazy.nvim if it's not already installed
-	function lazy.install(path)
-		-- Check if the path directory exists
-		if not vim.loop.fs_stat(path) then
-			print("Installing lazy.nvim....")
-			-- Run a shell command to clone the lazy.nvim repository from GitHub
-			vim.fn.system({
-				"git",
-				"clone",
-				"--filter=blob:none",
-				"https://github.com/folke/lazy.nvim.git",
-				"--branch=stable", -- latest stable release
-				path,
-			})
-		end
-	end
-
-	-- Function to set up the plugins
-	function lazy.setup(plugins)
-		-- Check if the plugins are already set up
-		if vim.g.plugins_ready then
-			return -- Return without doing anything
-		end
-
-		-- Install lazy.nvim if it's not already installed
-		lazy.install(lazy.path)
-
-		-- Prepend the path to the Neovim runtime path
-		vim.opt.rtp:prepend(lazy.path)
-
-		-- Set up the plugins using the lazy module
-		require("lazy").setup(plugins, lazy.opts)
-
-		-- Set the plugins_ready flag to true to indicate that the plugins are set up
-		vim.g.plugins_ready = true
-	end
-
-	-- Set the path where lazy.nvim will be installed
-	lazy.path = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-	-- Empty table to store options for the lazy module
-	lazy.opts = {}
-
+	require('lazy').setup({
 	-- Plugin Install {{{2
-	lazy.setup({
-		--
-		-- THEMING {{{3
-		--
-		-- Provides the Tokyo Night theme for Neovim.
+		-- { "folke/tokyonight.nvim" }, [Theme] {{{3
 		{ "folke/tokyonight.nvim" },
-		-- Offers the One Dark theme for Neovim.
+		-- { "joshdick/onedark.vim" }, [Theme] {{{3
 		{ "joshdick/onedark.vim" },
-		-- Implements the Monokai theme for Neovim.
+		-- { "tanvirtin/monokai.nvim" }, [Theme] {{{3
 		{ "tanvirtin/monokai.nvim" },
-		-- Presents the Dark+ theme for Neovim.
-		{ "lunarvim/darkplus.nvim" },
-		-- Provides icons for files, directories, etc., in Neovim.
+		-- { "lunarvim/darkplus.nvim" }, [Theme] {{{3
+		{
+      "lunarvim/darkplus.nvim",
+      lazy = false, -- make sure we load this during startup if it is your main colorscheme
+      priority = 1000, -- make sure to load this before all the other start plugins
+      config = function()
+        -- load the colorscheme here
+        vim.cmd([[colorscheme darkplus]])
+      end,
+    },
+		-- { "kyazdani42/nvim-web-devicons" }, [Provides icons for files, directories, etc.] {{{3
 		{ "kyazdani42/nvim-web-devicons" },
-		-- Configurable status line for Neovim.
-		{ "nvim-lualine/lualine.nvim" },
-		-- Enhanced buffer line (tab line) for Neovim.
-		{ "akinsho/bufferline.nvim" },
-		-- Displays indent lines in Neovim.
-		{ "lukas-reineke/indent-blankline.nvim" },
-		-- Provides syntax highlighting for Slim templates in Neovim.
-		{ "slim-template/vim-slim" },
-		-- Colorscheme switcher
-		{ "zaldih/themery.nvim" },
+		-- { "nvim-lualine/lualine.nvim" }, [Configurable status line] {{{3
+		{
+      "nvim-lualine/lualine.nvim",
+      config = function()
+        require("lualine").setup({
+          options = {
+            theme = "darkplus",
+            icons_enabled = true,
+            component_separators = "|",
+            section_separators = "",
+          },
+          sections = {
+            lualine_c = {
+              "vim.call('codeium#GetStatusString')",
+              require("lsp-progress").progress,
+            },
+          },
+        })
 
-		--
-		-- UTILITIES {{{3
-		--
-		-- All-in-one Lua utility functions for Neovim. (needed by telescope)
+        vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
+        vim.api.nvim_create_autocmd("User", {
+          group = "lualine_augroup",
+          pattern = "LspProgressStatusUpdated",
+          callback = require("lualine").refresh,
+        })
+      end,
+    },
+		-- { "akinsho/bufferline.nvim" }, [Enhanced buffer line (tab line)] {{{3,
+		{
+      "akinsho/bufferline.nvim",
+      config = function()
+        require("bufferline").setup({
+          options = {
+            mode = "buffers",
+            offsets = {
+              { filetype = "NvimTree" },
+            },
+          },
+          -- :help bufferline-highlights
+          highlights = {
+            buffer_selected = {
+              italic = false,
+            },
+            indicator_selected = {
+              -- Set the foreground color based on the 'Function' highlight group's foreground attribute.
+              fg = { attribute = "fg", highlight = "Function" },
+              italic = false,
+            },
+          },
+        })
+      end,
+    },
+		-- { "lukas-reineke/indent-blankline.nvim" }, [Displays indent lines] {{{3
+		{
+      "lukas-reineke/indent-blankline.nvim",
+      config = function()
+        require("ibl").setup({
+          enabled = true,
+          scope = {
+            enabled = false,
+          },
+          indent = {
+            char = "▏",
+          },
+        })
+      end,
+    },
+		-- { "slim-template/vim-slim" }, [Provides syntax highlighting for Slim templates] {{{3
+		{ "slim-template/vim-slim" },
+		-- { "zaldih/themery.nvim" }, [Theme switcher] {{{3
+		{ "zaldih/themery.nvim" },
+		-- { "nvim-lua/plenary.nvim" }, [All-in-one Lua utility functions (required by Telescope)] {{{3
 		{ "nvim-lua/plenary.nvim" },
-		-- Language parsing and manipulation for Neovim.
+		-- { "nvim-treesitter/nvim-treesitter" }, [Language parsing and manipulation] {{{3
 		{ "nvim-treesitter/nvim-treesitter" },
-		-- Additional text objects for treesitter.
+		-- { "nvim-treesitter/nvim-treesitter-textobjects" }, [Additional text objects for treesitter] {{{3
 		{ "nvim-treesitter/nvim-treesitter-textobjects" },
-		-- Provides easy toggling of terminal in Neovim.
+		-- { "akinsho/toggleterm.nvim" }, [Terminal toggling] {{{3
 		{ "akinsho/toggleterm.nvim" },
-		-- AI code completion
+    -- { "Exafunction/codeium.vim" }, [AI code completion] {{{3
 		{
 			"Exafunction/codeium.vim",
 			event = "BufEnter",
@@ -454,7 +478,7 @@ else
 				end, { expr = true })
 			end,
 		},
-		-- Provides which-key integration for Neovim.
+		-- { "folke/which-key.nvim" }, [Provides which-key integration] {{{3
 		{
 			"folke/which-key.nvim",
 			event = "VeryLazy",
@@ -463,9 +487,9 @@ else
 				vim.o.timeoutlen = 300
 			end,
 		},
-		-- Provides a Lua/Vim REPL for Neovim.
+		-- { "ii14/neorepl.nvim" }, [Lua/Vim Repl] {{{3
 		{ "ii14/neorepl.nvim" },
-		-- Debug diagnostics with AI or Google
+		-- { "piersolenski/wtf.nvim" }, [Debug diagnostics with AI or Google] {{{3
 		{
 			"piersolenski/wtf.nvim",
 			dependencies = {
@@ -491,68 +515,101 @@ else
 				},
 			},
 		},
-		-- Translate text
+		-- { "potamides/pantran.nvim" }, [Translation engine] {{{3
 		{ "potamides/pantran.nvim" },
-		-- Clipboard manager
+		-- { "AckslD/nvim-neoclip.lua" }, [Clipboard manager] {{{3
 		{ "AckslD/nvim-neoclip.lua" },
+		-- { "lalitmee/browse.nvim" }, [Browser integration] {{{3
 		{
 			"lalitmee/browse.nvim",
 			dependencies = { "nvim-telescope/telescope.nvim" },
 		},
-
-		-- Improved input and select
+		-- { "stevearc/dressing.nvim" }, [Improved input and select] {{{3
 		{
 			"stevearc/dressing.nvim",
 		},
-		-- Improved notifications
-		{ "rcarriga/nvim-notify" },
-		---
-		-- TEXT MANIPULATION {{{3
-		---
-		-- Provides search and replace
+    --  { "rcarriga/nvim-notify" }, [Improved notifications] {{{3
+    {
+      "rcarriga/nvim-notify",
+      keys = {
+        {
+          "<leader>un",
+          function()
+            require("notify").dismiss({ silent = true, pending = true })
+          end,
+          desc = "Dismiss All Notifications",
+        },
+      },
+      opts = {
+        stages = "static",
+        timeout = 3000,
+        max_height = function()
+          return math.floor(vim.o.lines * 0.75)
+        end,
+        max_width = function()
+          return math.floor(vim.o.columns * 0.75)
+        end,
+        on_open = function(win)
+          vim.api.nvim_win_set_config(win, { zindex = 100 })
+        end,
+      },
+      init = function()
+        vim.notify = require("notify")
+      end,
+    },
+		-- { "roobert/search-replace.nvim" }, [Search and replace] {{{3
 		{ "roobert/search-replace.nvim" },
-		-- Commenting plugin for Neovim.
-		{ "numToStr/Comment.nvim" },
-		-- Adds mappings to easily manipulate surroundings.
+		-- { "numToStr/Comment.nvim" }, [Commenting] {{{3
+		{
+      "numToStr/Comment.nvim",
+      config = function()
+        require("Comment").setup()
+      end,
+    },
+		-- { "tpope/vim-surround" }, [Add mappings to easily manipulate surroundings] {{{3
 		{ "tpope/vim-surround" },
-		-- Extends text objects to support additional targets.
+		-- { "wellle/targets.vim" }, [Extends text objects to support additional targets] {{{3
 		{ "wellle/targets.vim" },
-		-- Repeats supported plugin commands with '.'
+		-- { "tpope/vim-repeat" }, [Repeats supported plugin commands with '.'] {{{3
 		{ "tpope/vim-repeat" },
-		-- A search panel for Neovim.
-		{ "nvim-pack/nvim-spectre", dependencies = {
-			"nvim-lua/plenary.nvim",
-		} },
-
-		--
-		-- LSP {{{3
-		--
+		-- { "nvim-pack/nvim-spectre", [Search and replace Panel] {{{3
+		{ "nvim-pack/nvim-spectre",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+      }
+		},
+		-- { "williamboman/mason.nvim" }, [LSP Manager] {{{3
 		{ "williamboman/mason.nvim" },
+		-- { "williamboman/mason-lspconfig.nvim" }, [LSP Manager config] {{{3
 		{ "williamboman/mason-lspconfig.nvim" },
+		-- { "neovim/nvim-lspconfig" }, [LSP config] {{{3
 		{ "neovim/nvim-lspconfig" },
-		-- Provides diagnostics panel
+		-- { "folke/trouble.nvim"}, [Diagnostics panel] {{{3
 		{
 			"folke/trouble.nvim",
 			dependencies = {
 				"nvim-tree/nvim-web-devicons",
 			},
 		},
+		-- { "linrongbin16/lsp-progress.nvim" }, [LSP progress] {{{3
 		{
 			"linrongbin16/lsp-progress.nvim",
 			dependencies = { "nvim-tree/nvim-web-devicons" },
 		},
+		-- { "creativenull/efmls-configs-nvim" }, [Language server config] {{{3
 		{
 			"creativenull/efmls-configs-nvim",
 			version = "v1.x.x", -- version is optional, but recommended
 			dependencies = { "neovim/nvim-lspconfig" },
 		},
-
-		--
-		-- FILE MANAGEMENT {{{3
-		--
-		-- File explorer that lets you edit your filesystem like a normal Neovim buffer.
-		{ "stevearc/oil.nvim" },
-		-- Fuzzy finder extension for Neovim.
+		-- { "stevearc/oil.nvim" }, [File explorer that lets you edit your filesystem] {{{3
+		{
+      "stevearc/oil.nvim",
+      config = function()
+        require("oil").setup()
+      end,
+    },
+		-- { "nvim-telescope/telescope.nvim" }, [Fuzzy finder] {{{3
 		{
 			"nvim-telescope/telescope.nvim",
 			branch = "0.1.x",
@@ -562,11 +619,37 @@ else
 			},
 			config = function()
 				require("telescope").load_extension("live_grep_args")
+        require("telescope").load_extension("fzf")
+
+        local select_one_or_multi = function(prompt_bufnr)
+          local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
+          local multi = picker:get_multi_selection()
+          if not vim.tbl_isempty(multi) then
+            require("telescope.actions").close(prompt_bufnr)
+            for _, j in pairs(multi) do
+              if j.path ~= nil then
+                vim.cmd(string.format("%s %s", "edit", j.path))
+              end
+            end
+          else
+            require("telescope.actions").select_default(prompt_bufnr)
+          end
+        end
+
+        require("telescope").setup({
+          defaults = {
+            mappings = {
+              i = {
+                ["<CR>"] = select_one_or_multi,
+              },
+            },
+          },
+        })
 			end,
 		},
-		-- Native FZF integration for Telescope.
+		-- { "nvim-telescope/telescope-fzf-native.nvim"}, [FZF integration for Telescope] {{{3
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-		-- A framework for interacting with tests within NeoVim.
+		-- { "nvim-neotest/neotest" }, [Test runner] {{{3
 		{
 			"nvim-neotest/neotest",
 			dependencies = {
@@ -576,130 +659,11 @@ else
 				"olimorris/neotest-rspec",
 			},
 		},
-
-		--
-		-- GIT {{{3
-		--
-		-- Git signs and hunk management for Neovim.
+		-- { "lewis6991/gitsigns.nvim" }, [Git signs and hunk management] {{{3
 		{ "lewis6991/gitsigns.nvim" },
-		-- Git wrapper for Neovim.
+		-- { "tpope/vim-fugitive" }, [Git wrapper] {{{3
 		{ "tpope/vim-fugitive" },
 	})
-
-	-- Plugin Configuration  {{{2
-	-- Notify {{{3
-	---
-	vim.notify = require("notify")
-	---
-	-- Colorscheme {{{3
-	---
-	vim.cmd.colorscheme("darkplus")
-
-	---
-	-- lualine.nvim (statusline) {{{3
-	---
-	-- See :help lualine.txt
-	require("lualine").setup({
-		options = {
-			theme = "darkplus",
-			icons_enabled = true,
-			component_separators = "|",
-			section_separators = "",
-		},
-		sections = {
-			lualine_c = {
-				"vim.call('codeium#GetStatusString')",
-				require("lsp-progress").progress,
-			},
-		},
-	})
-
-	vim.api.nvim_create_augroup("lualine_augroup", { clear = true })
-	vim.api.nvim_create_autocmd("User", {
-		group = "lualine_augroup",
-		pattern = "LspProgressStatusUpdated",
-		callback = require("lualine").refresh,
-	})
-
-	---
-	-- bufferline {{{3
-	---
-	-- See :help bufferline-settings
-	require("bufferline").setup({
-		options = {
-			mode = "buffers",
-			offsets = {
-				{ filetype = "NvimTree" },
-			},
-		},
-		-- :help bufferline-highlights
-		highlights = {
-			buffer_selected = {
-				italic = false,
-			},
-			indicator_selected = {
-				-- Set the foreground color based on the 'Function' highlight group's foreground attribute.
-				fg = { attribute = "fg", highlight = "Function" },
-				italic = false,
-			},
-		},
-	})
-
-	---
-	-- Indent-blankline {{{3
-	---
-	-- See :help ibl.setup()
-	require("ibl").setup({
-		enabled = true,
-		scope = {
-			enabled = false,
-		},
-		indent = {
-			char = "▏",
-		},
-	})
-
-	---
-	-- Comment.nvim {{{3
-	---
-	require("Comment").setup({})
-
-	---
-	-- oil {{{3
-	---
-	require("oil").setup({})
-
-	---
-	-- Telescope {{{3
-	---
-	-- See :help telescope.builtin
-	require("telescope").load_extension("fzf")
-
-	local select_one_or_multi = function(prompt_bufnr)
-		local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
-		local multi = picker:get_multi_selection()
-		if not vim.tbl_isempty(multi) then
-			require("telescope.actions").close(prompt_bufnr)
-			for _, j in pairs(multi) do
-				if j.path ~= nil then
-					vim.cmd(string.format("%s %s", "edit", j.path))
-				end
-			end
-		else
-			require("telescope.actions").select_default(prompt_bufnr)
-		end
-	end
-
-	require("telescope").setup({
-		defaults = {
-			mappings = {
-				i = {
-					["<CR>"] = select_one_or_multi,
-				},
-			},
-		},
-	})
-	---
 	-- Gitsigns {{{3
 	---
 	-- See :help gitsigns-usage
