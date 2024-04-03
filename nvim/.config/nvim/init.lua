@@ -190,30 +190,6 @@ else
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
 -- Plugins {{{3
-  -- Telescope {{{4
-	vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find [r]ecently opened files" })
-
-	vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find current [b]uffers" })
-
-	vim.keymap.set("n", "<leader>fa", "<cmd>Telescope git_files<cr>", { desc = "Find [a]ll files" })
-
-	vim.keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Find git [f]iles" })
-
-	-- vim.keymap.set('n', '<leader>fs', '<cmd>Telescope live_grep<cr>',
-	--   {desc = 'Find [s]tring in files'}
-	-- )
-	vim.keymap.set(
-		"n",
-		"<leader>fs",
-		":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
-		{ desc = "Find [s]tring in files" }
-	)
-
-	vim.keymap.set("n", "<leader>fd", "<cmd>Telescope diagnostics<cr>", { desc = "Find [d]iagnostics" })
-
-	vim.keymap.set("n", "<leader>fh", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Find string [h]ere" })
-
-	vim.keymap.set("n", "<leader>fy", "<cmd>Telescope neoclip<cr>", { desc = "Find [y]anks" })
 -- NeoTest {{{4
 	vim.keymap.set("n", "<leader>tt", function()
 		require("neotest").run.run()
@@ -612,11 +588,42 @@ else
 		-- { "nvim-telescope/telescope.nvim" }, [Fuzzy finder] {{{3
 		{
 			"nvim-telescope/telescope.nvim",
-			branch = "0.1.x",
+      cmd = "Telescope",
+      version = false,
 			dependencies = {
-				"nvim-telescope/telescope-live-grep-args.nvim",
-				version = "^1.0.0",
+        { "nvim-telescope/telescope-fzf-native.nvim",
+          build = "make",
+        },
+        {
+          "nvim-telescope/telescope-live-grep-args.nvim",
+          version = "^1.0.0",
+        },
 			},
+      keys = {
+        { "<leader>fr",
+          "<cmd>Telescope oldfiles<cr>", { desc = "Find [r]ecently opened files" }},
+
+        { "<leader>fb",
+          "<cmd>Telescope buffers<cr>", { desc = "Find current [b]uffers" }},
+
+        { "<leader>fa",
+          "<cmd>Telescope git_files<cr>", { desc = "Find [a]ll files" }},
+
+        { "<leader>ff",
+          "<cmd>Telescope find_files<cr>", { desc = "Find git [f]iles" }},
+
+        { "<leader>fs",
+          ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { desc = "Find [s]tring in files" }},
+
+        { "<leader>fd",
+          "<cmd>Telescope diagnostics<cr>", { desc = "Find [d]iagnostics" }},
+
+        { "<leader>fh",
+          "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Find string [h]ere" }},
+
+        { "<leader>fy",
+          "<cmd>Telescope neoclip<cr>", { desc = "Find [y]anks" }},
+      },
 			config = function()
 				require("telescope").load_extension("live_grep_args")
         require("telescope").load_extension("fzf")
@@ -647,8 +654,6 @@ else
         })
 			end,
 		},
-		-- { "nvim-telescope/telescope-fzf-native.nvim"}, [FZF integration for Telescope] {{{3
-		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		-- { "nvim-neotest/neotest" }, [Test runner] {{{3
 		{
 			"nvim-neotest/neotest",
