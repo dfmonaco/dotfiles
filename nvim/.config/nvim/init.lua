@@ -1,3 +1,4 @@
+-- VSCODE SETTINGS {{{1
 if vim.g.vscode then
 	local vscode = require("vscode-neovim")
 
@@ -56,11 +57,9 @@ if vim.g.vscode then
 	end, { noremap = true, silent = true })
 
 else
-	-- ========================================================================== --
-	-- ==                           EDITOR SETTINGS                            == --
-	-- ========================================================================== --
 
-	-- Configurations
+-- EDITOR SETTINGS {{{1
+	-- Configurations {{{2
 
 	-- Show line numbers
 	vim.opt.number = true
@@ -124,10 +123,8 @@ else
 
 	--- Show the effects of a search / replace in a live preview window
 	vim.o.inccommand = "split"
-
-	-- Mappings
-
-	-- Set space as the leader key
+-- Mappings {{{2
+  -- Standard {{{3
 	vim.g.mapleader = " "
 
 	vim.keymap.set("n", "<tab>", ":bn<CR>", { desc = "Next buffer" })
@@ -146,12 +143,6 @@ else
 
 	vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Next window" })
 
-	vim.keymap.set("n", "<leader>ei", "<cmd>e $MYVIMRC<cr>", { desc = "Edit [i]nit.lua" })
-
-	vim.keymap.set("n", "<leader>ez", "<cmd>e $HOME/.zshrc<cr>", { desc = "Edit [z]shrc" })
-
-	vim.keymap.set("n", "<leader>er", "<cmd>e $HOME/.config/rubocop/config.yml<cr>", { desc = "Edit [r]ubocop" })
-
 	vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>", { desc = "Select entire buffer" })
 
 	vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "[q]uit" })
@@ -165,24 +156,26 @@ else
 	vim.keymap.set("n", "<leader><leader>", "<c-^>", { desc = "Last buffer" })
 
 	vim.keymap.set("n", "<leader>=", "gg=G", { desc = "Autoindent the whole file" })
+-- Edit Files {{{3
+	vim.keymap.set("n", "<leader>ei", "<cmd>e $MYVIMRC<cr>", { desc = "Edit [i]nit.lua" })
 
-	-- Define Lua functions for the abbreviations
-	-- local function pbb()
-	--   vim.fn.feedkeys([[require 'pry-byebug'; binding.pry]])
-	-- end
+	vim.keymap.set("n", "<leader>ez", "<cmd>e $HOME/.zshrc<cr>", { desc = "Edit [z]shrc" })
 
-	-- local function lll()
-	--   vim.fn.feedkeys([[print(vim.fn.json_encode(obj, 2))]])
-	-- end
-
+	vim.keymap.set("n", "<leader>er", "<cmd>e $HOME/.config/rubocop/config.yml<cr>", { desc = "Edit [r]ubocop" })
+-- Insert Text {{{3
 	vim.keymap.set(
 		"n",
 		"<leader>ir",
 		[[:normal! orequire 'pry-byebug'; binding.pry<cr>]],
 		{ desc = "insert [r]uby debugger" }
 	)
-	vim.keymap.set("n", "<leader>ij", [[:normal! odebugger<cr>]], { desc = "insert [j]avascript debugger" })
 
+	vim.keymap.set("n",
+   "<leader>ij",
+   [[:normal! odebugger<cr>]],
+   { desc = "insert [j]avascript debugger" }
+  )
+-- Custom Functions {{{3
 	local function confirm_and_delete_buffer()
 		local confirm = vim.fn.confirm("Delete buffer and file?", "&Yes\n&No", 2)
 
@@ -193,9 +186,8 @@ else
 	end
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
-
-	-- PLUGINS
-	-- Telescope
+-- Plugins {{{3
+  -- Telescope {{{4
 	vim.keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Find [r]ecently opened files" })
 
 	vim.keymap.set("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find current [b]uffers" })
@@ -219,8 +211,7 @@ else
 	vim.keymap.set("n", "<leader>fh", "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Find string [h]ere" })
 
 	vim.keymap.set("n", "<leader>fy", "<cmd>Telescope neoclip<cr>", { desc = "Find [y]anks" })
-
-	-- Neotest
+-- NeoTest {{{4
 	vim.keymap.set("n", "<leader>tt", function()
 		require("neotest").run.run()
 	end, { desc = "Run nearest [t]est" })
@@ -240,8 +231,7 @@ else
 	vim.keymap.set("n", "<leader>tp", function()
 		require("neotest").output_panel.toggle()
 	end, { desc = "Toggle test output [p]anel" })
-
-	-- Search/replace
+-- Search/Replace {{{4
 	vim.keymap.set(
 		"v",
 		"<C-r>",
@@ -269,8 +259,7 @@ else
 		"<CMD>SearchReplaceSingleBufferCWORD<CR>",
 		{ desc = "Search/replace in buffer for [W]WORD" }
 	)
-
-	-- Spectre
+-- Spectre {{{4
 	vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").toggle()<CR>', {
 		desc = "Toggle Search/Replace [p]anel",
 	})
@@ -282,8 +271,7 @@ else
 	vim.keymap.set("n", "<leader>sb", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
 		desc = "Search current word on current [b]uffer",
 	})
-
-	-- Trouble
+-- Trouble{{{4
 	vim.keymap.set("n", "<leader>lp", function()
 		require("trouble").toggle()
 	end, { desc = "Toggle diagnostics [p]anel" })
@@ -291,10 +279,7 @@ else
 		require("trouble").toggle("lsp_references")
 	end, { desc = "Toggle LSP [r]eferences" })
 
-	-- ========================================================================== --
-	-- ==                           USER COMMANDS                              == --
-	-- ========================================================================== --
-
+-- USER COMMANDS {{{1
 	local group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 
 	vim.api.nvim_create_autocmd("BufWritePost", {
@@ -364,9 +349,9 @@ else
 		end,
 	})
 
-	-- ========================================================================== --
-	-- ==                           PLUGINS                           == --
-	-- ========================================================================== --
+
+-- PLUGINS {{{1
+-- Lazy Config {{{2
 
 	local lazy = {}
 
@@ -413,10 +398,10 @@ else
 	-- Empty table to store options for the lazy module
 	lazy.opts = {}
 
-	-- Set up the plugins
+	-- Plugin Install {{{2
 	lazy.setup({
 		--
-		-- THEMING
+		-- THEMING {{{3
 		--
 		-- Provides the Tokyo Night theme for Neovim.
 		{ "folke/tokyonight.nvim" },
@@ -440,7 +425,7 @@ else
 		{ "zaldih/themery.nvim" },
 
 		--
-		-- UTILITIES
+		-- UTILITIES {{{3
 		--
 		-- All-in-one Lua utility functions for Neovim. (needed by telescope)
 		{ "nvim-lua/plenary.nvim" },
@@ -522,7 +507,7 @@ else
 		-- Improved notifications
 		{ "rcarriga/nvim-notify" },
 		---
-		-- TEXT MANIPULATION
+		-- TEXT MANIPULATION {{{3
 		---
 		-- Provides search and replace
 		{ "roobert/search-replace.nvim" },
@@ -540,7 +525,7 @@ else
 		} },
 
 		--
-		-- LSP
+		-- LSP {{{3
 		--
 		{ "williamboman/mason.nvim" },
 		{ "williamboman/mason-lspconfig.nvim" },
@@ -563,7 +548,7 @@ else
 		},
 
 		--
-		-- FILE MANAGEMENT
+		-- FILE MANAGEMENT {{{3
 		--
 		-- File explorer that lets you edit your filesystem like a normal Neovim buffer.
 		{ "stevearc/oil.nvim" },
@@ -585,6 +570,7 @@ else
 		{
 			"nvim-neotest/neotest",
 			dependencies = {
+        "nvim-neotest/nvim-nio",
 				"nvim-lua/plenary.nvim",
 				"antoinemadec/FixCursorHold.nvim",
 				"olimorris/neotest-rspec",
@@ -592,7 +578,7 @@ else
 		},
 
 		--
-		--- GIT
+		-- GIT {{{3
 		--
 		-- Git signs and hunk management for Neovim.
 		{ "lewis6991/gitsigns.nvim" },
@@ -600,18 +586,17 @@ else
 		{ "tpope/vim-fugitive" },
 	})
 
-	-- ========================================================================== --
-	-- ==                         PLUGIN CONFIGURATION                         == --
-	-- ========================================================================== --
-
+	-- Plugin Configuration  {{{2
+	-- Notify {{{3
+	---
 	vim.notify = require("notify")
 	---
-	-- Colorscheme
+	-- Colorscheme {{{3
 	---
 	vim.cmd.colorscheme("darkplus")
 
 	---
-	-- lualine.nvim (statusline)
+	-- lualine.nvim (statusline) {{{3
 	---
 	-- See :help lualine.txt
 	require("lualine").setup({
@@ -637,7 +622,7 @@ else
 	})
 
 	---
-	-- bufferline
+	-- bufferline {{{3
 	---
 	-- See :help bufferline-settings
 	require("bufferline").setup({
@@ -661,7 +646,7 @@ else
 	})
 
 	---
-	-- Indent-blankline
+	-- Indent-blankline {{{3
 	---
 	-- See :help ibl.setup()
 	require("ibl").setup({
@@ -675,17 +660,17 @@ else
 	})
 
 	---
-	-- Comment.nvim
+	-- Comment.nvim {{{3
 	---
 	require("Comment").setup({})
 
 	---
-	-- oil
+	-- oil {{{3
 	---
 	require("oil").setup({})
 
 	---
-	-- Telescope
+	-- Telescope {{{3
 	---
 	-- See :help telescope.builtin
 	require("telescope").load_extension("fzf")
@@ -715,7 +700,7 @@ else
 		},
 	})
 	---
-	-- Gitsigns
+	-- Gitsigns {{{3
 	---
 	-- See :help gitsigns-usage
 	require("gitsigns").setup({
@@ -787,7 +772,7 @@ else
 	})
 
 	---
-	-- Treesitter
+	-- Treesitter {{{3
 	---
 	require("nvim-treesitter.configs").setup({
 
@@ -825,7 +810,7 @@ else
 	})
 
 	---
-	-- toggleterm
+	-- toggleterm {{{3
 	---
 	-- See :help toggleterm-roadmap
 	require("toggleterm").setup({
@@ -851,7 +836,7 @@ else
 
 	vim.keymap.set("n", "<leader>o2", "<cmd>2ToggleTerm name=Term2<cr>", { desc = "Open [2] terminal" })
 	---
-	-- neotest
+	-- neotest {{{3
 	---
 	require("neotest").setup({
 		adapters = {
@@ -860,7 +845,7 @@ else
 	})
 
 	---
-	-- which-key
+	-- which-key {{{3
 	---
 	-- require('which-key').setup({})
 	require("which-key").register({
@@ -876,7 +861,7 @@ else
 	})
 
 	---
-	-- mason
+	-- mason {{{3
 	---
 	require("mason").setup({})
 	require("mason-lspconfig").setup({
@@ -888,7 +873,7 @@ else
 	})
 
 	---
-	-- lspconfig
+	-- lspconfig {{{3
 	---
 
 	require("lspconfig").lua_ls.setup({
@@ -908,7 +893,7 @@ else
 	require("lspconfig").pyright.setup({})
 
 	---
-	-- efmls
+	-- efmls {{{3
 	--
 	local languages = require("efmls-configs.defaults").languages()
 	-- To extend and add additional tools or to override existing
@@ -935,17 +920,17 @@ else
 
 	require("lspconfig").efm.setup(vim.tbl_extend("force", efmls_config, {}))
 	---
-	-- trouble
+	-- trouble {{{3
 	---
 	require("trouble").setup({})
 
 	---
-	-- search-replace.nvim
+	-- search-replace.nvim {{{3
 	---
 	require("search-replace").setup({})
 
 	---
-	-- vim-spectre
+	-- vim-spectre {{{3
 	---
 	require("spectre").setup({
 		highlight = {
@@ -956,7 +941,7 @@ else
 	})
 
 	---
-	-- themery
+	-- themery {{{3
 	--
 	require("themery").setup({
 		themes = {
@@ -968,12 +953,12 @@ else
 		livePreview = true,
 	})
 	---
-	-- lsp-progress
+	-- lsp-progress {{{3
 	--
 	require("lsp-progress").setup({})
 
 	--
-	--- pantran
+	--- pantran {{{3
 	--
 	require("pantran").setup({
 		-- Default engine to use for translation. To list valid engine names run
@@ -1018,12 +1003,12 @@ else
 	})
 
 	--
-	--- neoclip
+	--- neoclip {{{3
 	--
 	require("neoclip").setup({})
 
 	--
-	--- dressing
+	--- dressing {{{3
 	--
 	require("dressing").setup({
 		input = {
@@ -1039,7 +1024,7 @@ else
 	})
 
 	--
-	--- browse
+	--- browse {{{3
 	--
 	require("browse").setup({})
 
