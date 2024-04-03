@@ -190,26 +190,6 @@ else
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
 -- Plugins {{{3
--- NeoTest {{{4
-	vim.keymap.set("n", "<leader>tt", function()
-		require("neotest").run.run()
-	end, { desc = "Run nearest [t]est" })
-
-	vim.keymap.set("n", "<leader>tf", function()
-		require("neotest").run.run(vim.fn.expand("%"))
-	end, { desc = "Run [f]ile" })
-
-	vim.keymap.set("n", "<leader>to", function()
-		require("neotest").output.open({ enter = true })
-	end, { desc = "Open test [o]utput" })
-
-	vim.keymap.set("n", "<leader>ts", function()
-		require("neotest").summary.toggle()
-	end, { desc = "Toggle test [s]ummary" })
-
-	vim.keymap.set("n", "<leader>tp", function()
-		require("neotest").output_panel.toggle()
-	end, { desc = "Toggle test output [p]anel" })
 -- Search/Replace {{{4
 	vim.keymap.set(
 		"v",
@@ -417,11 +397,71 @@ else
 		-- { "zaldih/themery.nvim" }, [Theme switcher] {{{3
 		{ "zaldih/themery.nvim" },
 		-- { "nvim-treesitter/nvim-treesitter" }, [Language parsing and manipulation] {{{3
-		{ "nvim-treesitter/nvim-treesitter" },
+		{ "nvim-treesitter/nvim-treesitter",
+      config = function()
+        require("nvim-treesitter.configs").setup({
+          highlight = {
+            enable = true,
+          },
+          textobjects = {
+            select = {
+              -- Enable text objects selection with lookahead.
+              enable = true,
+              lookahead = true,
+              keymaps = {
+                -- Define key mappings for various text objects.
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = "@class.inner",
+              },
+            },
+          },
+          ensure_installed = {
+            "javascript",
+            "typescript",
+            "tsx",
+            "lua",
+            "vim",
+            "vimdoc",
+            "css",
+            "json",
+            "ruby",
+            "python",
+          },
+        })
+      end,
+    },
 		-- { "nvim-treesitter/nvim-treesitter-textobjects" }, [Additional text objects for treesitter] {{{3
 		{ "nvim-treesitter/nvim-treesitter-textobjects" },
 		-- { "akinsho/toggleterm.nvim" }, [Terminal toggling] {{{3
-		{ "akinsho/toggleterm.nvim" },
+		{
+      "akinsho/toggleterm.nvim",
+      config = function()
+        require("toggleterm").setup({
+          open_mapping = "<C-g>",
+          direction = "float",
+          shade_terminals = true,
+          size = function(term)
+            if term.direction == "horizontal" then
+              return 15
+            elseif term.direction == "vertical" then
+              return vim.o.columns * 0.5
+            end
+          end,
+        })
+
+        local Terminal = require("toggleterm.terminal").Terminal
+
+        vim.keymap.set("n", "<leader>og", function()
+          Terminal:new({ cmd = "lazygit", hidden = true, name = "lazygit" }):toggle()
+        end, { noremap = true, silent = true, expr = true, desc = "[g]it" })
+
+        vim.keymap.set("n", "<leader>o1", "<cmd>1ToggleTerm name=Term1<cr>", { desc = "Open [1] terminal" })
+
+        vim.keymap.set("n", "<leader>o2", "<cmd>2ToggleTerm name=Term2<cr>", { desc = "Open [2] terminal" })
+      end,
+    },
     -- { "Exafunction/codeium.vim" }, [AI code completion] {{{3
 		{
 			"Exafunction/codeium.vim",
@@ -651,157 +691,111 @@ else
 				"antoinemadec/FixCursorHold.nvim",
 				"olimorris/neotest-rspec",
 			},
+      keys = {
+        { "<leader>tt", function()
+          require("neotest").run.run()
+        end, { desc = "Run nearest [t]est" }},
+
+        { "<leader>tf", function()
+          require("neotest").run.run(vim.fn.expand("%"))
+        end, { desc = "Run [f]ile" }},
+
+        { "<leader>to", function()
+          require("neotest").output.open({ enter = true })
+        end, { desc = "Open test [o]utput" }},
+
+        { "<leader>ts", function()
+          require("neotest").summary.toggle()
+        end, { desc = "Toggle test [s]ummary" }},
+
+        { "<leader>tp", function()
+          require("neotest").output_panel.toggle()
+        end, { desc = "Toggle test output [p]anel" }},
+      },
+      config = function()
+        require("neotest").setup({
+          adapters = {
+            require("neotest-rspec"),
+          },
+        })
+      end,
 		},
 		-- { "lewis6991/gitsigns.nvim" }, [Git signs and hunk management] {{{3
-		{ "lewis6991/gitsigns.nvim" },
+		{
+      "lewis6991/gitsigns.nvim",
+      config = function()
+        require("gitsigns").setup({
+          signs = {
+            add = { text = "+" },
+            change = { text = "#" },
+            delete = { text = "-" },
+            topdelete = { text = "‾" },
+            changedelete = { text = "~" },
+            untracked = { text = "┆" },
+          },
+          on_attach = function(bufnr)
+            local gs = package.loaded.gitsigns
+
+            local function map(mode, l, r, opts)
+              opts = opts or {}
+              opts.buffer = bufnr
+              vim.keymap.set(mode, l, r, opts)
+            end
+
+            -- Navigation
+            map("n", "]h", function()
+              if vim.wo.diff then
+                return "]h"
+              end
+              vim.schedule(function()
+                gs.next_hunk()
+              end)
+              return "<Ignore>"
+            end, { expr = true, desc = "Next hunk" })
+
+            map("n", "[h", function()
+              if vim.wo.diff then
+                return "[h"
+              end
+              vim.schedule(function()
+                gs.prev_hunk()
+              end)
+              return "<Ignore>"
+            end, { expr = true, desc = "Previous hunk" })
+
+            -- Actions
+            map("v", "<leader>hs", function()
+              gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
+            end, { desc = "Hunk [s]tage in selection" })
+            map("v", "<leader>hr", function()
+              gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
+            end, { desc = "Hunk [r]eset in selection" })
+
+            map("n", "<leader>hs", gs.stage_hunk, { desc = "Hunk [s]tage" })
+            map("n", "<leader>hr", gs.reset_hunk, { desc = "Hunk [r]eset" })
+            map("n", "<leader>hS", gs.stage_buffer, { desc = "Hunk [S]tage all in buffer" })
+            map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Hunk [u]ndo stage" })
+            map("n", "<leader>hR", gs.reset_buffer, { desc = "Hunk [R]eset all in buffer" })
+            map("n", "<leader>hp", gs.preview_hunk, { desc = "Hunk [p]review" })
+            map("n", "<leader>hb", function()
+              gs.blame_line({ full = true })
+            end, { desc = "Line [b]lame" })
+            map("n", "<leader>hd", gs.diffthis, { desc = "Hunk [d]iff" })
+            map("n", "<leader>hD", function()
+              gs.diffthis("~")
+            end, { desc = "Hunk [D]iff all in buffer" })
+            map("n", "<leader>ht", gs.toggle_deleted, { desc = "Hunk [t]oggle deleted" })
+            map("n", "<leader>ha", ":Gitsigns setloclist<CR>", { desc = "Hunk show [a]ll" })
+
+            -- Text object
+            map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
+          end,
+        })
+      end,
+    },
 		-- { "tpope/vim-fugitive" }, [Git wrapper] {{{3
 		{ "tpope/vim-fugitive" },
 	})
-	-- Gitsigns {{{3
-	---
-	-- See :help gitsigns-usage
-	require("gitsigns").setup({
-		signs = {
-			add = { text = "+" },
-			change = { text = "#" },
-			delete = { text = "-" },
-			topdelete = { text = "‾" },
-			changedelete = { text = "~" },
-			untracked = { text = "┆" },
-		},
-		on_attach = function(bufnr)
-			local gs = package.loaded.gitsigns
-
-			local function map(mode, l, r, opts)
-				opts = opts or {}
-				opts.buffer = bufnr
-				vim.keymap.set(mode, l, r, opts)
-			end
-
-			-- Navigation
-			map("n", "]h", function()
-				if vim.wo.diff then
-					return "]h"
-				end
-				vim.schedule(function()
-					gs.next_hunk()
-				end)
-				return "<Ignore>"
-			end, { expr = true, desc = "Next hunk" })
-
-			map("n", "[h", function()
-				if vim.wo.diff then
-					return "[h"
-				end
-				vim.schedule(function()
-					gs.prev_hunk()
-				end)
-				return "<Ignore>"
-			end, { expr = true, desc = "Previous hunk" })
-
-			-- Actions
-			map("v", "<leader>hs", function()
-				gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
-			end, { desc = "Hunk [s]tage in selection" })
-			map("v", "<leader>hr", function()
-				gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
-			end, { desc = "Hunk [r]eset in selection" })
-
-			map("n", "<leader>hs", gs.stage_hunk, { desc = "Hunk [s]tage" })
-			map("n", "<leader>hr", gs.reset_hunk, { desc = "Hunk [r]eset" })
-			map("n", "<leader>hS", gs.stage_buffer, { desc = "Hunk [S]tage all in buffer" })
-			map("n", "<leader>hu", gs.undo_stage_hunk, { desc = "Hunk [u]ndo stage" })
-			map("n", "<leader>hR", gs.reset_buffer, { desc = "Hunk [R]eset all in buffer" })
-			map("n", "<leader>hp", gs.preview_hunk, { desc = "Hunk [p]review" })
-			map("n", "<leader>hb", function()
-				gs.blame_line({ full = true })
-			end, { desc = "Line [b]lame" })
-			map("n", "<leader>hd", gs.diffthis, { desc = "Hunk [d]iff" })
-			map("n", "<leader>hD", function()
-				gs.diffthis("~")
-			end, { desc = "Hunk [D]iff all in buffer" })
-			map("n", "<leader>ht", gs.toggle_deleted, { desc = "Hunk [t]oggle deleted" })
-			map("n", "<leader>ha", ":Gitsigns setloclist<CR>", { desc = "Hunk show [a]ll" })
-
-			-- Text object
-			map({ "o", "x" }, "ih", ":<C-U>Gitsigns select_hunk<CR>")
-		end,
-	})
-
-	---
-	-- Treesitter {{{3
-	---
-	require("nvim-treesitter.configs").setup({
-
-		highlight = {
-			enable = true,
-		},
-
-		textobjects = {
-			select = {
-				-- Enable text objects selection with lookahead.
-				enable = true,
-				lookahead = true,
-				keymaps = {
-					-- Define key mappings for various text objects.
-					["af"] = "@function.outer",
-					["if"] = "@function.inner",
-					["ac"] = "@class.outer",
-					["ic"] = "@class.inner",
-				},
-			},
-		},
-
-		ensure_installed = {
-			"javascript",
-			"typescript",
-			"tsx",
-			"lua",
-			"vim",
-			"vimdoc",
-			"css",
-			"json",
-			"ruby",
-			"python",
-		},
-	})
-
-	---
-	-- toggleterm {{{3
-	---
-	-- See :help toggleterm-roadmap
-	require("toggleterm").setup({
-		open_mapping = "<C-g>",
-		direction = "float",
-		shade_terminals = true,
-		size = function(term)
-			if term.direction == "horizontal" then
-				return 15
-			elseif term.direction == "vertical" then
-				return vim.o.columns * 0.5
-			end
-		end,
-	})
-
-	local Terminal = require("toggleterm.terminal").Terminal
-
-	vim.keymap.set("n", "<leader>og", function()
-		Terminal:new({ cmd = "lazygit", hidden = true, name = "lazygit" }):toggle()
-	end, { noremap = true, silent = true, expr = true, desc = "[g]it" })
-
-	vim.keymap.set("n", "<leader>o1", "<cmd>1ToggleTerm name=Term1<cr>", { desc = "Open [1] terminal" })
-
-	vim.keymap.set("n", "<leader>o2", "<cmd>2ToggleTerm name=Term2<cr>", { desc = "Open [2] terminal" })
-	---
-	-- neotest {{{3
-	---
-	require("neotest").setup({
-		adapters = {
-			require("neotest-rspec"),
-		},
-	})
-
-	---
 	-- which-key {{{3
 	---
 	-- require('which-key').setup({})
