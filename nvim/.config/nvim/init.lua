@@ -257,12 +257,17 @@ else
 
 	require('lazy').setup({
 	-- Plugin Settings {{{2
+    --  { "rebelot/kanagawa.nvim" }, [Theme] {{{3
+    { "rebelot/kanagawa.nvim",
+    },
+    --  { "catppuccin/nvim" }, [Theme] {{{3
+    {
+      "catppuccin/nvim",
+    },
 		-- { "folke/tokyonight.nvim" }, [Theme] {{{3
 		{ "folke/tokyonight.nvim" },
 		-- { "joshdick/onedark.vim" }, [Theme] {{{3
 		{ "joshdick/onedark.vim" },
-		-- { "tanvirtin/monokai.nvim" }, [Theme] {{{3
-		{ "tanvirtin/monokai.nvim" },
 		-- { "lunarvim/darkplus.nvim" }, [Theme] {{{3
 		{
       "lunarvim/darkplus.nvim",
@@ -352,8 +357,16 @@ else
           themes = {
             "tokyonight",
             "onedark",
-            "monokai",
             "darkplus",
+            "catppuccin",
+            "catppuccin-latte",
+            "catppuccin-frappe",
+            "catppuccin-macchiato",
+            "catppuccin-mocha",
+            "kanagawa",
+            "kanagawa-dragon",
+            "kanagawa-wave",
+            "kanagawa-lotus",
           },
           livePreview = true,
         })
@@ -998,5 +1011,110 @@ else
     },
 		-- { "tpope/vim-fugitive" }, [Git wrapper] {{{3
 		{ "tpope/vim-fugitive" },
+    -- { "folke/noice.nvim" }, [replaces the UI for messages, cmdline and the popupmenu] {{{3
+    {
+      "folke/noice.nvim",
+      event = "VeryLazy",
+      dependencies = {
+        -- if you lazy-load any plugin below, make sure to add proper `module="..."` entries
+        "MunifTanjim/nui.nvim",
+        "rcarriga/nvim-notify",
+        },
+      config = function()
+        require("noice").setup({
+          lsp = {
+            -- override markdown rendering so that **cmp** and other plugins use **Treesitter**
+            override = {
+              ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+              ["vim.lsp.util.stylize_markdown"] = true,
+              ["cmp.entry.get_documentation"] = true, -- requires hrsh7th/nvim-cmp
+            },
+          },
+          -- you can enable a preset for easier configuration
+          presets = {
+            bottom_search = true, -- use a classic bottom cmdline for search
+            command_palette = true, -- position the cmdline and popupmenu together
+            long_message_to_split = true, -- long messages will be sent to a split
+            inc_rename = false, -- enables an input dialog for inc-rename.nvim
+            lsp_doc_border = false, -- add a border to hover docs and signature help
+          },
+        })
+      end,
+    },
+    --  { "hrsh7th/nvim-cmp" } [Autocompletion] {{{3,
+    {
+      "hrsh7th/nvim-cmp",
+      version = false, -- last release is way too old
+      event = "InsertEnter",
+      dependencies = {
+        "hrsh7th/cmp-nvim-lsp",
+        "hrsh7th/cmp-buffer",
+        "hrsh7th/cmp-path",
+      },
+      opts = function()
+        vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
+        local cmp = require("cmp")
+        local defaults = require("cmp.config.default")()
+        return {
+          auto_brackets = {}, -- configure any filetype to auto add brackets
+          completion = {
+            completeopt = "menu,menuone,noinsert",
+          },
+          mapping = cmp.mapping.preset.insert({
+            ["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+            ["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
+            ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+            ["<C-f>"] = cmp.mapping.scroll_docs(4),
+            ["<C-Space>"] = cmp.mapping.complete(),
+            ["<C-e>"] = cmp.mapping.abort(),
+            ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            ["<S-CR>"] = cmp.mapping.confirm({
+              behavior = cmp.ConfirmBehavior.Replace,
+              select = true,
+            }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            ["<C-CR>"] = function(fallback)
+              cmp.abort()
+              fallback()
+            end,
+          }),
+          sources = cmp.config.sources(
+          {
+            { name = "nvim_lsp" },
+            { name = "path" },
+          },
+          {
+            { name = "buffer" },
+          }),
+          experimental = {
+            ghost_text = {
+              hl_group = "CmpGhostText",
+            },
+          },
+          sorting = defaults.sorting,
+        }
+      end,
+      config = function(_, opts)
+        for _, source in ipairs(opts.sources) do
+          source.group_index = source.group_index or 1
+        end
+        local cmp = require("cmp")
+        local Kind = cmp.lsp.CompletionItemKind
+        cmp.setup(opts)
+        cmp.event:on("confirm_done", function(event)
+          if not vim.tbl_contains(opts.auto_brackets or {}, vim.bo.filetype) then
+            return
+          end
+          local entry = event.entry
+          local item = entry:get_completion_item()
+          if vim.tbl_contains({ Kind.Function, Kind.Method }, item.kind) then
+            local keys = vim.api.nvim_replace_termcodes("()<left>", false, false, true)
+            vim.api.nvim_feedkeys(keys, "i", true)
+          end
+        end)
+      end,
+    }
 	})
+
 end
+
+
