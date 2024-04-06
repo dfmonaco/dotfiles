@@ -690,23 +690,23 @@ else
           "<C-r>",
           "<CMD>SearchReplaceSingleBufferVisualSelection<CR>",
           mode = "v",
-          { desc = "Visual search/replace in buffer" }
+          desc = "Visual search/replace in buffer"
         },
         {
           "<C-s>",
           "<CMD>SearchReplaceWithinVisualSelection<CR>",
           mode = "v",
-          { desc = "Search/replace within visual selection" }
+          desc = "Search/replace within visual selection"
         },
         {
           "<leader>rw",
           "<CMD>SearchReplaceSingleBufferCWord<CR>",
-          { desc = "Search/replace in buffer for [w]ord" }
+          desc = "Search/replace in buffer for [w]ord"
         },
         {
           "<leader>rW",
           "<CMD>SearchReplaceSingleBufferCWORD<CR>",
-          { desc = "Search/replace in buffer for [W]WORD" }
+          desc = "Search/replace in buffer for [W]WORD"
         },
       },
       config = function()
@@ -732,15 +732,20 @@ else
         "nvim-lua/plenary.nvim",
       },
       keys = {
-        { "<leader>sp", '<cmd>lua require("spectre").toggle()<CR>', {
+        {
+          "<leader>sp",
+          '<cmd>lua require("spectre").toggle()<CR>',
           desc = "Toggle Search/Replace [p]anel",
-        }},
-        { "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+        },
+        {
+          "<leader>sw",
+          '<cmd>lua require("spectre").open_visual({select_word=true})<CR>',
           desc = "Search current [w]ord on all files",
-        }},
-        { "<leader>sb", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+        },
+        { "<leader>sb",
+          '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>',
           desc = "Search current word on current [b]uffer",
-        }},
+        },
       },
       config = function()
         require("spectre").setup({
@@ -799,11 +804,11 @@ else
       keys = {
         { "<leader>lp", function()
             require("trouble").toggle()
-          end, { desc = "Toggle diagnostics [p]anel" }
+          end, desc = "Toggle diagnostics [p]anel"
         },
         { "<leader>lr", function()
             require("trouble").toggle("lsp_references")
-          end, { desc = "Toggle LSP [r]eferences" }
+          end, desc = "Toggle LSP [r]eferences"
         },
       },
       config = function()
@@ -872,28 +877,28 @@ else
 			},
       keys = {
         { "<leader>fr",
-          "<cmd>Telescope oldfiles<cr>", { desc = "Find [r]ecently opened files" }},
+          "<cmd>Telescope oldfiles<cr>", desc = "Find [r]ecently opened files" },
 
         { "<leader>fb",
-          "<cmd>Telescope buffers<cr>", { desc = "Find current [b]uffers" }},
+          "<cmd>Telescope buffers<cr>", desc = "Find current [b]uffers" },
 
         { "<leader>fa",
-          "<cmd>Telescope git_files<cr>", { desc = "Find [a]ll files" }},
+          "<cmd>Telescope git_files<cr>", desc = "Find [a]ll files" },
 
         { "<leader>ff",
-          "<cmd>Telescope find_files<cr>", { desc = "Find git [f]iles" }},
+          "<cmd>Telescope find_files<cr>", desc = "Find git [f]iles" },
 
         { "<leader>fs",
-          ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", { desc = "Find [s]tring in files" }},
+          ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", desc = "Find [s]tring in files" },
 
         { "<leader>fd",
-          "<cmd>Telescope diagnostics<cr>", { desc = "Find [d]iagnostics" }},
+          "<cmd>Telescope diagnostics<cr>", desc = "Find [d]iagnostics" },
 
         { "<leader>fh",
-          "<cmd>Telescope current_buffer_fuzzy_find<cr>", { desc = "Find string [h]ere" }},
+          "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find string [h]ere" },
 
         { "<leader>fy",
-          "<cmd>Telescope neoclip<cr>", { desc = "Find [y]anks" }},
+          "<cmd>Telescope neoclip<cr>", desc = "Find [y]anks" },
       },
 			config = function()
 				require("telescope").load_extension("live_grep_args")
@@ -948,23 +953,23 @@ else
       keys = {
         { "<leader>tt", function()
           require("neotest").run.run()
-        end, { desc = "Run nearest [t]est" }},
+        end, desc = "Run nearest [t]est"},
 
         { "<leader>tf", function()
           require("neotest").run.run(vim.fn.expand("%"))
-        end, { desc = "Run [f]ile" }},
+        end, desc = "Run [f]ile"},
 
         { "<leader>to", function()
           require("neotest").output.open({ enter = true })
-        end, { desc = "Open test [o]utput" }},
+        end, desc = "Open test [o]utput"},
 
         { "<leader>ts", function()
           require("neotest").summary.toggle()
-        end, { desc = "Toggle test [s]ummary" }},
+        end, desc = "Toggle test [s]ummary"},
 
         { "<leader>tp", function()
           require("neotest").output_panel.toggle()
-        end, { desc = "Toggle test output [p]anel" }},
+        end, desc = "Toggle test output [p]anel"},
       },
       config = function()
         require("neotest").setup({
