@@ -260,10 +260,6 @@ else
     --  { "rebelot/kanagawa.nvim" }, [Theme] {{{3
     { "rebelot/kanagawa.nvim",
     },
-    --  { "catppuccin/nvim" }, [Theme] {{{3
-    {
-      "catppuccin/nvim",
-    },
 		-- { "folke/tokyonight.nvim" }, [Theme] {{{3
 		{ "folke/tokyonight.nvim" },
 		-- { "joshdick/onedark.vim" }, [Theme] {{{3
@@ -271,12 +267,54 @@ else
 		-- { "lunarvim/darkplus.nvim" }, [Theme] {{{3
 		{
       "lunarvim/darkplus.nvim",
+    },
+    --  { "catppuccin/nvim" }, [Theme] {{{3
+    {
+      "catppuccin/nvim",
+      name = "catppuccin",
       lazy = false, -- make sure we load this during startup if it is your main colorscheme
       priority = 1000, -- make sure to load this before all the other start plugins
       config = function()
         -- load the colorscheme here
-        vim.cmd([[colorscheme darkplus]])
+        vim.cmd([[colorscheme catppuccin]])
       end,
+      opts = {
+        integrations = {
+          aerial = true,
+          alpha = true,
+          cmp = true,
+          dashboard = true,
+          flash = true,
+          gitsigns = true,
+          headlines = true,
+          illuminate = true,
+          indent_blankline = { enabled = true },
+          leap = true,
+          lsp_trouble = true,
+          mason = true,
+          markdown = true,
+          mini = true,
+          native_lsp = {
+            enabled = true,
+            underlines = {
+              errors = { "undercurl" },
+              hints = { "undercurl" },
+              warnings = { "undercurl" },
+              information = { "undercurl" },
+            },
+          },
+          navic = { enabled = true, custom_bg = "lualine" },
+          neotest = true,
+          neotree = true,
+          noice = true,
+          notify = true,
+          semantic_tokens = true,
+          telescope = true,
+          treesitter = true,
+          treesitter_context = true,
+          which_key = true,
+        },
+      },
     },
 		-- { "kyazdani42/nvim-web-devicons" }, [Provides icons for files, directories, etc.] {{{3
 		{ "kyazdani42/nvim-web-devicons" },
@@ -286,7 +324,7 @@ else
       config = function()
         require("lualine").setup({
           options = {
-            theme = "darkplus",
+            theme = "catppuccin",
             icons_enabled = true,
             component_separators = "|",
             section_separators = "",
@@ -1112,7 +1150,15 @@ else
           end
         end)
       end,
-    }
+    },
+    -- { "echasnovski/mini.pairs" } [Auto pairs for "" '' () []] {{{3
+    {
+      "echasnovski/mini.pairs" ,
+      event = "VeryLazy",
+      config = function()
+        require("mini.pairs").setup()
+      end,
+    },
 	})
 
 end
