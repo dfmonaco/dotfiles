@@ -199,46 +199,6 @@ else
 		end,
 	})
 
-	---
-	-- LSP Keybindings
-	---
-	vim.api.nvim_create_autocmd("LspAttach", {
-		group = group,
-		desc = "LSP actions",
-		callback = function()
-			local bufmap = function(mode, keys, cmd, opts)
-				opts.buffer = true
-				vim.keymap.set(mode, keys, cmd, opts)
-			end
-
-			-- You can search each function in the help page.
-			-- For example :help vim.lsp.buf.hover()
-
-			-- It shows information about the symbol under the cursor
-			bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.hover()<cr>", { desc = "Show [i]nfo" })
-
-			-- It jumps to the definition of the symbol under the cursor
-			bufmap("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to [d]efinition" })
-
-			-- Lists all the implementations of the symbol under the cursor
-			bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "List [i]mplementations" })
-			-- Displays the signature of the function
-			bufmap("n", "<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Show [s]ignature" })
-
-			-- Formats the buffer using the current language server
-			bufmap(
-				{ "n", "x" },
-				"<leader>lf",
-				"<cmd>lua vim.lsp.buf.format({async = true})<cr>",
-				{ desc = "Buffer [f]ormat" }
-			)
-
-			-- Selects a code action available at the current cursor position
-			bufmap("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Select code [a]ction" })
-		end,
-	})
-
-
 -- PLUGINS {{{1
 -- Lazy Config {{{2
 
@@ -317,7 +277,7 @@ else
       },
     },
 		-- { "kyazdani42/nvim-web-devicons" }, [Provides icons for files, directories, etc.] {{{3
-		{ "kyazdani42/nvim-web-devicons" },
+		{ "nvim-tree/nvim-web-devicons" },
 		-- { "nvim-lualine/lualine.nvim" }, [Configurable status line] {{{3
 		{
       "nvim-lualine/lualine.nvim",
@@ -380,7 +340,7 @@ else
             enabled = false,
           },
           indent = {
-            char = "▏",
+            char = "┊",
           },
         })
       end,
@@ -415,6 +375,9 @@ else
       config = function()
         require("nvim-treesitter.configs").setup({
           highlight = {
+            enable = true,
+          },
+          indent = {
             enable = true,
           },
           textobjects = {
@@ -493,6 +456,9 @@ else
 				vim.keymap.set("i", "<C-BS>", function()
 					return vim.fn["codeium#Clear"]()
 				end, { expr = true })
+				vim.keymap.set("n", "<C-i>", function()
+					return vim.fn["codeium#Chat"]()
+				end, { expr = true })
 			end,
 		},
 		-- { "folke/which-key.nvim" }, [Provides which-key integration] {{{3
@@ -517,8 +483,6 @@ else
         })
       end,
 		},
-		-- { "ii14/neorepl.nvim" }, [Lua/Vim Repl] {{{3
-		{ "ii14/neorepl.nvim" },
 		-- { "piersolenski/wtf.nvim" }, [Debug diagnostics with AI or Google] {{{3
 		{
 			"piersolenski/wtf.nvim",
@@ -545,53 +509,6 @@ else
 				},
 			},
 		},
-		-- { "potamides/pantran.nvim" }, [Translation engine] {{{3
-		{
-      "potamides/pantran.nvim",
-      config = function()
-        require("pantran").setup({
-          -- Default engine to use for translation. To list valid engine names run
-          -- `:lua =vim.tbl_keys(require("pantran.engines"))`.
-          default_engine = "argos",
-          -- Configuration for individual engines goes here.
-          engines = {
-            argos = {
-              -- Default languages can be defined on a per engine basis. In this case
-              -- `:lua require("pantran.async").run(function()
-              -- vim.pretty_print(require("pantran.engines").yandex:languages()) end)`
-              -- can be used to list available language identifiers.
-              default_source = "auto",
-              default_target = "en",
-            },
-          },
-          controls = {
-            mappings = {
-              edit = {
-                n = {
-                  -- Use this table to add additional mappings for the normal mode in
-                  -- the translation window. Either strings or function references are
-                  -- supported.
-                  ["j"] = "gj",
-                  ["k"] = "gk",
-                },
-                i = {
-                  -- Similar table but for insert mode. Using 'false' disables
-                  -- existing keybindings.
-                  ["<C-y>"] = false,
-                  ["<C-a>"] = require("pantran.ui.actions").yank_close_translation,
-                },
-              },
-              -- Keybindings here are used in the selection window.
-              select = {
-                n = {
-                  -- ...
-                },
-              },
-            },
-          },
-        })
-      end,
-    },
 		-- { "AckslD/nvim-neoclip.lua" }, [Clipboard manager] {{{3
 		{
       "AckslD/nvim-neoclip.lua",
@@ -656,15 +573,6 @@ else
     --  { "rcarriga/nvim-notify" }, [Improved notifications] {{{3
     {
       "rcarriga/nvim-notify",
-      keys = {
-        {
-          "<leader>un",
-          function()
-            require("notify").dismiss({ silent = true, pending = true })
-          end,
-          desc = "Dismiss All Notifications",
-        },
-      },
       opts = {
         stages = "static",
         timeout = 3000,
@@ -757,42 +665,111 @@ else
         })
       end,
 		},
-		-- { "williamboman/mason.nvim" }, [LSP Manager] {{{3
-		{
-      "williamboman/mason.nvim",
-      config = function()
-	      require("mason").setup({})
-      end,
-    },
-		-- { "williamboman/mason-lspconfig.nvim" }, [LSP Manager config] {{{3
-		{
-      "williamboman/mason-lspconfig.nvim",
-      config = function()
-        require("mason-lspconfig").setup({
-          ensure_installed = {
-            "lua_ls",
-            "solargraph",
-            "efm",
-          },
-        })
-      end,
-    },
+
 		-- { "neovim/nvim-lspconfig" }, [LSP config] {{{3
-		{ "neovim/nvim-lspconfig",
+		{
+      "neovim/nvim-lspconfig",
+      event = { "BufReadPre", "BufNewFile" },
+      dependencies = {
+        "williamboman/mason.nvim",
+        "williamboman/mason-lspconfig.nvim",
+        "hrsh7th/cmp-nvim-lsp",
+        { "antosha417/nvim-lsp-file-operations", config = true },
+        { "folke/neodev.nvim", config = true },
+      },
       config = function()
-        require("lspconfig").lua_ls.setup({
-          settings = {
-            Lua = {
-              diagnostics = {
-                globals = { "vim" },
-              },
-            },
+        local lspconfig = require("lspconfig")
+        local util = require("lspconfig.util")
+        local mason = require("mason")
+        local mason_lspconfig = require("mason-lspconfig")
+        local cmp_nvim_lsp = require("cmp_nvim_lsp")
+        -- used to enable autocompletion (assign to every lsp server config
+        local capabilities = cmp_nvim_lsp.default_capabilities()
+
+        mason.setup({
+          ui = {
+            icons = {
+              package_installed = "✓",
+              package_pending = "➜",
+              package_uninstalled = "✗",
+            }
+          }
+        })
+
+        mason_lspconfig.setup({
+          handlers = {
+            ["lua_ls"] = function()
+              lspconfig.lua_ls.setup({
+                settings = {
+                  Lua = {
+                    diagnostics = {
+                      globals = { "vim" },
+                    }
+                  }
+                }
+              })
+            end,
+            ["solargraph"] = function()
+              lspconfig.solargraph.setup({
+                capabilities = capabilities,
+                filetypes = { "ruby" },
+              })
+            end,
+            ["pyright"] = function()
+              lspconfig.pyright.setup({
+                capabilities = capabilities,
+              })
+            end,
+            ["eslint"] = function()
+              lspconfig.eslint.setup({
+                capabilities = capabilities,
+                root_dir = util.root_pattern(".git")
+              })
+            end,
+            ["biome"] = function()
+              lspconfig.biome.setup({
+                capabilities = capabilities,
+                root_dir = util.root_pattern(".git")
+              })
+            end,
           },
         })
-        require("lspconfig").solargraph.setup({
-          filetypes = { "ruby" },
+
+        vim.api.nvim_create_autocmd("LspAttach", {
+          group = group,
+          desc = "LSP actions",
+          callback = function()
+            local bufmap = function(mode, keys, cmd, opts)
+              opts.buffer = true
+              vim.keymap.set(mode, keys, cmd, opts)
+            end
+
+            -- You can search each function in the help page.
+            -- For example :help vim.lsp.buf.hover()
+
+            -- It shows information about the symbol under the cursor
+            bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.hover()<cr>", { desc = "Show [i]nfo" })
+
+            -- It jumps to the definition of the symbol under the cursor
+            bufmap("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to [d]efinition" })
+
+            -- Lists all the implementations of the symbol under the cursor
+            bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "List [i]mplementations" })
+            -- Displays the signature of the function
+            bufmap("n", "<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Show [s]ignature" })
+
+            -- Formats the buffer using the current language server
+            bufmap(
+              { "n", "x" },
+              "<leader>lf",
+              "<cmd>lua vim.lsp.buf.format({async = true})<cr>",
+              { desc = "Buffer [f]ormat" }
+            )
+
+            -- Selects a code action available at the current cursor position
+            bufmap("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Select code [a]ction" })
+          end,
         })
-        require("lspconfig").pyright.setup({})
       end,
     },
 		-- { "folke/trouble.nvim"}, [Diagnostics panel] {{{3
@@ -1164,8 +1141,19 @@ else
         require("mini.pairs").setup()
       end,
     },
+    -- { "voldikss/vim-browser-search" } [Quick Browser search] {{{3
+    {
+      "voldikss/vim-browser-search",
+      keys = {
+        {
+          "<C-s>",
+          "<Plug>SearchVisual",
+          mode = "v",
+          desc = "Search visual selection"
+        },
+      }
+    },
 	})
 
 end
-
 
