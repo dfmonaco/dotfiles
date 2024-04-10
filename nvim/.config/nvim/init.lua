@@ -430,9 +430,13 @@ else
 
         local Terminal = require("toggleterm.terminal").Terminal
 
-        vim.keymap.set("n", "<leader>og", function()
-          Terminal:new({ cmd = "lazygit", hidden = true, name = "lazygit" }):toggle()
-        end, { noremap = true, silent = true, expr = true, desc = "[g]it" })
+        vim.keymap.set("n", "<leader>os", function()
+          Terminal:new({ cmd = "rails s", hidden = true, name = "rails server" }):toggle()
+        end, { noremap = true, silent = true, expr = true, desc = "[s]server" })
+
+        vim.keymap.set("n", "<leader>oc", function()
+          Terminal:new({ cmd = "rails c", hidden = true, name = "rails console" }):toggle()
+        end, { noremap = true, silent = true, expr = true, desc = "[c]onsole" })
 
         vim.keymap.set("n", "<leader>o1", "<cmd>1ToggleTerm name=Term1<cr>", { desc = "Open [1] terminal" })
 
@@ -720,14 +724,8 @@ else
                 capabilities = capabilities,
               })
             end,
-            ["eslint"] = function()
-              lspconfig.eslint.setup({
-                capabilities = capabilities,
-                root_dir = util.root_pattern(".git")
-              })
-            end,
-            ["biome"] = function()
-              lspconfig.biome.setup({
+            ["tsserver"] = function()
+              lspconfig.tsserver.setup({
                 capabilities = capabilities,
                 root_dir = util.root_pattern(".git")
               })
@@ -1153,7 +1151,27 @@ else
         },
       }
     },
+    {
+        "kdheepak/lazygit.nvim",
+    	cmd = {
+    		"LazyGit",
+    		"LazyGitConfig",
+    		"LazyGitCurrentFile",
+    		"LazyGitFilter",
+    		"LazyGitFilterCurrentFile",
+    	},
+        -- optional for floating window border decoration
+        dependencies = {
+            "nvim-lua/plenary.nvim",
+        },
+        -- setting the keybinding for LazyGit with 'keys' is recommended in
+        -- order to load the plugin when the command is run for the first time
+        keys = {
+           { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+        }
+    },
 	})
 
 end
+
 
