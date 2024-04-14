@@ -1,4 +1,4 @@
--- VSCODE SETTINGS {{{1
+-- VSCODE SETTINGSj {{{1
 if vim.g.vscode then
 	local vscode = require("vscode-neovim")
 
@@ -59,7 +59,7 @@ if vim.g.vscode then
 else
 
 -- EDITOR CONFIGURATION {{{1
-
+  -- Options {{{2
   -- Set folding method
   vim.opt.foldmethod = "marker"
 
@@ -126,7 +126,6 @@ else
 	--- Show the effects of a search / replace in a live preview window
 	vim.o.inccommand = "split"
 -- Mappings {{{2
-  -- Standard {{{3
 	vim.g.mapleader = " "
 
 	vim.keymap.set("n", "<tab>", ":bn<CR>", { desc = "Next buffer" })
@@ -158,13 +157,15 @@ else
 	vim.keymap.set("n", "<leader><leader>", "<c-^>", { desc = "Last buffer" })
 
 	vim.keymap.set("n", "<leader>=", "gg=G", { desc = "Autoindent the whole file" })
--- Edit Files {{{3
+
 	vim.keymap.set("n", "<leader>ei", "<cmd>e $MYVIMRC<cr>", { desc = "Edit [i]nit.lua" })
 
 	vim.keymap.set("n", "<leader>ez", "<cmd>e $HOME/.zshrc<cr>", { desc = "Edit [z]shrc" })
 
 	vim.keymap.set("n", "<leader>er", "<cmd>e $HOME/.config/rubocop/config.yml<cr>", { desc = "Edit [r]ubocop" })
--- Insert Text {{{3
+
+  vim.keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
+
 	vim.keymap.set(
 		"n",
 		"<leader>ir",
@@ -177,7 +178,7 @@ else
    [[:normal! odebugger<cr>]],
    { desc = "insert [j]avascript debugger" }
   )
--- Custom Functions {{{3
+
 	local function confirm_and_delete_buffer()
 		local confirm = vim.fn.confirm("Delete buffer and file?", "&Yes\n&No", 2)
 
@@ -419,24 +420,38 @@ else
           open_mapping = "<C-g>",
           direction = "float",
           shade_terminals = true,
-          size = function(term)
-            if term.direction == "horizontal" then
-              return 15
-            elseif term.direction == "vertical" then
-              return vim.o.columns * 0.5
-            end
-          end,
         })
 
         local Terminal = require("toggleterm.terminal").Terminal
 
-        vim.keymap.set("n", "<leader>os", function()
-          Terminal:new({ cmd = "rails s", hidden = true, name = "rails server" }):toggle()
-        end, { noremap = true, silent = true, expr = true, desc = "[s]server" })
+        local rails_c = Terminal:new({
+          name = "rails console",
+          cmd = "rails c",
+          hidden = true,
+          on_open = function()
+            vim.cmd("startinsert!")
+          end,
+        })
 
-        vim.keymap.set("n", "<leader>oc", function()
-          Terminal:new({ cmd = "rails c", hidden = true, name = "rails console" }):toggle()
-        end, { noremap = true, silent = true, expr = true, desc = "[c]onsole" })
+        local rails_s = Terminal:new({
+          name = "rails server",
+          cmd = "rails s",
+          hidden = true,
+        })
+
+        function Rails_c_toggle()
+          rails_c:toggle()
+        end
+
+        function Rails_s_toggle()
+          rails_s:toggle()
+        end
+
+        vim.keymap.set("n", "<C-1>", "<cmd>lua Rails_s_toggle()<cr>", { noremap = true, silent = true})
+        vim.keymap.set("t", "<C-1>", "<cmd>lua Rails_s_toggle()<cr>" )
+
+        vim.keymap.set("n", "<C-2>", "<cmd>lua Rails_c_toggle()<cr>", { noremap = true, silent = true})
+        vim.keymap.set("t", "<C-2>", "<cmd>lua Rails_c_toggle()<cr>" )
 
         vim.keymap.set("n", "<leader>o1", "<cmd>1ToggleTerm name=Term1<cr>", { desc = "Open [1] terminal" })
 
@@ -1060,21 +1075,27 @@ else
       end,
     },
     --  { "hrsh7th/nvim-cmp" } [Autocompletion] {{{3,
+    
+
     {
       "hrsh7th/nvim-cmp",
       version = false, -- last release is way too old
+      -- The "InsertEnter" event is triggered when entering insert mode, so we load the plugin at that time.
       event = "InsertEnter",
       dependencies = {
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
+        "hrsh7th/cmp-nvim-lsp", -- LSP completion source
+        "hrsh7th/cmp-buffer", -- Buffer completion source
+        "hrsh7th/cmp-path", -- Path completion source
       },
       opts = function()
-        vim.api.nvim_set_hl(0, "CmpGhostText", { link = "Comment", default = true })
         local cmp = require("cmp")
         local defaults = require("cmp.config.default")()
+
         return {
-          auto_brackets = {}, -- configure any filetype to auto add brackets
+          -- Configure auto-brackets for all filetypes
+          auto_brackets = {},
+          -- completeopt controls how completion menus are displayed.
+          -- "menu,menuone,noinsert" means show a menu, show only one menu entry, and don't insert the completion automatically.
           completion = {
             completeopt = "menu,menuone,noinsert",
           },
@@ -1085,11 +1106,15 @@ else
             ["<C-f>"] = cmp.mapping.scroll_docs(4),
             ["<C-Space>"] = cmp.mapping.complete(),
             ["<C-e>"] = cmp.mapping.abort(),
-            ["<CR>"] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            -- Confirm the current completion item
+            -- "<CR>" is the Enter key. This mapping confirms the currently selected completion item.
+            ["<CR>"] = cmp.mapping.confirm({ select = true }),
+            -- Confirm and replace the current completion item
+            -- "<S-CR>" is the Shift + Enter key. This mapping confirms and replaces the current completion item.
             ["<S-CR>"] = cmp.mapping.confirm({
               behavior = cmp.ConfirmBehavior.Replace,
               select = true,
-            }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+            }),
             ["<C-CR>"] = function(fallback)
               cmp.abort()
               fallback()
@@ -1097,34 +1122,49 @@ else
           }),
           sources = cmp.config.sources(
           {
+            -- LSP completion source
+            -- "nvim_lsp" uses the Language Server Protocol to provide completion items.
             { name = "nvim_lsp" },
+            -- Path completion source
+            -- "path" provides completion for file paths.
             { name = "path" },
           },
           {
+            -- Buffer completion source
+            -- "buffer" provides completion for words in the current buffer.
             { name = "buffer" },
           }),
-          experimental = {
-            ghost_text = {
-              hl_group = "CmpGhostText",
-            },
-          },
           sorting = defaults.sorting,
         }
       end,
       config = function(_, opts)
+        -- The group index determines the order in which completion sources are queried.
         for _, source in ipairs(opts.sources) do
           source.group_index = source.group_index or 1
         end
+
         local cmp = require("cmp")
+        -- "CompletionItemKind" is used to identify the type of completion item.
         local Kind = cmp.lsp.CompletionItemKind
+
+        -- cmp.setup configures nvim-cmp with the options we provided in the "opts" function.-- cmp.setup configures nvim-cmp with the options we provided in the "opts" function.
         cmp.setup(opts)
+
+        -- Event handler for when a completion item is confirmed
         cmp.event:on("confirm_done", function(event)
+          -- Check if auto-brackets are enabled for the current filetype
+          -- opts.auto_brackets is a table of filetypes for which auto-brackets are enabled.
           if not vim.tbl_contains(opts.auto_brackets or {}, vim.bo.filetype) then
             return
           end
+
+          -- Get the confirmed completion item
           local entry = event.entry
           local item = entry:get_completion_item()
+
+          -- Check if the completion item is a function or method
           if vim.tbl_contains({ Kind.Function, Kind.Method }, item.kind) then
+            -- We insert "()" after the function/method name and move the cursor inside the parentheses.
             local keys = vim.api.nvim_replace_termcodes("()<left>", false, false, true)
             vim.api.nvim_feedkeys(keys, "i", true)
           end
@@ -1151,6 +1191,7 @@ else
         },
       }
     },
+    -- { "kdheepak/lazygit.vim" } [LazyGit] {{{3
     {
         "kdheepak/lazygit.nvim",
     	cmd = {
@@ -1167,7 +1208,7 @@ else
         -- setting the keybinding for LazyGit with 'keys' is recommended in
         -- order to load the plugin when the command is run for the first time
         keys = {
-           { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
+           { "<leader>og", "<cmd>LazyGit<cr>", desc = "[o]pen [g]it" }
         }
     },
 	})
