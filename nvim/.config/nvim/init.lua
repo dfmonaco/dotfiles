@@ -1075,8 +1075,6 @@ else
       end,
     },
     --  { "hrsh7th/nvim-cmp" } [Autocompletion] {{{3,
-    
-
     {
       "hrsh7th/nvim-cmp",
       version = false, -- last release is way too old
@@ -1086,14 +1084,33 @@ else
         "hrsh7th/cmp-nvim-lsp", -- LSP completion source
         "hrsh7th/cmp-buffer", -- Buffer completion source
         "hrsh7th/cmp-path", -- Path completion source
+        {
+          "L3MON4D3/LuaSnip",
+          config = function() require("luasnip.loaders.from_vscode").lazy_load() end
+        },
+        "saadparwaiz1/cmp_luasnip", -- Snippet completion source
+        "onsails/lspkind-nvim", -- Icons for autocompletion
       },
       opts = function()
         local cmp = require("cmp")
         local defaults = require("cmp.config.default")()
-
         return {
-          -- Configure auto-brackets for all filetypes
-          auto_brackets = {},
+          window = {
+            completion = cmp.config.window.bordered({ border = "rounded" }),
+            documentation = cmp.config.window.bordered({ border = "rounded" }),
+          },
+          snippet = {
+            expand = function(args)
+              require("luasnip").lsp_expand(args.body)
+            end,
+          },
+          formatting = {
+            format = require("lspkind").cmp_format({
+              mode = "symbol_text",
+              maxwidth = 50,
+              ellipsis_char = "...",
+            })
+          },
           -- completeopt controls how completion menus are displayed.
           -- "menu,menuone,noinsert" means show a menu, show only one menu entry, and don't insert the completion automatically.
           completion = {
@@ -1128,11 +1145,12 @@ else
             -- Path completion source
             -- "path" provides completion for file paths.
             { name = "path" },
-          },
-          {
             -- Buffer completion source
             -- "buffer" provides completion for words in the current buffer.
             { name = "buffer" },
+            -- Snippet completion source
+            -- "luasnip" provides completion for snippets.
+            { name = "luasnip" },
           }),
           sorting = defaults.sorting,
         }
