@@ -197,15 +197,17 @@ else
 
 	vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
 -- EVENT CALLBACKS {{{1
-	local group = vim.api.nvim_create_augroup("user_cmds", { clear = true })
 
-	vim.api.nvim_create_autocmd("TextYankPost", {
-		desc = "Highlight on yank",
-		group = group,
-		callback = function()
-			vim.highlight.on_yank({ timeout = 300 })
-		end,
-	})
+  -- Highlight when yanking (copying) text
+  --  Try it with `yap` in normal mode
+  --  See `:help vim.highlight.on_yank()`
+  vim.api.nvim_create_autocmd('TextYankPost', {
+    desc = 'Highlight when yanking (copying) text',
+    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+    callback = function()
+      vim.highlight.on_yank({ timeout = 300 })
+    end,
+  })
 
 -- PLUGINS {{{1
 -- Lazy Config {{{2
@@ -756,27 +758,37 @@ else
         })
 
         vim.api.nvim_create_autocmd("LspAttach", {
-          group = group,
+          group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
           desc = "LSP actions",
-          callback = function()
+          callback = function(event)
             local bufmap = function(mode, keys, cmd, opts)
-              opts.buffer = true
+              opts.buffer = event.buf
               vim.keymap.set(mode, keys, cmd, opts)
             end
+            local telescope_builtin = require("telescope.builtin")
 
             -- You can search each function in the help page.
             -- For example :help vim.lsp.buf.hover()
 
             -- It shows information about the symbol under the cursor
-            bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.hover()<cr>", { desc = "Show [i]nfo" })
+            bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.hover()<cr>",
+              { desc = "Show [i]nfo" })
 
             -- It jumps to the definition of the symbol under the cursor
-            bufmap("n", "<leader>ld", "<cmd>lua vim.lsp.buf.definition()<cr>", { desc = "Go to [d]efinition" })
+            bufmap("n", "<leader>ld", telescope_builtin.lsp_definitions,
+              { desc = "Go to [d]efinition" })
+
+            -- It jumps to the references of the symbol under the cursor
+            bufmap("n", "<leader>lr", telescope_builtin.lsp_references,
+              { desc = "Go to [r]eferences" })
 
             -- Lists all the implementations of the symbol under the cursor
-            bufmap("n", "<leader>li", "<cmd>lua vim.lsp.buf.implementation()<cr>", { desc = "List [i]mplementations" })
-            -- Displays the signature of the function
-            bufmap("n", "<leader>ls", "<cmd>lua vim.lsp.buf.signature_help()<cr>", { desc = "Show [s]ignature" })
+            bufmap("n", "<leader>li", telescope_builtin.lsp_implementations,
+              { desc = "List [i]mplementations" })
+
+            -- Displays the symbols in the current buffer
+            bufmap("n", "<leader>ls", telescope_builtin.lsp_document_symbols,
+              { desc = "Show [s]imbols" })
 
             -- Formats the buffer using the current language server
             bufmap(
