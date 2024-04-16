@@ -103,7 +103,7 @@ else
 	vim.opt.encoding = "utf-8"
 
 	-- Show 3 lines of context around the cursor.
-	vim.opt.scrolloff = 3
+	vim.opt.scrolloff = 10
 
 	-- Set the terminal's title
 	vim.opt.title = true
@@ -122,6 +122,13 @@ else
 
 	--- Render colors more accurately and with greater precision
 	vim.opt.termguicolors = true
+
+  -- Sets how neovim will display certain whitespace characters in the editor.
+  vim.opt.list = true
+  vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+
+  -- Preview substitutions live, as you type!
+  vim.opt.inccommand = 'split'
 
 	--- Show the effects of a search / replace in a live preview window
 	vim.o.inccommand = "split"
@@ -196,7 +203,7 @@ else
 		desc = "Highlight on yank",
 		group = group,
 		callback = function()
-			vim.highlight.on_yank({ higroup = "Visual", timeout = 200 })
+			vim.highlight.on_yank({ timeout = 300 })
 		end,
 	})
 
@@ -864,6 +871,7 @@ else
           "nvim-telescope/telescope-live-grep-args.nvim",
           version = "^1.0.0",
         },
+        { 'nvim-telescope/telescope-ui-select.nvim' },
 			},
       keys = {
         { "<leader>fr",
@@ -885,10 +893,13 @@ else
           "<cmd>Telescope diagnostics<cr>", desc = "Find [d]iagnostics" },
 
         { "<leader>fh",
-          "<cmd>Telescope current_buffer_fuzzy_find<cr>", desc = "Find string [h]ere" },
+          "<cmd>Telescope help_tags<cr>", desc = "Find [h]elp" },
 
         { "<leader>fy",
           "<cmd>Telescope neoclip<cr>", desc = "Find [y]anks" },
+
+        { "<leader>fk",
+          "<cmd>Telescope keymaps<cr>", desc = "Find [k]eymaps" },
       },
 			config = function()
 				require("telescope").load_extension("live_grep_args")
@@ -909,12 +920,25 @@ else
           end
         end
 
+        local builtin = require('telescope.builtin')
+        vim.keymap.set('n', '<leader>/', function()
+          builtin.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+            winblend = 10,
+            previewer = false,
+          })
+        end, { desc = '[/] Fuzzily search in current buffer' })
+
         require("telescope").setup({
           defaults = {
             mappings = {
               i = {
                 ["<CR>"] = select_one_or_multi,
               },
+            },
+          },
+          extensions = {
+            ['ui-select'] = {
+              require('telescope.themes').get_dropdown(),
             },
           },
         })
@@ -1232,5 +1256,3 @@ else
 	})
 
 end
-
-
