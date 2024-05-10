@@ -708,13 +708,21 @@ else
       config = function()
         local lspconfig = require("lspconfig")
         local util = require("lspconfig.util")
-        local mason = require("mason")
-        local mason_lspconfig = require("mason-lspconfig")
         local cmp_nvim_lsp = require("cmp_nvim_lsp")
         -- used to enable autocompletion (assign to every lsp server config
         local capabilities = cmp_nvim_lsp.default_capabilities()
 
-        mason.setup({
+        local servers = {
+          "lua_ls",
+          "cssls",
+          "html",
+          "bashls",
+          "solargraph",
+          "tsserver",
+          "pyright",
+        }
+
+        require("mason").setup({
           ui = {
             icons = {
               package_installed = "✓",
@@ -724,43 +732,55 @@ else
           }
         })
 
-        mason_lspconfig.setup({
-          handlers = {
-            ["lua_ls"] = function()
-              lspconfig.lua_ls.setup({
-                settings = {
-                  Lua = {
-                    diagnostics = {
-                      globals = { "vim" },
-                    }
-                  }
-                }
-              })
-            end,
-            ["solargraph"] = function()
-              lspconfig.solargraph.setup({
-                capabilities = capabilities,
-                filetypes = { "ruby" },
-              })
-            end,
-            ["pyright"] = function()
-              lspconfig.pyright.setup({
-                capabilities = capabilities,
-              })
-            end,
-            ["tsserver"] = function()
-              lspconfig.tsserver.setup({
-                capabilities = capabilities,
-                root_dir = util.root_pattern(".git")
-              })
-            end,
-          },
+        require("mason-lspconfig").setup({
+          ensure_installed = servers,
+          automatic_installation = true,
         })
+
+        local generic_opts = {
+          capabilities = capabilities,
+          root_dir = util.root_pattern(".git"),
+        }
+
+        local server_opts = {
+          lua_ls = {
+            settings = {
+              Lua = {
+                diagnostics = {
+                  globals = { "vim" },
+                }
+              }
+            }
+          },
+        }
+
+        for _, server in pairs(servers) do
+          local opts = vim.tbl_deep_extend("force", generic_opts, server_opts[server] or {})
+          lspconfig[server].setup(opts)
+        end
 
         vim.api.nvim_create_autocmd("LspAttach", {
           group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
           desc = "LSP actions",
           callback = function(event)
+            -- The following two autocommands are used to highlight references of the
+            -- word under your cursor when your cursor rests there for a little while.
+            --    See `:help CursorHold` for information about when this is executed
+            --
+            -- When you move your cursor, the highlights will be cleared (the second autocommand).
+            local client = vim.lsp.get_client_by_id(event.data.client_id)
+            if client and client.server_capabilities.documentHighlightProvider then
+              vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+                buffer = event.buf,
+                callback = vim.lsp.buf.document_highlight,
+              })
+
+              vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+                buffer = event.buf,
+                callback = vim.lsp.buf.clear_references,
+              })
+            end
+
             local bufmap = function(mode, keys, cmd, opts)
               opts.buffer = event.buf
               vim.keymap.set(mode, keys, cmd, opts)
@@ -800,6 +820,7 @@ else
 
             -- Selects a code action available at the current cursor position
             bufmap("n", "<leader>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", { desc = "Select code [a]ction" })
+
           end,
         })
       end,
@@ -868,6 +889,11 @@ else
       config = function()
         require("oil").setup()
       end,
+      keys = {
+        {
+          "-", "<cmd>Oil --float<cr>", desc = "Open [e]xplorer"
+        }
+      }
     },
 		-- { "nvim-telescope/telescope.nvim" }, [Fuzzy finder] {{{3
 		{
