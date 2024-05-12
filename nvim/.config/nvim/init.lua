@@ -718,7 +718,6 @@ else
           "html",
           "bashls",
           "solargraph",
-          "tsserver",
           "pyright",
         }
 
@@ -823,6 +822,17 @@ else
 
           end,
         })
+      end,
+    },
+    -- { "pmizio/typescript-tools.nvim"}, [Replacement for tsserver]
+    {
+      "pmizio/typescript-tools.nvim",
+      requires = {
+        "nvim-lua/plenary.nvim",
+        "neovim/nvim-lspconfig",
+      },
+      config = function()
+        require("typescript-tools").setup({})
       end,
     },
 		-- { "folke/trouble.nvim"}, [Diagnostics panel] {{{3
