@@ -119,3 +119,6 @@ if [ -f '/home/diego/google-cloud-sdk/path.zsh.inc' ]; then . '/home/diego/googl
 
 # The next line enables shell command completion for gcloud.
 if [ -f '/home/diego/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/diego/google-cloud-sdk/completion.zsh.inc'; fi
+
+eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+eval "$(atuin init zsh)"
