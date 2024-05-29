@@ -21,23 +21,32 @@
   ds = diff --staged
   co = checkout
   cob = checkout -b
-
 [alias]
 	tag-deploy = ! sh -c 'git tag "v${0}_`date +%Y-%m-%d-%H.%M.%S`"'
-
 [core]
 	excludesfile = /home/diego/.gitignore_global
 	editor = nvim
 [push]
 	default = simple
-
 [pull]
 	rebase = true
 [branch]
 	sort = -committerdate
 [credential "https://github.com"]
-	helper = 
 	helper = !/usr/bin/gh auth git-credential
 [credential "https://gist.github.com"]
-	helper = 
 	helper = !/usr/bin/gh auth git-credential
+[include]
+  path = /home/diego/.config/delta/themes.gitconfig
+[core]
+  pager = delta
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  features = "mellow-barbet"
+  navigate = true    # use n and N to move between diff sections
+  side-by-side = true
+[merge]
+  conflictstyle = diff3
+[diff]
+  colorMoved = default
