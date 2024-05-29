@@ -65,9 +65,18 @@ alias gds='git diff --staged'
 alias gco='git checkout'
 alias lg='lazygit'
 
+# docker
+alias ld='lazydocker'
+
 # Eza
 alias l="eza -l --icons --git -a"
 alias lt="eza --tree --level=2 --long --icons --git"
+
+# yay
+# Try this to fuzzy-search through all available packages, with package info shown in a preview window, and then install selected packages:
+alias si="yay -Slq | fzf --multi --preview 'yay -Si {1}' | xargs -ro yay -S"
+# List all your installed packages, and then remove selected packages
+alias sr="yay -Qq | fzf --multi --preview 'yay -Qi {1}' | xargs -ro yay -Rns"
 
 # System power
 alias po='systemctl poweroff'
@@ -91,5 +100,15 @@ eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
 # FZF
-export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# Set up fzf key bindings and fuzzy completion
+# CTRL-/ to toggle small preview window to see the full command
+# CTRL-Y to copy the command into clipboard using pbcopy
+source <(fzf --zsh)
+export FZF_CTRL_R_OPTS="
+  --preview 'echo {}' --preview-window up:3:hidden:wrap
+  --bind 'ctrl-/:toggle-preview'
+  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+  --color header:italic
+  --header 'Press CTRL-Y to copy command into clipboard'"
+source /usr/share/fzf/key-bindings.zsh
+source /usr/share/fzf/completion.zsh
