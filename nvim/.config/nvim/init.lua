@@ -714,11 +714,11 @@ else
 
         local servers = {
           "lua_ls",
-          "cssls",
-          "html",
-          "bashls",
-          "solargraph",
-          "pyright",
+          -- "cssls",
+          -- "html",
+          -- "bashls",
+          -- "solargraph",
+          -- "pyright",
         }
 
         require("mason").setup({

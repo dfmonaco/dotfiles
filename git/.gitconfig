@@ -11,12 +11,10 @@
 [diff]
 	tool = meld
 [alias]
-	lg1 = log --pretty=oneline --abbrev-commit --decorate --date=relative
-
   mm = "!f() { git merge $1 --no-ff; git branch -d $1; }; f"
   s  = status
   a  = add .
-	l  = log --graph --pretty=format:'%Cred%h%Creset - %s %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+  l  = log --graph --topo-order --pretty='%w(100,0,6)%C(yellow)%h%C(bold)%C(red)%d %C(cyan)%ar %C(green)%an%n%C(bold)%C(white)%s %N' --abbrev-commit
   c  = commit -v
   i  = add -i
   d  = diff

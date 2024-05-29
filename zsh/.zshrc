@@ -7,6 +7,13 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 export BROWSER="/usr/bin/google-chrome-stable"
 
+# Reevaluate the prompt string each time it's displaying a prompt
+setopt prompt_subst
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+autoload bashcompinit && bashcompinit
+autoload -Uz compinit
+compinit
+
 source ~/.zplug/init.zsh
 
 # plugins
@@ -15,7 +22,7 @@ zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
 zplug "plugins/wd", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh
-zplug "plugins/vi-mode", from:oh-my-zsh
+zplug "jeffreytse/zsh-vi-mode"
 
 # completions
 zplug "zsh-users/zsh-syntax-highlighting"
@@ -37,6 +44,7 @@ zplug load
 # Alias
 alias cat='bat'
 alias q='exit'
+alias cl='clear'
 
 # editor
 alias e='nvim'
@@ -49,76 +57,39 @@ alias rails='bundle exec rails'
 # git
 alias gs='git status'
 alias ga='git add .'
-alias gl='git lg'
-alias gl1='git lg1'
+alias gl='git l'
 alias gc='git commit -v'
 alias gi='git add -i'
 alias gd='git diff'
 alias gds='git diff --staged'
 alias gco='git checkout'
-alias -g rsnet='1256@usw-s001.rsync.net'
 alias lg='lazygit'
 
+# Eza
+alias l="eza -l --icons --git -a"
+alias lt="eza --tree --level=2 --long --icons --git"
 
+# System power
 alias po='systemctl poweroff'
 alias re='systemctl reboot'
 
-alias wxp='vboxmanage startvm "wxp"'
-alias wxpoff='vboxmanage controlvm "wxp" savestate'
-
-alias l='i3lock -c 505050'
-
-# tmate
-alias tcopy='tmate -S /tmp/tmate.sock display -p "#{tmate_ssh}" | xclip -selection clipboard'
-
-# Open new terminal on same directory
-if [[ $TERM == xterm-termite ]]; then
-  . /etc/profile.d/vte.sh
-  __vte_osc7
-fi
+alias x='i3lock -c 505050'
 
 # Fix locale
 export LC_ALL=en_US.UTF-8
 
-# RUBY
-SPACESHIP_RUBY_SHOW=true
-SPACESHIP_RUBY_SYMBOL='>'
-# SPACESHIP_VI_MODE_SHOW=false
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-export PATH="$PATH:`yarn global bin`"
-
-# Suppress ruby 2.7 warnings
-# export RUBYOPT='-W:no-deprecated -W:no-experimental'
-
-# [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# rbenv
+eval "$(rbenv init - zsh)"
 
 # Set up Node Version Manager
 source /usr/share/nvm/init-nvm.sh
 
-eval "$(rbenv init - zsh)"
-
-# Load pyenv automatically by appending
-# the following to
-# ~/.zprofile (for login shells)
-# and ~/.zshrc (for interactive shells) :
-
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
-
 # Starship Prompt
 eval "$(starship init zsh)"
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/home/diego/google-cloud-sdk/path.zsh.inc' ]; then . '/home/diego/google-cloud-sdk/path.zsh.inc'; fi
+# Zoxide
+eval "$(zoxide init zsh)"
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/home/diego/google-cloud-sdk/completion.zsh.inc' ]; then . '/home/diego/google-cloud-sdk/completion.zsh.inc'; fi
-
-eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-eval "$(atuin init zsh)"
+# FZF
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow'
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
