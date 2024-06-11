@@ -1,4 +1,4 @@
--- VSCODE SETTINGSj {{{1
+-- VSCODE SETTINGS {{{1
 if vim.g.vscode then
 	local vscode = require("vscode-neovim")
 
@@ -151,7 +151,7 @@ else
 
 	vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Next window" })
 
-	vim.keymap.set("n", "<leader>a", ":keepjumps normal! ggVG<cr>", { desc = "Select entire buffer" })
+	vim.keymap.set("n", "<leader>0", ":keepjumps normal! ggVG<cr>", { desc = "Select entire buffer" })
 
 	vim.keymap.set("n", "<leader>q", "<cmd>q<cr>", { desc = "[q]uit" })
 
@@ -1281,16 +1281,59 @@ else
         },
       }
     },
+    -- { "David-Kunz/gen.nvim" } [Code generation] {{{3
+    {
+      "David-Kunz/gen.nvim",
+      config = function()
+        local gen = require("gen")
+        gen.setup({
+          model = "mixtral", -- The default model to use.
+          display_mode = "split", -- The display mode. Can be "float" or "split".
+          show_prompt = true, -- Shows the Prompt submitted to Ollama.
+          host = "10.0.0.57",
+          show_model = true, -- Displays which model you are using at the beginning of your chat session.
+          no_auto_close = false, -- Never closes the window automatically.
+          -- Function to initialize Ollama
+          command = function(options)
+            return "curl --silent --no-buffer -X POST http://"
+              .. options.host
+              .. ":"
+              .. options.port
+              .. "/api/chat -d $body"
+          end,
+          -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
+          -- This can also be a lua function returning a command string, with options as the input parameter.
+          -- The executed command must return a JSON object with { response, context }
+          -- (context property is optional).
+          debug = false,
+        })
+        gen.prompts['Fix_Code'] = {
+          prompt = "Fix the following code. Only ouput the result in format ```$filetype\n...\n```:\n```$filetype\n$text\n```",
+          replace = false,
+          extract = "```$filetype\n(.-)```"
+        }
+        vim.keymap.set({ 'n', 'v' }, '<leader>ai', ':Gen<CR>', { desc = "[A][I] Menu" })
+        vim.keymap.set({ 'n', 'v' }, '<leader>am', function() gen.select_model() end, { desc = "[A]I Select [m]odel" })
+      end,
+    },
+    {
+        'MeanderingProgrammer/markdown.nvim',
+        name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
+        dependencies = { 'nvim-treesitter/nvim-treesitter' },
+        config = function()
+            require('render-markdown').setup({})
+        end,
+    },
     -- { "kdheepak/lazygit.vim" } [LazyGit] {{{3
     {
         "kdheepak/lazygit.nvim",
-    	cmd = {
-    		"LazyGit",
-    		"LazyGitConfig",
-    		"LazyGitCurrentFile",
-    		"LazyGitFilter",
-    		"LazyGitFilterCurrentFile",
-    	},
+        cmd = {
+          "LazyGit",
+          "LazyGitConfig",
+          "LazyGitCurrentFile",
+          "LazyGitFilter",
+          "LazyGitFilterCurrentFile",
+        },
         -- optional for floating window border decoration
         dependencies = {
             "nvim-lua/plenary.nvim",
