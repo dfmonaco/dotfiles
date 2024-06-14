@@ -118,7 +118,7 @@ else
 	vim.opt.gdefault = true
 
 	-- The current mode (e.g., insert mode, normal mode) will not be displayed in the statusline.
-	vim.opt.showmode = false
+	vim.opt.showmode = true
 
 	--- Render colors more accurately and with greater precision
 	vim.opt.termguicolors = true
@@ -303,6 +303,7 @@ else
             lualine_c = {
               "vim.call('codeium#GetStatusString')",
               require("lsp-progress").progress,
+              {'filename', path = 1},
             },
           },
         })
@@ -316,30 +317,30 @@ else
       end,
     },
 		-- { "akinsho/bufferline.nvim" }, [Enhanced buffer line (tab line)] {{{3,
-		{
-      "akinsho/bufferline.nvim",
-      config = function()
-        require("bufferline").setup({
-          options = {
-            mode = "buffers",
-            offsets = {
-              { filetype = "NvimTree" },
-            },
-          },
-          -- :help bufferline-highlights
-          highlights = {
-            buffer_selected = {
-              italic = false,
-            },
-            indicator_selected = {
-              -- Set the foreground color based on the 'Function' highlight group's foreground attribute.
-              fg = { attribute = "fg", highlight = "Function" },
-              italic = false,
-            },
-          },
-        })
-      end,
-    },
+		-- {
+  --     "akinsho/bufferline.nvim",
+  --     config = function()
+  --       require("bufferline").setup({
+  --         options = {
+  --           mode = "buffers",
+  --           offsets = {
+  --             { filetype = "NvimTree" },
+  --           },
+  --         },
+  --         -- :help bufferline-highlights
+  --         highlights = {
+  --           buffer_selected = {
+  --             italic = false,
+  --           },
+  --           indicator_selected = {
+  --             -- Set the foreground color based on the 'Function' highlight group's foreground attribute.
+  --             fg = { attribute = "fg", highlight = "Function" },
+  --             italic = false,
+  --           },
+  --         },
+  --       })
+  --     end,
+  --   },
 		-- { "lukas-reineke/indent-blankline.nvim" }, [Displays indent lines] {{{3
 		{
       "lukas-reineke/indent-blankline.nvim",
