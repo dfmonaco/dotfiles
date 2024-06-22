@@ -416,6 +416,7 @@ else
             "json",
             "ruby",
             "python",
+            "yaml",
           },
         })
       end,
@@ -509,6 +510,7 @@ else
           ["<leader>l"] = { name = "[l]sp", _ = "which_key_ignore" },
           ["<leader>o"] = { name = "[o]open", _ = "which_key_ignore" },
           ["<leader>i"] = { name = "[i]insert", _ = "which_key_ignore" },
+          ["<leader>a"] = { name = "[a]i", _ = "which_key_ignore" },
         })
       end,
 		},
@@ -715,6 +717,7 @@ else
 
         local servers = {
           "lua_ls",
+          "ruby_lsp",
           -- "cssls",
           -- "html",
           -- "bashls",
@@ -949,6 +952,9 @@ else
 
         { "<leader>fk",
           "<cmd>Telescope keymaps<cr>", desc = "Find [k]eymaps" },
+
+        { "<leader>fn",
+          "<cmd>Telescope notify<cr>", desc = "Find [n]notifications" },
       },
 			config = function()
 				require("telescope").load_extension("live_grep_args")
@@ -1288,13 +1294,16 @@ else
       config = function()
         local gen = require("gen")
         gen.setup({
-          model = "mixtral", -- The default model to use.
+          model = "llama3:8b", -- The default model to use.
           display_mode = "split", -- The display mode. Can be "float" or "split".
           show_prompt = true, -- Shows the Prompt submitted to Ollama.
           host = "10.0.0.57",
           show_model = true, -- Displays which model you are using at the beginning of your chat session.
           no_auto_close = false, -- Never closes the window automatically.
-          -- Function to initialize Ollama
+          -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
+          -- This can also be a lua function returning a command string, with options as the input parameter.
+          -- The executed command must return a JSON object with { response, context }
+          -- (context property is optional).
           command = function(options)
             return "curl --silent --no-buffer -X POST http://"
               .. options.host
@@ -1302,10 +1311,6 @@ else
               .. options.port
               .. "/api/chat -d $body"
           end,
-          -- The command for the Ollama service. You can use placeholders $prompt, $model and $body (shellescaped).
-          -- This can also be a lua function returning a command string, with options as the input parameter.
-          -- The executed command must return a JSON object with { response, context }
-          -- (context property is optional).
           debug = false,
         })
         gen.prompts['Fix_Code'] = {
@@ -1313,10 +1318,61 @@ else
           replace = false,
           extract = "```$filetype\n(.-)```"
         }
-        vim.keymap.set({ 'n', 'v' }, '<leader>ai', ':Gen<CR>', { desc = "[A][I] Menu" })
+        vim.keymap.set({ 'n', 'v' }, '<leader>ag', ':Gen<CR>', { desc = "[A][I] Menu" })
         vim.keymap.set({ 'n', 'v' }, '<leader>am', function() gen.select_model() end, { desc = "[A]I Select [m]odel" })
       end,
     },
+    -- { "olimorris/codecompanion.nvim" } [Code Companion] {{{3
+    {
+      "olimorris/codecompanion.nvim",
+      dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-treesitter/nvim-treesitter",
+        "nvim-telescope/telescope.nvim", -- Optional
+        {
+          "stevearc/dressing.nvim", -- Optional: Improves the default Neovim UI
+          opts = {},
+        },
+      },
+      config = function()
+        require("codecompanion").setup({
+          adapters = {
+            ollama = require("codecompanion.adapters").use("ollama", {
+              url = "http://10.0.0.57:11434/api/chat",
+              schema = {
+                model = {
+                  default = "deepseek-coder-v2:16b",
+                },
+              },
+            chat_prompt = [[
+            You are an AI programming assistant. When asked for your name, you must respond with "Codezilla". Follow the user's requirements carefully & to the letter. Your expertise is strictly limited to software development topics.
+
+            You can answer general programming questions and perform the following tasks:
+            - Ask a question about the files in your current workspace
+            - Explain how the selected code works
+            - Generate unit tests for the selected code
+            - Propose a fix for the problems in the selected code
+            - Scaffold code for a new feature
+            - Ask questions about Neovim
+            - Ask how to do something in the terminal
+
+            First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail. Then output the code in a single code block. Minimize any other prose. Use Markdown formatting in your answers. Make sure to include the programming language name at the start of the Markdown code blocks. Avoid wrapping the whole response in triple backticks. The user works in a text editor called Neovim which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal. The active document is the source code the user is looking at right now. You can only give one reply for each conversation turn.
+              ]],
+            }),
+          },
+          strategies = {
+            chat = "ollama",
+            inline = "ollama",
+            tools = "ollama",
+          },
+        })
+	      vim.keymap.set({ "n" }, "<leader>ac", "<cmd>CodeCompanionChat<cr>", { desc = "[A]I [c]hat" })
+	      vim.keymap.set({ "v" }, "<leader>aa", "<cmd>CodeCompanionAdd<cr>", { desc = "[A]I [a]dd" })
+	      vim.keymap.set({ "n", "v" }, "<leader>ai", "<cmd>CodeCompanionActions<cr>", { desc = "[A]I act[i]ons" })
+        vim.keymap.set({ "n" }, "<leader>at", "<cmd>CodeCompanionToggle<cr>", { desc = "[A]I [t]oggle" })
+      end,
+    },
+    -- { "MeanderingProgrammer/markdown.nvim" } [Markdown preview] {{{3
     {
         'MeanderingProgrammer/markdown.nvim',
         name = 'render-markdown', -- Only needed if you have another plugin named markdown.nvim
