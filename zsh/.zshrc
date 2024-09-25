@@ -47,6 +47,7 @@ alias e='nvim'
 # ruby
 alias be='bundle exec'
 alias rails='bundle exec rails'
+alias t='bundle exec rspec --fail-fast'
 
 # git
 alias gs='git status'

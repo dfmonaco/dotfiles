@@ -288,6 +288,8 @@ else
     },
 		-- { "kyazdani42/nvim-web-devicons" }, [Provides icons for files, directories, etc.] {{{3
 		{ "nvim-tree/nvim-web-devicons" },
+    -- { "echasnovski/mini.tabline" }, [More icons] {{{3
+    { 'echasnovski/mini.icons', version = false },
 		-- { "nvim-lualine/lualine.nvim" }, [Configurable status line] {{{3
 		{
       "nvim-lualine/lualine.nvim",
@@ -358,6 +360,8 @@ else
     },
 		-- { "slim-template/vim-slim" }, [Provides syntax highlighting for Slim templates] {{{3
 		{ "slim-template/vim-slim" },
+    -- { "tpope/vim-rails" }, [Rails support] {{{3
+		{ "tpope/vim-rails" },
 		-- { "zaldih/themery.nvim" }, [Theme switcher] {{{3
 		{
       "zaldih/themery.nvim",
@@ -428,7 +432,7 @@ else
       "akinsho/toggleterm.nvim",
       config = function()
         require("toggleterm").setup({
-          open_mapping = "<C-g>",
+          open_mapping = "<C-8>",
           direction = "float",
           shade_terminals = true,
         })
@@ -461,8 +465,8 @@ else
         vim.keymap.set("n", "<C-1>", "<cmd>lua Rails_s_toggle()<cr>", { noremap = true, silent = true})
         vim.keymap.set("t", "<C-1>", "<cmd>lua Rails_s_toggle()<cr>" )
 
-        vim.keymap.set("n", "<C-2>", "<cmd>lua Rails_c_toggle()<cr>", { noremap = true, silent = true})
-        vim.keymap.set("t", "<C-2>", "<cmd>lua Rails_c_toggle()<cr>" )
+        vim.keymap.set("n", "<C-9>", "<cmd>lua Rails_c_toggle()<cr>", { noremap = true, silent = true})
+        vim.keymap.set("t", "<C-9>", "<cmd>lua Rails_c_toggle()<cr>" )
 
         vim.keymap.set("n", "<leader>o1", "<cmd>1ToggleTerm name=Term1<cr>", { desc = "Open [1] terminal" })
 
@@ -500,17 +504,22 @@ else
 				vim.o.timeoutlen = 300
 			end,
       config = function()
-        require("which-key").register({
-          ["<leader>f"] = { name = "[f]ind" },
-          ["<leader>e"] = { name = "[e]dit" },
-          ["<leader>r"] = { name = "[r]eplace" },
-          ["<leader>t"] = { name = "[t]est" },
-          ["<leader>s"] = { name = "[s]earch" },
-          ["<leader>h"] = { name = "[h]unk", _ = "which_key_ignore" },
-          ["<leader>l"] = { name = "[l]sp", _ = "which_key_ignore" },
-          ["<leader>o"] = { name = "[o]open", _ = "which_key_ignore" },
-          ["<leader>i"] = { name = "[i]insert", _ = "which_key_ignore" },
-          ["<leader>a"] = { name = "[a]i", _ = "which_key_ignore" },
+        require("which-key").add({
+          { "<leader>f", group = "[f]ind" },
+          { "<leader>e", group = "[e]dit" },
+          { "<leader>r", group = "[r]eplace" },
+          { "<leader>t", group = "[t]est" },
+          { "<leader>s", group = "[s]earch" },
+          { "<leader>h", group = "[h]unk" },
+          { "<leader>h_", hidden = true },
+          { "<leader>l", group = "[l]sp" },
+          { "<leader>l_", hidden = true },
+          { "<leader>o", group = "[o]open" },
+          { "<leader>o_", hidden = true },
+          { "<leader>i", group = "[i]insert" },
+          { "<leader>i_", hidden = true },
+          { "<leader>a", group = "[a]i" },
+          { "<leader>a_", hidden = true },
         })
       end,
 		},
@@ -955,6 +964,9 @@ else
 
         { "<leader>fn",
           "<cmd>Telescope notify<cr>", desc = "Find [n]notifications" },
+
+        { "<leader>fg",
+          "<cmd>Telescope git_status<cr>", desc = "Find [g]it status" },
       },
 			config = function()
 				require("telescope").load_extension("live_grep_args")
@@ -1337,28 +1349,33 @@ else
       config = function()
         require("codecompanion").setup({
           adapters = {
-            ollama = require("codecompanion.adapters").use("ollama", {
-              url = "http://10.0.0.57:11434/api/chat",
-              schema = {
-                model = {
-                  default = "deepseek-coder-v2:16b",
+            ollama = function()
+              return require("codecompanion.adapters").extend("ollama", {
+                env = {
+                  url = "http://10.0.0.57:11434/api/chat",
                 },
-              },
-            chat_prompt = [[
-            You are an AI programming assistant. When asked for your name, you must respond with "Codezilla". Follow the user's requirements carefully & to the letter. Your expertise is strictly limited to software development topics.
-
-            You can answer general programming questions and perform the following tasks:
-            - Ask a question about the files in your current workspace
-            - Explain how the selected code works
-            - Generate unit tests for the selected code
-            - Propose a fix for the problems in the selected code
-            - Scaffold code for a new feature
-            - Ask questions about Neovim
-            - Ask how to do something in the terminal
-
-            First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail. Then output the code in a single code block. Minimize any other prose. Use Markdown formatting in your answers. Make sure to include the programming language name at the start of the Markdown code blocks. Avoid wrapping the whole response in triple backticks. The user works in a text editor called Neovim which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal. The active document is the source code the user is looking at right now. You can only give one reply for each conversation turn.
-              ]],
-            }),
+                schema = {
+                  model = {
+                    default = "deepseek-coder-v2:16b",
+                  },
+                },
+              })
+            end,
+            -- chat_prompt = [[
+            -- You are an AI programming assistant. When asked for your name, you must respond with "Codezilla". Follow the user's requirements carefully & to the letter. Your expertise is strictly limited to software development topics.
+            --
+            -- You can answer general programming questions and perform the following tasks:
+            -- - Ask a question about the files in your current workspace
+            -- - Explain how the selected code works
+            -- - Generate unit tests for the selected code
+            -- - Propose a fix for the problems in the selected code
+            -- - Scaffold code for a new feature
+            -- - Ask questions about Neovim
+            -- - Ask how to do something in the terminal
+            --
+            -- First think step-by-step - describe your plan for what to build in pseudocode, written out in great detail. Then output the code in a single code block. Minimize any other prose. Use Markdown formatting in your answers. Make sure to include the programming language name at the start of the Markdown code blocks. Avoid wrapping the whole response in triple backticks. The user works in a text editor called Neovim which has a concept for editors with open files, integrated unit test support, an output pane that shows the output of running the code as well as an integrated terminal. The active document is the source code the user is looking at right now. You can only give one reply for each conversation turn.
+            --   ]],
+            -- }),
           },
           strategies = {
             chat = "ollama",
