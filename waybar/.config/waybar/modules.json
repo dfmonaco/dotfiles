@@ -156,15 +156,9 @@
   "clock": {
     "format": "{:%H:%M %a}",
     "on-click": "ags toggle calendar",
-    "timezone": "",
+    "timezone": "America/Argentina/Cordoba",
     "tooltip": false
   },
-
-
-
-
-
-
 
   // NOT USED MODULES //
   // Taskbar
