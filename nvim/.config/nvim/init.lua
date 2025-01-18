@@ -308,7 +308,7 @@ else
           },
           sections = {
             lualine_c = {
-              "vim.call('codeium#GetStatusString')",
+              -- "vim.call('codeium#GetStatusString')",
               require("lsp-progress").progress,
               {'filename', path = 1},
             },
@@ -480,28 +480,28 @@ else
       end,
     },
     -- { "Exafunction/codeium.vim" }, [AI code completion] {{{3
-		{
-			"Exafunction/codeium.vim",
-      enabled = false,
-			event = "BufEnter",
-			config = function()
-				vim.keymap.set("i", "<C-h>", function()
-					return vim.fn["codeium#Accept"]()
-				end, { expr = true })
-				vim.keymap.set("i", "<C-j>", function()
-					return vim.fn["codeium#CycleCompletions"](1)
-				end, { expr = true })
-				vim.keymap.set("i", "<C-k>", function()
-					return vim.fn["codeium#CycleCompletions"](-1)
-				end, { expr = true })
-				vim.keymap.set("i", "<C-BS>", function()
-					return vim.fn["codeium#Clear"]()
-				end, { expr = true })
-				vim.keymap.set("n", "<C-i>", function()
-					return vim.fn["codeium#Chat"]()
-				end, { expr = true })
-			end,
-		},
+		-- {
+		-- 	"Exafunction/codeium.vim",
+  --     enabled = false,
+		-- 	event = "BufEnter",
+		-- 	config = function()
+		-- 		vim.keymap.set("i", "<C-h>", function()
+		-- 			return vim.fn["codeium#Accept"]()
+		-- 		end, { expr = true })
+		-- 		vim.keymap.set("i", "<C-j>", function()
+		-- 			return vim.fn["codeium#CycleCompletions"](1)
+		-- 		end, { expr = true })
+		-- 		vim.keymap.set("i", "<C-k>", function()
+		-- 			return vim.fn["codeium#CycleCompletions"](-1)
+		-- 		end, { expr = true })
+		-- 		vim.keymap.set("i", "<C-BS>", function()
+		-- 			return vim.fn["codeium#Clear"]()
+		-- 		end, { expr = true })
+		-- 		vim.keymap.set("n", "<C-i>", function()
+		-- 			return vim.fn["codeium#Chat"]()
+		-- 		end, { expr = true })
+		-- 	end,
+		-- },
 		-- { "folke/which-key.nvim" }, [Provides which-key integration] {{{3
 		{
 			"folke/which-key.nvim",
