@@ -35,7 +35,7 @@
     "format": "  {}",
     "escape": true,
     "return-type": "json",
-    "exec": "~/.config/ml4w/waybar/updates.sh",
+    "exec": "~/.config/waybar/scripts/updates.sh",
     "interval": 1800,
     "on-click": "kitty --class dotfiles-floating -e pacseek ",
   },
@@ -144,7 +144,29 @@
     "spacing": 10
   },
 
+  // Power Menu
+  "custom/exit": {
+    "format": "",
+    "on-click": "~/.config/waybar/scripts/wlogout.sh",
+    "on-click-right": "hyprlock",
+    "tooltip-format": "Left: Power menu\nRight: Lock screen"
+  },
 
+  // Clock
+  "clock": {
+    "format": "{:%H:%M %a}",
+    "on-click": "ags toggle calendar",
+    "timezone": "",
+    "tooltip": false
+  },
+
+
+
+
+
+
+
+  // NOT USED MODULES //
   // Taskbar
   "wlr/taskbar": {
     "format": "{icon}",
@@ -160,22 +182,6 @@
       "Firefox Web Browser": "Firefox",
       "Foot Server": "Terminal"
     }
-  },
-
-  // Power Menu
-  "custom/exit": {
-    "format": "",
-    "on-click": "~/.config/waybar/scripts/wlogout.sh",
-    "on-click-right": "hyprlock",
-    "tooltip-format": "Left: Power menu\nRight: Lock screen"
-  },
-
-  // Clock
-  "clock": {
-    "format": "{:%H:%M %a}",
-    "on-click": "ags toggle calendar",
-    "timezone": "",
-    "tooltip": false
   },
 
   // ML4W Welcome App
