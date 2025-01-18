@@ -28,20 +28,15 @@ configuration {
     
 }
 
-/* ---- Load font ---- */
-@import "~/.config/ml4w/settings/rofi-font.rasi"
-
 /* ---- Load pywal colors (custom wal template) ---- */
-@theme "~/.cache/wal/colors-rofi-pywal"
+@theme "~/.config/rofi/colors-rofi-pywal"
 
-/* ---- Load wallpaper ---- */
-@import "~/.config/ml4w/cache/current_wallpaper.rasi"
 
 /* ---- Load border width ---- */
-@import "~/.config/ml4w/settings/rofi-border.rasi"
+@import "~/.config/rofi/rofi-border.rasi"
 
 /* ---- Load border radius ---- */
-@import "~/.config/ml4w/settings/rofi-border-radius.rasi"
+@import "~/.config/rofi/rofi-border-radius.rasi"
 
 // Main //
 window {
@@ -71,7 +66,7 @@ mainbox {
     orientation:                 horizontal;
     children:                    [ "listbox" ];
     background-color:            transparent;
-    background-image:            @current-image;
+    background-image:            url("~/.config/hypr/hyprland.jpg", width);
 }
 
 /* ---- Imagebox ---- */
@@ -89,7 +84,7 @@ inputbar {
     padding:                     1em;
     children:                    [ "textbox-prompt-colon", "entry" ];
     background-color:            transparent;
-    background-image:            url("~/.config/ml4w/cache/current_wallpaper", width);
+    background-image:            url("~/.config/hypr/hyprland.jpg", width);
 }
 
 textbox-prompt-colon {
@@ -100,7 +95,7 @@ textbox-prompt-colon {
     text-color:                  @foreground;
     border-radius:               2em 0em 0em 2em;
     background-color:            @background;
-    background-image:            url("~/.config/ml4w/cache/current_wallpaper", width);
+    background-image:            url("~/.config/hypr/hyprland.jpg", width);
 }
 
 entry {
