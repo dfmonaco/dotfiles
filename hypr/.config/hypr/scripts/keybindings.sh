@@ -26,7 +26,7 @@ while read -r line
 do
     if [[ "$line" == "bind"* ]]; then
 
-        line="$(echo "$line" | sed 's/$mainMod/SUPER/g')"
+        line="$(echo "$line" | sed 's/$mainMod/ALT/g')"
         line="$(echo "$line" | sed 's/bind = //g')"
         line="$(echo "$line" | sed 's/bindm = //g')"
 
