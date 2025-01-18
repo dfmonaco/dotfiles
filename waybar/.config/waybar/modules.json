@@ -71,8 +71,7 @@
     "return-type": "json",
     "exec": "~/.config/waybar/scripts/updates.sh",
     "interval": 1800,
-    "on-click": "$(cat ~/.config/ml4w/settings/terminal.sh) --class dotfiles-floating -e ~/.config/ml4w/scripts/installupdates.sh",
-    "on-click-right": "~/.config/ml4w/settings/software.sh"
+    "on-click": "kitty --class dotfiles-floating -e pacseek",
   },
 
   // Wallpaper
