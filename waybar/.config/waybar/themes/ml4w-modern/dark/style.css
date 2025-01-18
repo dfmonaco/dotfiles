@@ -1,0 +1,39 @@
+/* -----------------------------------------------------
+ * Import Pywal colors 
+ * ----------------------------------------------------- */
+
+/* @import '../../../../../.cache/wal/colors-waybar.css'; */
+/* the following colors are defined in colors-waybar.css file */
+@define-color foreground #ddccde;
+@define-color background #131219;
+@define-color cursor #ddccde;
+
+@define-color color0 #131219;
+@define-color color1 #633E81;
+@define-color color2 #68688D;
+@define-color color3 #906DA1;
+@define-color color4 #7987A7;
+@define-color color5 #9196B2;
+@define-color color6 #ADAFC8;
+@define-color color7 #ddccde;
+@define-color color8 #9a8e9b;
+@define-color color9 #633E81;
+@define-color color10 #68688D;
+@define-color color11 #906DA1;
+@define-color color12 #7987A7;
+@define-color color13 #9196B2;
+@define-color color14 #ADAFC8;
+@define-color color15 #ddccde;
+/* @import '../../../../../.cache/wal/colors-waybar.css'; */
+
+@define-color backgroundlight @color8;
+@define-color backgrounddark #FFFFFF;
+@define-color workspacesbackground1 @color8;
+@define-color workspacesbackground2 #FFFFFF;
+@define-color bordercolor @color8;
+@define-color textcolor1 @color8;
+@define-color textcolor2 #FFFFFF;
+@define-color textcolor3 #FFFFFF;
+@define-color iconcolor @color8;
+
+@import '../style.css';
