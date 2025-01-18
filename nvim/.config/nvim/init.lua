@@ -132,6 +132,11 @@ else
 
 	--- Show the effects of a search / replace in a live preview window
 	vim.o.inccommand = "split"
+
+  --- Filetypes
+  vim.filetype.add({
+    pattern = { [".*/hyprland%.conf"] = "hyprlang" },
+  })
 -- Mappings {{{2
 	vim.g.mapleader = " "
 
@@ -421,6 +426,7 @@ else
             "ruby",
             "python",
             "yaml",
+            "hyprlang",
           },
         })
       end,
@@ -476,6 +482,7 @@ else
     -- { "Exafunction/codeium.vim" }, [AI code completion] {{{3
 		{
 			"Exafunction/codeium.vim",
+      enabled = false,
 			event = "BufEnter",
 			config = function()
 				vim.keymap.set("i", "<C-h>", function()
@@ -726,7 +733,7 @@ else
 
         local servers = {
           "lua_ls",
-          "ruby_lsp",
+          -- "ruby_lsp",
           -- "cssls",
           -- "html",
           -- "bashls",
