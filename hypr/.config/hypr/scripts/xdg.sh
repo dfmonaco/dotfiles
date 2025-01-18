@@ -1,10 +1,4 @@
 #!/bin/bash
-# __  ______   ____ 
-# \ \/ /  _ \ / ___|
-#  \  /| | | | |  _ 
-#  /  \| |_| | |_| |
-# /_/\_\____/ \____|
-#                   
 
 # Setup Timers
 _sleep1="0.1"
@@ -55,4 +49,5 @@ systemctl --user start xdg-desktop-portal-hyprland
 
 # Run waybar
 sleep $_sleep3
-~/.config/waybar/launch.sh
+nm-applet &
+waybar -c ~/.config/waybar/themes/ml4w-modern/config.jsonc -s ~/.config/waybar/themes/ml4w-modern/dark/style.css
