@@ -19,17 +19,12 @@
 
     // Load Modules
     "include": [
-        "~/.config/waybar/waybar-quicklinks.json",
         "~/.config/waybar/modules.json"
     ],
 
     // Modules Left
     "modules-left": [
-        "custom/appmenu",
         "hyprland/workspaces",
-        "group/links",
-        //"wlr/taskbar",
-        "group/quicklinks",
         "custom/empty"
     ],
 
@@ -43,7 +38,7 @@
     "modules-right": [
         "custom/updates",
         "pulseaudio",
-        //"backlight",
+        "backlight",
         "bluetooth",
         "battery", 
         "network",
