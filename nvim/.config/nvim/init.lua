@@ -251,7 +251,7 @@ else
       priority = 1000, -- make sure to load this before all the other start plugins
       config = function()
         -- load the colorscheme here
-        vim.cmd([[colorscheme catppuccin]])
+        vim.cmd([[colorscheme catppuccin-mocha]])
       end,
       opts = {
         integrations = {
@@ -1437,6 +1437,12 @@ else
            { "<leader>og", "<cmd>LazyGit<cr>", desc = "[o]pen [g]it" }
         }
     },
+    {
+        "catgoose/nvim-colorizer.lua",
+        event = "BufReadPre",
+        opts = { -- set to setup table
+        },
+    }
 	})
 
 end
