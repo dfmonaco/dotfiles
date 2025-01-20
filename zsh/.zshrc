@@ -86,8 +86,7 @@ export LC_ALL=en_US.UTF-8
 eval "$(rbenv init - zsh)"
 
 # Set up Node Version Manager
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+source /usr/share/nvm/init-nvm.sh
 
 # Starship Prompt
 eval "$(starship init zsh)"
