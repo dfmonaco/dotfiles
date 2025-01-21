@@ -46,8 +46,3 @@ systemctl --user start pipewire
 systemctl --user start wireplumber 
 systemctl --user start xdg-desktop-portal 
 systemctl --user start xdg-desktop-portal-hyprland
-
-# Run waybar
-sleep $_sleep3
-nm-applet &
-waybar -c ~/.config/waybar/themes/ml4w-modern/config.jsonc -s ~/.config/waybar/themes/ml4w-modern/dark/style.css

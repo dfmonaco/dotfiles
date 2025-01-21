@@ -154,7 +154,7 @@
 
   // Clock
   "clock": {
-    "format": "{:%H:%M %a}",
+    "format": "{:%H:%M %a %d/%m}",
     "on-click": "ags toggle calendar",
     "timezone": "America/Argentina/Cordoba",
     "tooltip": false
