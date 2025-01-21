@@ -15,6 +15,7 @@ $character\
 
 palette = 'dracula'
 add_newline = true
+command_timeout = 1000
 
 [palettes.dracula]
 foreground = '#F8F8F2'
