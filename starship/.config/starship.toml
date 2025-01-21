@@ -86,5 +86,4 @@ format = """
 [╰─$symbol](fg:current_line) """
 success_symbol = '[❯](bold white) '
 error_symbol = '[✗](bold red) '
-vimcmd_symbol = '[V](bold green) '
-
+vimcmd_symbol = '[](bold green) '
