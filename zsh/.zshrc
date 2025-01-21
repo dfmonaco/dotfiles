@@ -18,7 +18,6 @@ source ~/.zplug/init.zsh
 
 # plugins
 zplug "plugins/git", from:oh-my-zsh 
-zplug "plugins/sudo", from:oh-my-zsh
 zplug "plugins/command-not-found", from:oh-my-zsh
 zplug "plugins/wd", from:oh-my-zsh
 zplug "plugins/docker", from:oh-my-zsh
