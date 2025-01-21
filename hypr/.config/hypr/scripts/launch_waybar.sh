@@ -45,13 +45,13 @@ else
     log "nm-applet is not running."
 fi
 
-# Wait for half a second
-log "Waiting for 0.5 seconds..."
-sleep 0.5
+log "Waiting for 1 seconds..."
+sleep 1
 
 # Run waybar
 log "Starting nm-applet..."
 nm-applet &
+
 if [ $? -ne 0 ]; then
     log "Failed to start nm-applet."
     exit 1
@@ -59,6 +59,7 @@ fi
 
 log "Starting waybar..."
 waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/themes/ml4w-modern/dark/style.css
+
 if [ $? -ne 0 ]; then
     log "Failed to start waybar."
     exit 1
