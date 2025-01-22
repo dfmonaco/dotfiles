@@ -5,7 +5,7 @@ SAVEHIST=1000000000
 # Set editor
 export VISUAL=nvim
 export EDITOR="$VISUAL"
-export BROWSER="/usr/bin/google-chrome-stable"
+export BROWSER="/usr/bin/brave"
 
 # Reevaluate the prompt string each time it's displaying a prompt
 setopt prompt_subst
@@ -38,6 +38,8 @@ zplug load
 alias cat='bat'
 alias q='exit'
 alias cl='clear'
+alias c='wl-copy'
+alias p='wl-paste'
 
 # editor
 alias e='nvim'
