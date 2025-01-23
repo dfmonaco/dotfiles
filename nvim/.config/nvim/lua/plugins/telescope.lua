@@ -14,6 +14,7 @@ return {
         version = "^1.0.0",
       },
       { 'nvim-telescope/telescope-ui-select.nvim' },
+      { "tsakirist/telescope-lazy.nvim" },
     },
     keys = {
       { "<leader>fr",
