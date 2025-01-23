@@ -7,6 +7,13 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 export BROWSER="/usr/bin/brave"
 
+# Decrypt and export environment variables
+if decrypted_env=$(sops --decrypt ~/dotfiles/sec.env 2>/dev/null); then
+    export $(echo "$decrypted_env" | xargs)
+else
+    echo "Failed to decrypt the environment variables"
+fi
+
 # Reevaluate the prompt string each time it's displaying a prompt
 setopt prompt_subst
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
