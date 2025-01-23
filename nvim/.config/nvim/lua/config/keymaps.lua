@@ -1,3 +1,5 @@
+-- Disable the default behavior of the spacebar in normal mode to set it up as the leader key
+vim.keymap.set('n', '<SPACE>', '<Nop>', { silent = true })
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
