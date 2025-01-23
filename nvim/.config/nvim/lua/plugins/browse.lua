@@ -29,9 +29,13 @@ return {
         },
       }
 
+      -- vim.keymap.set("n", "<leader>b", function()
+      --   require("browse").open_bookmarks({ bookmarks = bookmarks })
+      -- end, { desc = "[b]rowse bookmarks" })
+
       vim.keymap.set("n", "<leader>b", function()
-        require("browse").open_bookmarks({ bookmarks = bookmarks })
-      end, { desc = "[b]rowse bookmarks" })
+        require("browse").input_search()
+      end, { desc = "[b]rowse" })
     end,
   },
   -- Quick Browser search
