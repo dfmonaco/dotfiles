@@ -253,7 +253,13 @@ return {
             { name = "path" },
             -- Buffer completion source
             -- "buffer" provides completion for words in the current buffer.
-            { name = "buffer" },
+            { name = "buffer",
+              option = {
+                get_bufnrs = function()
+                  return vim.api.nvim_list_bufs()
+                end
+              }
+            },
             -- Snippet completion source
             -- "luasnip" provides completion for snippets.
             { name = "luasnip" },

@@ -14,6 +14,7 @@
   "efmls-configs-nvim": { "branch": "main", "commit": "f477186ecc12ac025a9948d17edc69242e1ee96b" },
   "gen.nvim": { "branch": "main", "commit": "0be6ca0cdfe45a7b6537cbf41bd22a420c05be85" },
   "gitsigns.nvim": { "branch": "main", "commit": "1ef74b546732f185d0f806860fa5404df7614f28" },
+  "gp.nvim": { "branch": "main", "commit": "2372d5323c6feaa2e9c19f7ccb537c615d878e18" },
   "indent-blankline.nvim": { "branch": "master", "commit": "18603eb949eba08300799f64027af11ef922283f" },
   "kanagawa.nvim": { "branch": "master", "commit": "f491b0fe68fffbece7030181073dfe51f45cda81" },
   "lazy.nvim": { "branch": "main", "commit": "d8f26efd456190241afd1b0f5235fe6fdba13d4a" },

@@ -137,4 +137,36 @@ return {
       vim.keymap.set({ "n" }, "<leader>at", "<cmd>CodeCompanionToggle<cr>", { desc = "[A]I [t]oggle" })
     end,
   },
+  {
+    "robitx/gp.nvim",
+    config = function()
+      local conf = {
+        providers = {
+          openai = {
+            endpoint = "https://api.openai.com/v1/chat/completions",
+          }
+        },
+        agents = {
+          {
+            name = "Codezilla",
+            provider = "openai",
+            chat = true,
+            model = { model = "gpt-4o" },
+            system_prompt = [[
+                  You are a highly knowledgeable Programming Mentor Bot specialized in Ruby, Ruby on Rails, JavaScript, jQuery, StimulusJS, SQL, PostgreSQL, and Git. Your primary functions include:
+
+                  Answering Questions: Provide concise, easy-to-understand explanations for queries related to the specified technologies.
+                  Tutorials on Demand: Create brief tutorials to illustrate basic to intermediate concepts within your areas of expertise.
+                  Code Improvement: Suggest improvements for code snippets submitted by users. Aim for readability, performance, and best practices.
+                  Bug Finding: Analyze code snippets to identify potential bugs or issues, explaining both the problem and the recommended fix.
+                  Code Explanation: Dismantle complex code snippets, guiding users through the logic step-by-step in a few sentences.
+
+                  Your responses should be concise, aiming for a few sentences. Encourage users to ask follow-up questions if they seek deeper understanding or clarification.
+                ]],
+          }
+        },
+      }
+      require("gp").setup(conf)
+    end
+  },
 }
