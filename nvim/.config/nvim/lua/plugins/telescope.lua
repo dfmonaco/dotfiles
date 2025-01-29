@@ -29,8 +29,11 @@ return {
       { "<leader>ff",
         "<cmd>Telescope find_files<cr>", desc = "Find git [f]iles" },
 
+      -- { "<leader>fs",
+      --   ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", desc = "Find [s]tring in files" },
+
       { "<leader>fs",
-        ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", desc = "Find [s]tring in files" },
+        "<cmd>Telescope live_grep<cr>", desc = "Find [s]tring in files" },
 
       { "<leader>fd",
         "<cmd>Telescope diagnostics<cr>", desc = "Find [d]iagnostics" },
@@ -79,6 +82,18 @@ return {
       local lga_actions = require("telescope-live-grep-args.actions")
 
       telescope.setup({
+        pickers = {
+          live_grep = {
+            file_ignore_patterns = { 'node_modules', '.git' },
+            additional_args = function(_)
+              return { "--hidden" }
+            end
+          },
+          find_files = {
+            file_ignore_patterns = { 'node_modules', '.git' },
+            hidden = true
+          }
+        },
         defaults = {
           mappings = {
             i = {
@@ -95,7 +110,7 @@ return {
             mappings = { -- extend mappings
               i = {
                 ["<C-k>"] = lga_actions.quote_prompt(),
-                ["<C-.>"] = lga_actions.quote_prompt({ postfix = " --hidden " }),
+                ["<C-h>"] = lga_actions.quote_prompt({ postfix = " --hidden " }),
               },
             },
           }
