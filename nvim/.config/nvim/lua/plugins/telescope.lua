@@ -51,8 +51,7 @@ return {
         "<cmd>Telescope git_status<cr>", desc = "Find [g]it status" },
     },
     config = function()
-      require("telescope").load_extension("live_grep_args")
-      require("telescope").load_extension("fzf")
+      local telescope = require("telescope")
 
       local select_one_or_multi = function(prompt_bufnr)
         local picker = require("telescope.actions.state").get_current_picker(prompt_bufnr)
@@ -77,7 +76,9 @@ return {
         })
       end, { desc = '[/] Fuzzily search in current buffer' })
 
-      require("telescope").setup({
+      local lga_actions = require("telescope-live-grep-args.actions")
+
+      telescope.setup({
         defaults = {
           mappings = {
             i = {
@@ -89,8 +90,20 @@ return {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
+          live_grep_args = {
+            auto_quoting = true, -- enable/disable auto-quoting
+            mappings = { -- extend mappings
+              i = {
+                ["<C-k>"] = lga_actions.quote_prompt(),
+                ["<C-.>"] = lga_actions.quote_prompt({ postfix = " --hidden " }),
+              },
+            },
+          }
         },
       })
+
+      telescope.load_extension("live_grep_args")
+      telescope.load_extension("fzf")
 
       -- Fix Telescope bug
       -- https://github.com/nvim-telescope/telescope.nvim/issues/2027#issuecomment-1561836585
