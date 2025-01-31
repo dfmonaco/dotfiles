@@ -19,9 +19,6 @@
 	-- Enable line wrapping
 	vim.opt.wrap = true
 
-	-- Enable automatic indentation when starting a new line
-	vim.opt.breakindent = true
-
 	-- Set the number of spaces for a tab
 	vim.opt.tabstop = 2
 
@@ -63,9 +60,6 @@
 
   -- Preview substitutions live, as you type!
   vim.opt.inccommand = 'split'
-
-	--- Show the effects of a search / replace in a live preview window
-	vim.o.inccommand = "split"
 
   --- Filetypes
   vim.filetype.add({

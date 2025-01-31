@@ -231,7 +231,7 @@ return {
           ["<C-e>"] = cmp.mapping.abort(),
           -- Confirm the current completion item
           -- "<CR>" is the Enter key. This mapping confirms the currently selected completion item.
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<TAB>"] = cmp.mapping.confirm({ select = true }),
           -- Confirm and replace the current completion item
           -- "<S-CR>" is the Shift + Enter key. This mapping confirms and replaces the current completion item.
           ["<S-CR>"] = cmp.mapping.confirm({
