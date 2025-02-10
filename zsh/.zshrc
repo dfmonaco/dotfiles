@@ -7,6 +7,9 @@ export VISUAL=nvim
 export EDITOR="$VISUAL"
 export BROWSER="/usr/bin/brave"
 
+# Emacs mode
+bindkey -e
+
 # Decrypt and export environment variables
 if decrypted_env=$(sops --decrypt ~/dotfiles/sec.env 2>/dev/null); then
     export $(echo "$decrypted_env" | xargs)
