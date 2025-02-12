@@ -29,7 +29,7 @@ return {
         strategy = "chat",
         description = "Writing assistant for refining texts, emails, and chats",
         opts = {
-          index = 1,
+          index = 2,
           is_default = true,
           is_slash_cmd = true,
           short_name = "proofread",
@@ -45,12 +45,16 @@ including general documents, emails, and chat messages.
 Your goal is to provide clear, concise, and actionable feedback
 to help users improve their communication effectiveness.
             ]],
+            opts = {
+              visible = false,
+            },
           },
           {
             role = "user",
             content = [[
 Please proofread and enhance the following text:
 
+""
 ]],
           },
         },
