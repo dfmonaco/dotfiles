@@ -10,5 +10,7 @@ vim.keymap.set("n", "<leader><leader>", "<c-^>", { desc = "Last buffer" })
 
 vim.keymap.set("n", "<C-c>", "<C-W>c", { desc = "Delete Window", remap = true })
 vim.keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
+-- Remap macros to letter 'm'
 vim.keymap.set("n", "m", "q", { noremap = true, silent = true })
+-- Remove mapping from letter 'q'
 vim.keymap.set("n", "q", "<Nop>", { noremap = true, silent = true })
