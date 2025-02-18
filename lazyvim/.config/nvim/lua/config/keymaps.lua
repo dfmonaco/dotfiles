@@ -2,15 +2,21 @@
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
 
-vim.keymap.set("n", "<leader>j", "<cmd>w<cr><esc>", { desc = "Save File" })
-vim.keymap.set("n", "<leader>k", function()
+-- Remap escape to jk
+vim.keymap.set({"i"}, "jk", "<ESC>", { silent = true })
+-- Closes a window but keeps the buffer
+vim.keymap.set({"n", "i"}, "<C-k>", "<C-W>c", { desc = "Kill Window", remap = true })
+-- Delete buffer
+vim.keymap.set({"n"}, "<leader>k", function()
   Snacks.bufdelete()
 end, { desc = "Kill Buffer" })
-vim.keymap.set("n", "<leader><leader>", "<c-^>", { desc = "Last buffer" })
-
-vim.keymap.set("n", "<C-c>", "<C-W>c", { desc = "Delete Window", remap = true })
-vim.keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
--- Remap macros to letter 'm'
-vim.keymap.set("n", "m", "q", { noremap = true, silent = true })
+-- Enter vim mode in terminal
+vim.keymap.set({"t"}, "<C-Esc>", "<C-\\><C-n>", { desc = "Escape terminal mode" })
+-- Save file
+vim.keymap.set({"n"}, "<leader>j", "<cmd>w<cr><esc>", { desc = "Save File" })
+-- Toggle last 2 buffers
+vim.keymap.set({"n"}, "<leader><leader>", "<c-^>", { desc = "Last buffer" })
+-- Use letter 'm' for macros instead of 'q'
+vim.keymap.set({"n"}, "m", "q", { noremap = true, silent = true })
 -- Remove mapping from letter 'q'
-vim.keymap.set("n", "q", "<Nop>", { noremap = true, silent = true })
+vim.keymap.set({"n"}, "q", "<Nop>", { noremap = true, silent = true })

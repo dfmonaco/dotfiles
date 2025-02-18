@@ -8,6 +8,11 @@ return {
     strategies = {
       chat = {
         adapter = "openai",
+        keymaps = {
+          close = {
+            modes = { n = "<C-k>", i = "<C-k>" },
+          },
+        },
       },
     },
     opts = {

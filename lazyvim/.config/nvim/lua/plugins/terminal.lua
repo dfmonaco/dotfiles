@@ -6,7 +6,7 @@ return {
     },
     keys = {
       {
-        "<Esc>",
+        "<C-k>",
         function()
           require("toggleterm").toggle()
         end,
