@@ -6,7 +6,7 @@ return {
     },
     keys = {
       {
-        "<C-k>",
+        "<C-q>",
         function()
           require("toggleterm").toggle()
         end,

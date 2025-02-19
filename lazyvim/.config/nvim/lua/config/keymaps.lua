@@ -5,7 +5,7 @@
 -- Remap escape to jk
 vim.keymap.set({"i"}, "jk", "<ESC>", { silent = true })
 -- Closes a window but keeps the buffer
-vim.keymap.set({"n", "i"}, "<C-k>", "<C-W>c", { desc = "Kill Window", remap = true })
+vim.keymap.set({"n", "i"}, "<C-q>", "<C-W>c", { desc = "Kill Window", remap = true })
 -- Delete buffer
 vim.keymap.set({"n"}, "<leader>k", function()
   Snacks.bufdelete()
