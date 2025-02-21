@@ -22,3 +22,5 @@ vim.keymap.set({"n"}, "m", "q", { noremap = true, silent = true })
 vim.keymap.set({"n"}, "q", "<Nop>", { noremap = true, silent = true })
 
 vim.keymap.set({"n"}, "<leader>gs", ":Neogit cwd=%:p:h<CR>", { noremap = true, silent = true, desc = "Git Status" })
+
+vim.keymap.set("n", "<leader>=", "gg=G", { desc = "Autoindent the whole file" })
