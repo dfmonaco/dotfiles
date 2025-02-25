@@ -1,0 +1,62 @@
+atuin | Magical shell history
+bat | Cat clone with syntax highlighting and git integration
+bibata-cursor-theme-bin | Material Based Cursor Theme
+blueman | GTK+ Bluetooth Manager
+brave-bin | Web browser that blocks ads and trackers by default (binary release)
+cliphist | wayland clipboard manager
+docker | Pack, ship and run any application as a lightweight container
+dunst | Customizable and lightweight notification-daemon
+evince | Document viewer (PDF, PostScript, XPS, djvu, dvi, tiff, cbr, cbz, cb7, cbt)
+eza | A modern replacement for ls (community fork of exa)
+fastfetch | A feature-rich and performance oriented neofetch like system information tool
+fd | Simple, fast and user-friendly alternative to find
+git | the fast distributed version control system
+git-delta | Syntax-highlighting pager for git and diff output
+github-cli | The GitHub CLI
+google-chrome | The popular web browser by Google (Stable Channel)
+grim | Screenshot utility for Wayland
+htop | Interactive process viewer
+inxi | Full featured CLI system information tool
+jq | Command-line JSON processor
+keyd | A key remapping daemon for linux
+kitty | A modern, hackable, featureful, OpenGL-based terminal emulator
+lazydocker | A simple terminal UI for docker and docker-compose, written in Go with the gocui library.
+lazygit | Simple terminal UI for git commands
+libreoffice-fresh | LibreOffice branch which contains new features and program enhancements
+neovim | Fork of Vim aiming to improve user experience, plugins, and GUIs
+network-manager-applet | Applet for managing network connections
+networkmanager | Network connection manager and user applications
+nodejs-readability-cli | Firefox Reader Mode in your terminal! - CLI tool for Mozilla's Readability library
+nvm | Node Version Manager - Simple bash script to manage multiple active node.js versions
+nwg-displays | Output management utility for sway and Hyprland Wayland compositors
+nwg-look | GTK settings editor adapted to work on wlroots-based compositors
+os-prober | Utility to detect other OSes on a set of drives
+otf-font-awesome | Iconic font designed for Bootstrap
+pandoc-cli | Conversion between documentation formats
+papirus-icon-theme | Papirus icon theme
+pavucontrol | PulseAudio Volume Control
+postgresql-libs | Libraries for use with PostgreSQL
+rbenv | Manage your app's Ruby environment
+rofi-wayland | A window switcher, run dialog and dmenu replacement - fork with wayland support
+ruby-build | A tool to download, compile, and install Ruby on Unix-like systems
+sops | Editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY formats
+starship | The cross-shell prompt for astronauts
+stow | Manage installation of multiple softwares in the same directory tree
+sysz | fzf terminal UI for systemctl
+tree | A directory listing program displaying a depth indented list of files
+ttf-fira-code | Monospaced font with programming ligatures
+ttf-fira-sans | Mozilla's sans-serif typeface designed for Firefox OS
+ttf-firacode-nerd | Patched font Fira (Fura) Code from nerd fonts library
+waybar | Highly customizable Wayland bar for Sway and Wlroots based compositors
+waypaper | GUI wallpaper setter for Wayland and Xorg window managers. It works as a frontend for popular wallpaper backends like swaybg, swww, wallutils, hyprpaper and feh.
+wev | A tool for debugging wayland events on a Wayland window, analagous to the X11 tool xev
+wget | Network utility to retrieve files from the Web
+wl-clipboard | Command-line copy/paste utilities for Wayland
+wlogout | Logout menu for wayland
+wofi | launcher for wlroots-based wayland compositors
+yay | Yet another yogurt. Pacman wrapper and AUR helper written in go.
+yazi | Blazing fast terminal file manager written in Rust, based on async I/O
+zoom | Video Conferencing and Web Conferencing Service
+zoxide | A smarter cd command for your terminal
+zsh | A very advanced and programmable command interpreter (shell) for UNIX
+zsh-completions | Additional completion definitions for Zsh
