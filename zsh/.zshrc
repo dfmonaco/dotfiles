@@ -52,8 +52,7 @@ alias c='wl-copy'
 alias p='wl-paste'
 
 # editor
-alias e='nvim'
-# alias vim='nvim'
+alias v='nvim'
 
 # ruby
 alias be='bundle exec'
@@ -70,6 +69,9 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gco='git checkout'
 alias lg='lazygit'
+
+# yazi
+alias e='yazi'
 
 # docker
 alias ld='lazydocker'
