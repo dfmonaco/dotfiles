@@ -4,3 +4,10 @@
 --
 -- LazyVim auto format
 vim.g.autoformat = false
+
+vim.filetype.add({
+  extension = {
+    jbuilder = "ruby",
+    axlsx = "ruby",
+  }
+})
