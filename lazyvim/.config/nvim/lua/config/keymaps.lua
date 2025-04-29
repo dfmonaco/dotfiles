@@ -24,3 +24,14 @@ vim.keymap.set({"n"}, "q", "<Nop>", { noremap = true, silent = true })
 vim.keymap.set({"n"}, "<leader>gs", ":Neogit cwd=%:p:h<CR>", { noremap = true, silent = true, desc = "Git Status" })
 
 vim.keymap.set("n", "<leader>=", "gg=G", { desc = "Autoindent the whole file" })
+
+local function confirm_and_delete_buffer()
+  local confirm = vim.fn.confirm("Delete buffer and file?", "&Yes\n&No", 2)
+
+  if confirm == 1 then
+    os.remove(vim.fn.expand("%"))
+    vim.api.nvim_buf_delete(0, { force = true })
+  end
+end
+
+vim.keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "[D]elete buffer and file" })
