@@ -57,6 +57,14 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
+log "Starting udiskie..."
+udiskie --tray &
+
+if [ $? -ne 0 ]; then
+    log "Failed to start udiskie."
+    exit 1
+fi
+
 log "Starting waybar..."
 waybar -c ~/.config/waybar/config.jsonc -s ~/.config/waybar/themes/ml4w-modern/dark/style.css
 
