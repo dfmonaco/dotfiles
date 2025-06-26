@@ -146,3 +146,6 @@ export FZF_CTRL_R_OPTS="
   --header 'Press CTRL-Y to copy command into clipboard'"
 source <(fzf --zsh)
 eval "$(atuin init zsh --disable-up-arrow)"
+
+# uv
+export PATH="/home/diego/.local/bin:$PATH"
