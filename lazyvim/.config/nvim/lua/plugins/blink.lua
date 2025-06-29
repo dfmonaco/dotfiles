@@ -27,8 +27,9 @@ return {
     },
     signature = { window = { border = "single" } },
     keymap = {
-      preset = "super-tab",
+      preset = "default",
       ["<C-y>"] = { "select_and_accept" },
+      ["<Tab>"] = { "accept" },
     },
   },
 }
