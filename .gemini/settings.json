@@ -2,5 +2,21 @@
   "theme": "GitHub",
   "selectedAuthType": "oauth-personal",
   "preferredEditor": "vim",
-  "contextFileName": "AGENTS.md"
+  "contextFileName": "AGENTS.md",
+  "mcpServers": {
+    "context7": {
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "command": "npx"
+    },
+    "sequential-thinking": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "command": "npx"
+    }
+  }
 }
