@@ -53,6 +53,7 @@ alias p='wl-paste'
 
 # editor
 alias v='nvim'
+alias vim='nvim'
 
 # ruby
 alias be='bundle exec'
