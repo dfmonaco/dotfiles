@@ -9,5 +9,5 @@ vim.filetype.add({
   extension = {
     jbuilder = "ruby",
     axlsx = "ruby",
-  }
+  },
 })

@@ -103,15 +103,7 @@ Please proofread and enhance the following text:
     "ravitemer/mcphub.nvim",
     build = "npm install -g mcp-hub@latest",
     config = function()
-      require("mcphub").setup({
-        log = {
-          level = vim.log.levels.WARN,
-          to_file = true,
-        },
-        on_ready = function()
-          vim.notify("✅ MCP Hub is online!")
-        end,
-      })
+      require("mcphub").setup()
     end,
   },
 }

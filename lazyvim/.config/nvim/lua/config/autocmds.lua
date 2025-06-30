@@ -9,7 +9,15 @@
 --
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "html", "css", "javascript", "ruby", "sql" },
-  callback = function(args)
+  callback = function()
     vim.opt_local.keywordprg = "sh -c 'xdg-open \"https://devdocs.io/search?q= \"$1' _"
+  end,
+})
+
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+  pattern = "*.md",
+  callback = function()
+    vim.opt_local.textwidth = 80
   end,
 })
