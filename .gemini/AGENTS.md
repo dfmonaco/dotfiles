@@ -113,23 +113,32 @@ We use a simplified GitFlow model with the following primary branches:
 - **Issue references:** `Closes #123`, `Fixes #456`
 - **Breaking changes:** `BREAKING CHANGE: <description>`
 
+### Security Guidelines for Commit Messages
+
+- **Always use quotes:** Enclose git commit messages in single quotes to prevent 
+  shell interpretation of special characters
+- **Avoid backticks:** Do not use backticks (`) in commit messages unless 
+  properly escaped, as they can trigger command execution
+- **Shell safety:** Single quotes prevent accidental command execution due to 
+  shell interpretation of special characters
+
 ### Example Commit Messages
 
-```
-feat(auth): add OAuth2 integration
+```bash
+git commit -m 'feat(auth): add OAuth2 integration
 
 Implement Google OAuth2 authentication to replace custom login system.
 This reduces security maintenance burden and improves user experience
 with single sign-on capability.
 
-Closes #145
+Closes #145'
 ```
 
-```
-fix(database): resolve connection timeout issues
+```bash
+git commit -m 'fix(database): resolve connection timeout issues
 
 Increase connection pool size and implement retry logic for failed
 database connections during high traffic periods.
 
-Fixes #234
+Fixes #234'
 ```
