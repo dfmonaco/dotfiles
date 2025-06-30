@@ -5,6 +5,9 @@
   exists, I will find the most recent dev_session summary file within it and
   use its content for additional context to continue the work from the last
   session.
+- When writing Markdown files, always follow these guidelines: maximum line
+length of 80 characters, and maintain proper header hierarchy
+(e.g., only one H1 per document, correct nesting of H2, H3, etc.).
 
 ## Git Workflow
 
