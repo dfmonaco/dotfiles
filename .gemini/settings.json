@@ -1,6 +1,6 @@
 {
   "theme": "GitHub",
-  "selectedAuthType": "oauth-personal",
+  "selectedAuthType": "gemini-api-key",
   "preferredEditor": "vim",
   "contextFileName": "AGENTS.md",
   "mcpServers": {
