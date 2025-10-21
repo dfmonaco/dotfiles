@@ -150,3 +150,8 @@ eval "$(atuin init zsh --disable-up-arrow)"
 
 # uv
 export PATH="/home/diego/.local/bin:$PATH"
+
+# Autocompletion with carapace
+export CARAPACE_BRIDGES='zsh,fish,bash,inshellisense' # optional
+zstyle ':completion:*' format $'\e[2;37mCompleting %d\e[m'
+source <(carapace _carapace)
