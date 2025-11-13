@@ -3,7 +3,7 @@ return {
   dependencies = {
     "nvim-lua/plenary.nvim",         -- required
     "sindrets/diffview.nvim",        -- optional - Diff integration
-    "echasnovski/mini.pick",         -- optional
+    "nvim-mini/mini.pick",         -- optional
   },
   config = true
 }
