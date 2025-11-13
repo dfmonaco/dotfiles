@@ -106,4 +106,11 @@ Please proofread and enhance the following text:
   --     require("mcphub").setup()
   --   end,
   -- },
+  -- Amp Plugin
+  {
+    "sourcegraph/amp.nvim",
+    branch = "main", 
+    lazy = false,
+    opts = { auto_start = true, log_level = "info" },
+  },
 }
