@@ -1,1 +1,6 @@
-Run the test suite and fix any failing tests. Check AGENTS.md or common test commands (npm test, pytest, cargo test, go test, etc.) to determine the right test command for this project. Then run it and fix all failures.
+# Fix Tests
+
+Run the test suite and fix any failing tests. Check AGENTS.md or common
+test commands (npm test, pytest, cargo test, go test, etc.) to determine
+the right test command for this project. Then run it and fix all
+failures.
