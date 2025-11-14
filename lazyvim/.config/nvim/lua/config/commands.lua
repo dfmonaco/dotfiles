@@ -1,6 +1,3 @@
--- Custom commands for Amp and PROMPT buffer management
--- Provides commands for sending content to Amp and managing a local PROMPT buffer
-
 -- ============================================================================
 -- Helper functions for PROMPT buffer management
 -- ============================================================================
