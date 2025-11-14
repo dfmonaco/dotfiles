@@ -80,8 +80,8 @@ alias ld='lazydocker'
 # Eza
 alias tr="eza --tree --long --git-ignore"
 alias tra="eza --tree --long --all --git-ignore"
-alias ls="eza --icons --group-directories-first --long --no-user --no-permissions --no-time --grid --sort=extension"
-alias lsa="eza --icons --group-directories-first --long --no-user --no-permissions --no-time --all --grid --sort=extension"
+alias ls="eza --icons --group-directories-first --oneline --sort=extension"
+alias lsa="eza --icons --group-directories-first --oneline --sort=extension --all"
 
 # yay
 # Try this to fuzzy-search through all available packages, with package info shown in a preview window, and then install selected packages:
