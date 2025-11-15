@@ -40,9 +40,3 @@ vim.keymap.set("n", "<leader>ap", cmd.toggle_prompt_buffer, { desc = "Toggle PRO
 vim.keymap.set("n", "<leader>ac", cmd.clear_prompt_buffer, { desc = "Clear PROMPT buffer" })
 vim.keymap.set("n", "<leader>ar", ":PromptFileRef<CR>", { desc = "Add current file ref to PROMPT buffer" })
 vim.keymap.set("v", "<leader>ar", ":'<,'>PromptRef<CR>", { desc = "Add file ref (with lines) to PROMPT buffer" })
-
--- Reload config
-vim.keymap.set("n", "<leader>R", function()
-  vim.cmd("source $MYVIMRC")
-  print("Config reloaded!")
-end, { desc = "Reload Neovim config" })
