@@ -1,165 +1,68 @@
 ---
-description: Generate comprehensive Product Requirements Document (PRD)
+description: Draft a focused Product Requirements Document
 ---
 
-Generate a comprehensive Product Requirements Document (PRD) for: $ARGUMENTS
+You are helping write a Product Requirements Document (PRD) for: $ARGUMENTS
 
 ## Goal
 
-To guide an AI assistant in creating a detailed Product Requirements Document (PRD) in Markdown format, based on an initial user prompt. The PRD should be clear, actionable, and suitable for a junior developer to understand and implement the feature.
+Create a clear, implementation-ready PRD in Markdown that a junior developer can use to plan and build the feature.
 
-## Prerequisites
+## Flow
 
-- User has provided an initial feature request or description
-- AI has access to project structure and existing codebase (if applicable)
+1. Briefly restate what you understand about the feature.
+2. Ask a concise set of clarifying questions (usually 5–10) that cover at least:
+   - Problem and context (what/why).
+   - Target users and main use cases.
+   - Core workflows or actions.
+   - Scope (what is in vs. out).
+   - Important technical or UX constraints.
+3. Present questions as a numbered or bulleted list for easy answering.
+4. Stop and wait for the user’s answers.
+5. If needed, ask a short follow‑up round of questions.
+6. Once you have enough detail, generate the PRD.
 
-## Process
+Keep questions short, concrete, and easy to answer.
 
-1. **Receive Initial Prompt:** The user provides a brief description or request for a new feature or functionality.
+## PRD structure
 
-2. **Ask Clarifying Questions:** Before writing the PRD, the AI *must* ask clarifying questions to gather sufficient detail. The goal is to understand the "what" and "why" of the feature, not necessarily the "how" (which the developer will figure out). 
-   - Provide options in lettered/numbered lists for easy user selection
-   - Ask follow-up questions based on user responses
-   - Continue until you have enough detail to write a comprehensive PRD
+When writing the PRD, use this structure:
 
-3. **Generate PRD:** Based on the initial prompt and the user's answers, generate a PRD using the structure outlined below.
+1. **Feature Overview**
+   - Feature name.
+   - Problem statement (2–3 sentences).
+   - Solution summary.
 
-4. **Save PRD:** Save the generated document as `prd-[feature-name].md` inside the `/docs/tasks/[feature-name]/` directory.
+2. **Goals & Success Criteria**
+   - Primary goals.
+   - Success metrics / expected impact.
 
-5. **Confirmation:** Ask the user to review the PRD and confirm it captures their requirements before proceeding to task generation.
+3. **User Stories**
+   - A list of user stories in the format:  
+     `As a [user], I want to [action] so that [benefit].`
 
-## Clarifying Questions Framework
+4. **Functional Requirements**
+   - Numbered items (FR-1, FR-2, …).
+   - Describe what the system must do.
+   - Include key validation rules and important edge cases.
 
-The AI should adapt questions based on the prompt. Cover these core areas systematically:
+5. **Non-Functional / Constraints** (only if relevant)
+   - Performance, security, accessibility, compliance, platform constraints, etc.
 
-### Problem & Context
-- "What specific problem does this feature solve for users?"
-- "What triggered the need for this feature?"
-- "How are users currently handling this without the feature?"
+6. **UI / UX Notes** (if there is a UI)
+   - Main screens or states.
+   - Critical interactions and error states.
 
-### Target Users & Use Cases
-- "Who is the primary user of this feature? (e.g., end users, admins, developers)"
-- "In what scenarios will this feature be used most?"
-- "Are there different user types with different needs?"
+7. **Technical Notes** (only what is needed)
+   - Key integrations, data or API needs, dependencies.
 
-### Core Functionality
-- "What are the 3-5 most important things users should be able to do with this feature?"
-- "Can you walk me through a typical user workflow?"
-- "What actions should users be able to perform? Please prioritize them."
+8. **Open Questions**
+   - Anything that still needs clarification or a decision.
 
-### User Stories & Acceptance Criteria
-- "Can you provide specific user stories? Format: 'As a [user type], I want to [action] so that [benefit]'"
-- "How will we know this feature is working correctly?"
-- "What does 'done' look like for this feature?"
+## Output
 
-### Scope & Boundaries
-- "What should this feature NOT do? (non-goals)"
-- "Are there any similar features in the system we should integrate with or avoid duplicating?"
-- "What's the minimum viable version vs. nice-to-have features?"
-
-### Technical Context
-- "Are there existing system components this should integrate with?"
-- "Are there any technical constraints or requirements I should know about?"
-- "What data does this feature need to work with?"
-
-### Design & UX
-- "Do you have any design mockups or UI preferences?"
-- "Should this follow existing UI patterns in the application?"
-- "Are there any specific user experience requirements?"
-
-### Success Metrics
-- "How will you measure if this feature is successful?"
-- "What metrics or outcomes should improve after implementing this?"
-
-## PRD Structure
-
-Generate the PRD with these sections in order:
-
-### 1. Feature Overview
-- **Feature Name:** Clear, descriptive name
-- **Problem Statement:** 2-3 sentences describing the problem being solved
-- **Solution Summary:** Brief description of the proposed solution
-
-### 2. Goals & Success Metrics
-- **Primary Goals:** 3-5 specific, measurable objectives
-- **Success Metrics:** How success will be measured (quantitative when possible)
-- **Business Impact:** Expected benefits to users and business
-
-### 3. User Stories
-- **Primary User Stories:** Core functionality from user perspective
-- **Secondary User Stories:** Additional features or edge cases
-- Format: "As a [user type], I want to [action] so that [benefit]"
-
-### 4. Functional Requirements
-List specific functionalities the feature must have:
-- Use clear, actionable language
-- Number requirements (FR-1, FR-2, etc.)
-- Include input/output specifications where relevant
-- Specify validation rules and constraints
-
-### 5. Non-Functional Requirements (if applicable)
-- Performance requirements
-- Security considerations
-- Accessibility requirements
-- Compatibility requirements
-
-### 6. Non-Goals (Out of Scope)
-- Explicitly state what this feature will NOT include
-- Helps manage scope and expectations
-- Reference future phases if applicable
-
-### 7. User Interface Requirements
-- Describe key UI elements and layout
-- Reference existing design patterns or mockups
-- Specify responsive design requirements
-- Note accessibility considerations
-
-### 8. Technical Considerations
-- Integration points with existing systems
-- Data requirements and storage needs
-- API requirements (if applicable)
-- Dependencies on other features or services
-
-### 9. Edge Cases & Error Handling
-- Identify potential error scenarios
-- Specify expected behavior for edge cases
-- Define user-facing error messages
-
-### 10. Open Questions
-- List remaining uncertainties
-- Note areas needing further research
-- Flag decisions requiring stakeholder input
-
-## Quality Checklist
-
-Before finalizing the PRD, ensure:
-- [ ] All functional requirements are testable
-- [ ] User stories follow the standard format
-- [ ] Technical terms are explained or avoided
-- [ ] Requirements are specific, not vague
-- [ ] Success criteria are measurable
-- [ ] Scope is clearly defined
-- [ ] Edge cases are considered
-
-## Target Audience
-
-Write for a **junior developer** who will implement this feature:
-- Use explicit, unambiguous language
-- Avoid unnecessary jargon
-- Provide context for business decisions
-- Include enough detail for technical planning
-
-## Output Specifications
-
-- **Format:** Markdown (`.md`)
-- **Location:** `/docs/tasks/[feature-name]/`
-- **Filename:** `prd-[feature-name].md`
-- **Naming Convention:** Use kebab-case for feature names (e.g., `user-profile-editing`)
-
-## Critical Instructions
-
-1. **DO NOT** start implementing the PRD
-2. **ALWAYS** ask clarifying questions before writing
-3. **WAIT** for user confirmation before proceeding to task generation
-4. **ENSURE** all sections are complete and actionable
-5. **SAVE** the file in the correct location with proper naming
+- Write the PRD as clean Markdown.
+- At the end, add a short section listing:
+  - Assumptions you made.
+  - Open questions or risks that should be resolved before implementation.
+- Suggest a reasonable file path and name for saving the PRD (for example: `docs/tasks/[feature-slug]/prd-[feature-slug].md`), but do not create files yourself.
