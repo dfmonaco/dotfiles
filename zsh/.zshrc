@@ -50,6 +50,7 @@ alias q='exit'
 alias cl='clear'
 alias c='wl-copy'
 alias p='wl-paste'
+alias o='opencode'
 
 # editor
 alias v='nvim'
