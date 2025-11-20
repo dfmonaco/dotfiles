@@ -73,20 +73,55 @@ Once details are confirmed, generate the PRD with this structure:
 - Items requiring decision or future clarification
 - Known unknowns
 
-### 4. Review & Save
+### 4. Git Branch Setup
+Before saving the PRD, create a feature branch for this work:
+
+```bash
+git checkout main  # or develop, depending on project
+git pull origin main
+git checkout -b feature/[feature-name]
+```
+
+**Branch naming:** Use kebab-case matching the feature name (e.g., `feature/user-profile-editing`)
+
+**Important:** The branch name should match the PRD filename for seamless integration with the `feature-implement` command.
+
+### 5. Review & Save
 1. Review the PRD against the **Role & Standards**
 2. Ensure all Functional Requirements are implementation-ready
 3. Save the file:
-   - **Path:** `/docs/tasks/[feature-name]/prd-[feature-name].md`
-   - **Naming:** Use kebab-case (e.g., `user-profile-editing`)
+   - **Path:** `./docs/tasks/[feature-name]/prd-[feature-name].md`
+   - **Naming:** Use kebab-case matching the branch name (e.g., `user-profile-editing`)
    - Create directory if needed
 
+**Example:**
+- Branch: `feature/user-profile-editing`
+- PRD Path: `./docs/tasks/user-profile-editing/prd-user-profile-editing.md`
+
+### 6. Commit PRD
+Commit the PRD to the feature branch:
+
+```bash
+git add docs/tasks/[feature-name]/
+git commit -m "docs: add PRD for [feature-name]
+
+- Define feature requirements and scope
+- Include user stories and acceptance criteria
+- Document technical considerations"
+```
+
 ## Output
-A comprehensive PRD document saved to `/docs/tasks/[feature-name]/prd-[feature-name].md`
+- Feature branch created: `feature/[feature-name]`
+- PRD document saved to `./docs/tasks/[feature-name]/prd-[feature-name].md`
+- PRD committed to feature branch
+- Ready for implementation via `/feature-implement` command
 
 ## Success Criteria
+- [ ] Feature branch created with consistent naming
 - [ ] PRD contains all required sections
 - [ ] All Functional Requirements are atomic and testable
 - [ ] Edge cases and error states are documented
 - [ ] PRD is saved to correct location
+- [ ] PRD is committed to the feature branch
+- [ ] Branch name matches PRD filename
 - [ ] User has confirmed the PRD is complete and accurate

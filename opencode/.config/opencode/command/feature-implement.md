@@ -8,7 +8,7 @@ description: Plan, implement, test, and submit a feature for review autonomously
 Autonomously implement a complete feature based on a PRD. Generate a test-driven task plan, execute all implementation work, validate functionality with the user, and create a pull request for review.
 
 ## Input
-**ASK** the user for the **exact file path** of the PRD document to implement.
+Optional PRD file path via `$ARGUMENTS`. If not provided, the command will attempt to auto-detect the PRD based on the current branch name.
 
 ## Core Principles
 
@@ -32,6 +32,33 @@ Autonomously implement a complete feature based on a PRD. Generate a test-driven
 
 ### Phase 1: Planning & Setup
 
+#### 1.0 Locate PRD
+Determine which PRD to implement:
+
+**Auto-detection (preferred):**
+1. Get current branch name:
+   ```bash
+   git branch --show-current
+   ```
+
+2. If branch follows pattern `feature/[feature-name]`:
+   - Extract feature name from branch (e.g., `feature/user-profile-editing` → `user-profile-editing`)
+   - Look for PRD at: `./docs/tasks/[feature-name]/prd-[feature-name].md`
+   - If found AND branch name matches PRD filename: Use this PRD automatically (no confirmation needed)
+   - If found but names don't match: Ask user "Found PRD at [path]. Use this? (Y/n)"
+   - If not found: Proceed to manual input
+
+**Manual input (fallback):**
+- If not on a feature branch OR no matching PRD found OR user provided explicit path via `$ARGUMENTS`
+- Ask user for the exact file path of the PRD document
+
+**Example auto-detection:**
+```
+Branch: feature/user-profile-editing
+Expected PRD: ./docs/tasks/user-profile-editing/prd-user-profile-editing.md
+If exists → Use automatically (names match)
+```
+
 #### 1.1 Analyze PRD
 Read and analyze the PRD, focusing on:
 - Functional Requirements (FRs): What must be built
@@ -49,7 +76,7 @@ Determine which files need work:
 Use the TodoWrite tool to create a comprehensive task list with:
 
 **Task Structure:**
-- **Setup Tasks:** Branch creation, dependency installation, configuration
+- **Setup Tasks:** Dependency installation, configuration, environment setup
 - **Implementation Tasks:** Grouped by logical feature area (e.g., Data Layer, Business Logic, UI Components)
 - **Testing Tasks:** Unit tests, integration tests, validation against FRs
 - **Finalization Tasks:** Documentation updates, cleanup
@@ -63,13 +90,30 @@ Use the TodoWrite tool to create a comprehensive task list with:
 ```
 
 #### 1.4 Git Setup
-Create feature branch:
+Check if already on the correct feature branch:
+
 ```bash
-git checkout main  # or develop, depending on project
-git pull origin main
-git checkout -b feature/[feature-name]
+git branch --show-current
 ```
-**Branch naming:** Use kebab-case matching the PRD feature name
+
+**If already on feature branch (e.g., from `/prd-create`):**
+- Stay on current branch
+- Ensure branch is up to date with main/develop:
+  ```bash
+  git fetch origin
+  git merge origin/main  # or origin/develop
+  ```
+
+**If on main/develop or another branch:**
+- Create feature branch:
+  ```bash
+  git checkout main  # or develop, depending on project
+  git pull origin main
+  git checkout -b feature/[feature-name]
+  ```
+  **Branch naming:** Use kebab-case matching the PRD feature name
+
+**Note:** If the PRD was created via `/prd-create`, you should already be on the correct feature branch.
 
 ### Phase 2: Implementation
 
