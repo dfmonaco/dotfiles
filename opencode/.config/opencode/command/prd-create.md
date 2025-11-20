@@ -1,7 +1,8 @@
 ---
 description: Draft and save an implementation-ready PRD for a new feature
 ---
-# Create Product Requirements Document (PRD)
+
+# PRD Create
 
 ## Objective
 Create a clear, implementation-focused PRD that a junior developer can use to build the feature. The PRD serves as the source of truth for requirements, scope, and acceptance criteria.
@@ -12,7 +13,7 @@ Act as a Senior Product Manager writing for a **Junior Developer**.
 - **Quality:** All Functional Requirements must be atomic, testable, and handle edge cases
 - **Format:** Markdown
 
-## Workflow
+## Process
 
 ### 1. Discovery
 Ask the user to briefly describe the feature they want to build.
@@ -34,42 +35,43 @@ Once the user responds, analyze their request and:
 Once details are confirmed, generate the PRD with this structure:
 
 #### Required Sections
-1. **Feature Overview**
-   - Feature name
-   - Problem statement (why this matters)
-   - Solution summary (what we're building)
 
-2. **Goals & Success Metrics**
-   - Primary goals (2-3 max)
-   - Measurable success criteria
+**1. Feature Overview**
+- Feature name
+- Problem statement (why this matters)
+- Solution summary (what we're building)
 
-3. **User Stories**
-   - Format: *"As a [role], I want to [action], so that [benefit]"*
-   - Include primary and edge-case scenarios
+**2. Goals & Success Metrics**
+- Primary goals (2-3 max)
+- Measurable success criteria
 
-4. **Functional Requirements**
-   - Numbered format (FR-1, FR-2, etc.)
-   - Must be specific, testable, and complete
-   - Cover happy path, edge cases, and error states
+**3. User Stories**
+- Format: *"As a [role], I want to [action], so that [benefit]"*
+- Include primary and edge-case scenarios
 
-5. **Non-Functional Requirements** (if applicable)
-   - Performance expectations
-   - Security considerations
-   - Platform/browser constraints
+**4. Functional Requirements**
+- Numbered format (FR-1, FR-2, etc.)
+- Must be specific, testable, and complete
+- Cover happy path, edge cases, and error states
 
-6. **UI/UX Guidelines** (if applicable)
-   - Key screens and user flows
-   - Interactive states (loading, error, empty, success)
-   - Accessibility requirements
+**5. Non-Functional Requirements** (if applicable)
+- Performance expectations
+- Security considerations
+- Platform/browser constraints
 
-7. **Technical Notes**
-   - Data models or schema changes
-   - API endpoints or integrations needed
-   - Dependencies or prerequisite work
+**6. UI/UX Guidelines** (if applicable)
+- Key screens and user flows
+- Interactive states (loading, error, empty, success)
+- Accessibility requirements
 
-8. **Open Questions**
-   - Items requiring decision or future clarification
-   - Known unknowns
+**7. Technical Notes**
+- Data models or schema changes
+- API endpoints or integrations needed
+- Dependencies or prerequisite work
+
+**8. Open Questions**
+- Items requiring decision or future clarification
+- Known unknowns
 
 ### 4. Review & Save
 1. Review the PRD against the **Role & Standards**
@@ -79,7 +81,10 @@ Once details are confirmed, generate the PRD with this structure:
    - **Naming:** Use kebab-case (e.g., `user-profile-editing`)
    - Create directory if needed
 
-## Completion Criteria
+## Output
+A comprehensive PRD document saved to `/docs/tasks/[feature-name]/prd-[feature-name].md`
+
+## Success Criteria
 - [ ] PRD contains all required sections
 - [ ] All Functional Requirements are atomic and testable
 - [ ] Edge cases and error states are documented

@@ -1,12 +1,13 @@
 ---
 description: Plan, implement, test, and submit a feature for review autonomously
 ---
-# Implement Feature from PRD
+
+# Feature Implement
 
 ## Objective
 Autonomously implement a complete feature based on a PRD. Generate a test-driven task plan, execute all implementation work, validate functionality with the user, and create a pull request for review.
 
-## Initial Setup
+## Input
 **ASK** the user for the **exact file path** of the PRD document to implement.
 
 ## Core Principles
@@ -27,7 +28,7 @@ Autonomously implement a complete feature based on a PRD. Generate a test-driven
 - **Task tracking:** Use TodoWrite tool to maintain visible progress
 - **Transparency:** Document decisions and changes as you work
 
-## Workflow
+## Process
 
 ### Phase 1: Planning & Setup
 
@@ -214,7 +215,14 @@ After addressing all feedback:
 - Request re-review if needed
 - Notify user that all feedback has been addressed
 
-## Completion Criteria
+## Output
+- Comprehensive implementation of feature from PRD
+- All tests passing
+- Git commits following conventional commit format
+- Pull request created and ready for review
+- User validation and approval
+
+## Success Criteria
 
 ### Implementation Complete When:
 - [ ] All tasks in TodoWrite are marked completed
@@ -229,7 +237,9 @@ After addressing all feedback:
 - [ ] CI/CD checks pass
 - [ ] User is notified of PR status
 
-## Success Definition
+## Notes
+
+### Success Definition
 Success means:
 - Feature works exactly as specified in the PRD
 - All tests pass and cover critical functionality
