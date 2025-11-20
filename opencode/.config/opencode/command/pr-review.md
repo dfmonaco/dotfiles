@@ -6,15 +6,30 @@ description: Address PR review feedback with automated fixes
 
 You are tasked with addressing PR review feedback comprehensively and automatically.
 
-## PR Number
-PR #$ARGUMENTS
+## Identify PR Number
+
+First, identify the PR number associated with the current branch:
+
+1. Get the current branch name:
+```bash
+git branch --show-current
+```
+
+2. Find the PR number for this branch using:
+```bash
+gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'
+```
+
+This will return the PR number for the current branch. Store this as the PR number to use throughout.
+
+**Note:** If no PR is found for the current branch, inform the user and exit. The command requires an active PR for the current branch.
 
 ## Your Tasks
 
 ### 1. Fetch Review Comments
-Use the following command to fetch all review comments from the PR:
+Use the following command to fetch all review comments from the PR (replace PR_NUMBER with the number identified above):
 ```bash
-gh api repos/OWNER/REPO/pulls/$ARGUMENTS/comments
+gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments
 ```
 
 Parse the JSON response to extract:
@@ -85,9 +100,9 @@ git push
 ```
 
 ### 7. Post Summary Comment
-Use the following command to post a summary comment on the PR:
+Use the following command to post a summary comment on the PR (using the PR number identified earlier):
 ```bash
-gh pr comment $ARGUMENTS --body "[your markdown formatted summary]"
+gh pr comment PR_NUMBER --body "[your markdown formatted summary]"
 ```
 
 Your summary should:
@@ -120,9 +135,9 @@ Commit: [hash]
 ```
 
 ### 8. Reply to Individual Comments
-For each review comment you addressed, post a reply:
+For each review comment you addressed, post a reply (using the PR number identified earlier):
 ```bash
-gh api -X POST repos/OWNER/REPO/pulls/$ARGUMENTS/comments \
+gh api -X POST repos/OWNER/REPO/pulls/PR_NUMBER/comments \
   -f body="✅ Fixed in commit [hash] - [brief explanation]" \
   -F in_reply_to=[COMMENT_ID]
 ```
@@ -176,17 +191,19 @@ Current branch:
 
 ## Example Workflow
 
-1. Fetch comments: `gh api repos/owner/repo/pulls/7/comments`
-2. Analyze all comments and present your assessment
-3. Wait for user confirmation before proceeding (optional)
-4. Implement fixes for agreed-upon issues
-5. Run tests: `[project test command]`
-6. Commit: `git commit -m "fix: address PR review feedback"`
-7. Push: `git push`
-8. Post summary: `gh pr comment 7 --body "..."`
-9. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/7/comments ...`
+1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
+2. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments`
+3. Analyze all comments and present your assessment
+4. Wait for user confirmation before proceeding (optional)
+5. Implement fixes for agreed-upon issues
+6. Run tests: `[project test command]`
+7. Commit: `git commit -m "fix: address PR review feedback"`
+8. Push: `git push`
+9. Post summary: `gh pr comment PR_NUMBER --body "..."`
+10. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ## Success Criteria
+✅ PR number successfully identified from current branch
 ✅ All review comments fetched and analyzed
 ✅ Each comment has clear agree/disagree reasoning
 ✅ All agreed fixes implemented correctly
