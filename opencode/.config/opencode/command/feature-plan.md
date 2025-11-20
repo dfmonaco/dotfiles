@@ -1,8 +1,8 @@
 ---
-description: Draft and save an implementation-ready PRD for a new feature
+description: Plan a feature by creating an implementation-ready PRD
 ---
 
-# PRD Create
+# Feature Plan
 
 ## Objective
 Create a clear, implementation-focused PRD that a junior developer can use to build the feature. The PRD serves as the source of truth for requirements, scope, and acceptance criteria.
@@ -84,7 +84,7 @@ git checkout -b feature/[feature-name]
 
 **Branch naming:** Use kebab-case matching the feature name (e.g., `feature/user-profile-editing`)
 
-**Important:** The branch name should match the PRD filename for seamless integration with the `feature-implement` command.
+**Important:** The branch name should match the PRD filename for seamless integration with the `/feature-implement` command.
 
 ### 5. Review & Save
 1. Review the PRD against the **Role & Standards**

@@ -96,7 +96,7 @@ Check if already on the correct feature branch:
 git branch --show-current
 ```
 
-**If already on feature branch (e.g., from `/prd-create`):**
+**If already on feature branch (e.g., from `/feature-plan`):**
 - Stay on current branch
 - Ensure branch is up to date with main/develop:
   ```bash
@@ -113,7 +113,7 @@ git branch --show-current
   ```
   **Branch naming:** Use kebab-case matching the PRD feature name
 
-**Note:** If the PRD was created via `/prd-create`, you should already be on the correct feature branch.
+**Note:** If the PRD was created via `/feature-plan`, you should already be on the correct feature branch.
 
 ### Phase 2: Implementation
 
