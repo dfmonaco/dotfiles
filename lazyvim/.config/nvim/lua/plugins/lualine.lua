@@ -1,0 +1,84 @@
+return {
+  "nvim-lualine/lualine.nvim",
+  opts = {
+    options = {
+      theme = "auto",
+      component_separators = "",
+      section_separators = "",
+      globalstatus = true,
+    },
+    sections = {
+      -- Left side
+      lualine_a = {
+        {
+          "mode",
+          fmt = function(mode)
+            local mode_map = {
+              ["NORMAL"] = "N",
+              ["INSERT"] = "I",
+              ["VISUAL"] = "V",
+              ["V-LINE"] = "VL",
+              ["V-BLOCK"] = "VB",
+              ["COMMAND"] = "C",
+              ["REPLACE"] = "R",
+              ["TERMINAL"] = "T",
+              ["SELECT"] = "S",
+              ["S-LINE"] = "SL",
+              ["S-BLOCK"] = "SB",
+              ["EX"] = "E",
+              ["O-PENDING"] = "O",
+            }
+            return mode_map[mode] or mode:sub(1, 1)
+          end,
+        },
+      },
+      lualine_b = {
+        {
+          function()
+            local cwd = vim.fn.getcwd()
+            local home = vim.env.HOME
+            if cwd:find(home, 1, true) == 1 then
+              return "~" .. cwd:sub(#home + 1)
+            end
+            return cwd
+          end,
+        },
+      },
+      lualine_c = {
+        {
+          "branch",
+          icon = "",
+        },
+      },
+      -- Right side
+      lualine_x = {
+        -- Prompt buffer icon indicator
+        {
+          function()
+            local status = require('nvim-opencode').statusline.get_status()
+            if status.prompt_buffer then
+              return status.prompt_icon  -- Returns 💬
+            end
+            return ''
+          end,
+        },
+        -- OpenCode statusline component
+        {
+          function()
+            return require('nvim-opencode').statusline.get_component()
+          end,
+        },
+      },
+      lualine_y = {},
+      lualine_z = {},
+    },
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {},
+      lualine_x = {},
+      lualine_y = {},
+      lualine_z = {},
+    },
+  },
+}
