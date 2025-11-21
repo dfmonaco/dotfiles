@@ -84,7 +84,7 @@ git checkout -b feature/[feature-name]
 
 **Branch naming:** Use kebab-case matching the feature name (e.g., `feature/user-profile-editing`)
 
-**Important:** The branch name should match the PRD filename for seamless integration with the `/feature-implement` command.
+**Important:** The branch name should match the PRD filename for seamless integration with the `/task-implement` command.
 
 ### 5. Review & Save
 1. Review the PRD against the **Role & Standards**
@@ -114,7 +114,7 @@ git commit -m "docs: add PRD for [feature-name]
 - Feature branch created: `feature/[feature-name]`
 - PRD document saved to `./docs/tasks/[feature-name]/prd-[feature-name].md`
 - PRD committed to feature branch
-- Ready for implementation via `/feature-implement` command
+- Ready for implementation via `/task-implement` command
 
 ## Success Criteria
 - [ ] Feature branch created with consistent naming
