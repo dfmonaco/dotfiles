@@ -1,11 +1,11 @@
 ---
-description: Expert prompt engineer that creates optimized, XML-structured prompts with intelligent depth selection
+description: Expert prompt engineer that creates optimized, well-structured prompts with intelligent depth selection
 ---
 
 # Prompt Create
 
 ## Objective
-Create highly effective, optimized prompts using XML tag structuring and best practices for AI Coding Agents. Generate single or multiple prompts based on task complexity and save them to the prompts folder.
+Create highly effective, optimized prompts using clear Markdown structure and best practices for AI Coding Agents. Generate single or multiple prompts based on task complexity and save them to the prompts folder.
 
 ## Input
 The user's request for what prompt(s) to create: `$ARGUMENTS`
@@ -13,8 +13,9 @@ The user's request for what prompt(s) to create: `$ARGUMENTS`
 ## Process
 
 ### 1. Analysis
-<thinking>
+
 Analyze the user's request to determine:
+
 1. **Clarity check (Golden Rule)**: Would a colleague with minimal context understand what's being asked?
    - Are there ambiguous terms that could mean multiple things?
    - Would examples help clarify the desired outcome?
@@ -46,10 +47,9 @@ Analyze the user's request to determine:
 9. **Verification needs**: Does this task warrant built-in error checking or validation steps?
 
 10. **Prompt quality needs**:
-- Does this need explicit "go beyond basics" encouragement for ambitious/creative work?
-- Should generated prompts explain WHY constraints matter, not just what they are?
-- Do examples need to demonstrate desired behavior while avoiding undesired patterns?
-</thinking>
+    - Does this need explicit "go beyond basics" encouragement for ambitious/creative work?
+    - Should generated prompts explain WHY constraints matter, not just what they are?
+    - Do examples need to demonstrate desired behavior while avoiding undesired patterns?
 
 ### 2. Clarification (if needed)
 If the request is ambiguous or could benefit from more detail, ask targeted questions:
@@ -89,13 +89,13 @@ Create the prompt(s) and save to the prompts folder.
 ## Prompt Construction Rules
 
 ### Always Include
-- XML tag structure with clear, semantic tags like `<objective>`, `<context>`, `<requirements>`, `<constraints>`, `<output>`
+- **Clear Markdown structure** with semantic headings: `## Objective`, `## Context`, `## Requirements`, `## Implementation`, `## Output`
 - **Contextual information**: Why this task matters, what it's for, who will use it, end goal
 - **Explicit, specific instructions**: Tell the AI Coding Agent exactly what to do with clear, unambiguous language
 - **Sequential steps**: Use numbered lists for clarity
 - File output instructions using relative paths: `./filename` or `./subfolder/filename`
 - Reference to reading the AGENTS.md for project conventions (when applicable)
-- Explicit success criteria within `<success_criteria>` or `<verification>` tags
+- Explicit success criteria within `## Success Criteria` or `## Verification` sections
 
 ### Conditionally Include (based on analysis)
 - **Extended thinking triggers** for complex reasoning:
@@ -110,14 +110,14 @@ Create the prompt(s) and save to the prompts folder.
   - "For maximum efficiency, whenever you need to perform multiple independent operations, invoke all relevant tools simultaneously rather than sequentially."
 - **Reflection after tool use** for complex agentic tasks:
   - "After receiving tool results, carefully reflect on their quality and determine optimal next steps before proceeding."
-- `<research>` tags when codebase exploration is needed
-- `<validation>` tags for tasks requiring verification
-- `<examples>` tags for complex or ambiguous requirements - ensure examples demonstrate desired behavior and avoid undesired patterns
-- Bash command execution with "!" prefix when system state matters
+- `## Research` section when codebase exploration is needed
+- `## Validation` section for tasks requiring verification
+- `## Examples` section for complex or ambiguous requirements - ensure examples demonstrate desired behavior and avoid undesired patterns
+- Bash command execution when system state matters
 - MCP server references when specifically requested or obviously beneficial
 
 ### Output Format
-1. Generate prompt content with XML structure
+1. Generate prompt content with Markdown structure
 2. Save to: `./prompts/[number]-[descriptive-name].md`
    - Number format: 001, 002, 003, etc. (check existing files in ./prompts/ to determine next number)
    - Name format: lowercase, hyphen-separated, max 5 words describing the task
@@ -127,103 +127,146 @@ Create the prompt(s) and save to the prompts folder.
 ## Prompt Patterns
 
 ### For Coding Tasks
-```xml
-<objective>
+```markdown
+## Objective
 [Clear statement of what needs to be built/fixed/refactored]
 Explain the end goal and why this matters.
-</objective>
 
-<context>
-[Project type, tech stack, relevant constraints]
-[Who will use this, what it's for]
-@[relevant files to examine]
-</context>
+## Context
+- Project type: [description]
+- Tech stack: [list]
+- Relevant constraints: [list]
+- Who will use this: [description]
+- What it's for: [purpose]
 
-<requirements>
-[Specific functional requirements]
-[Performance or quality requirements]
+**Files to examine:**
+- `@package.json` - [why]
+- `@src/[relevant]` - [why]
+
+## Requirements
+
+### Functional Requirements
+1. [Specific requirement 1]
+2. [Specific requirement 2]
+
+### Quality Requirements
+- Performance: [expectations]
+- Security: [considerations]
+
 Be explicit about what the AI Coding Agent should do.
-</requirements>
 
-<implementation>
+## Implementation
+
+### Approach
 [Any specific approaches or patterns to follow]
+
+### Constraints
 [What to avoid and WHY - explain the reasoning behind constraints]
-</implementation>
 
-<output>
-Create/modify files with relative paths:
+## Output
+Create/modify the following files:
 - `./path/to/file.ext` - [what this file should contain]
-</output>
+- `./path/to/test.ext` - [test coverage needed]
 
-<verification>
+## Verification
 Before declaring complete, verify your work:
-- [Specific test or check to perform]
-- [How to confirm the solution works]
-</verification>
+- [ ] [Specific test or check to perform]
+- [ ] [How to confirm the solution works]
+- [ ] Run tests and ensure they pass
 
-<success_criteria>
-[Clear, measurable criteria for success]
-</success_criteria>
+## Success Criteria
+- [ ] [Clear, measurable criterion 1]
+- [ ] [Clear, measurable criterion 2]
 ```
 
 ### For Analysis Tasks
-```xml
-<objective>
+```markdown
+## Objective
 [What needs to be analyzed and why]
 [What the analysis will be used for]
-</objective>
 
-<data_sources>
-@[files or data to analyze]
-!`[relevant commands to gather data]`
-</data_sources>
+## Data Sources
+**Files to analyze:**
+- `@file1.ext` - [what to look for]
+- `@file2.ext` - [what to look for]
 
-<analysis_requirements>
-[Specific metrics or patterns to identify]
-[Depth of analysis needed - use "thoroughly analyze" for complex tasks]
-[Any comparisons or benchmarks]
-</analysis_requirements>
+**Commands to run:**
+```bash
+[relevant commands to gather data]
+```
 
-<output_format>
-[How results should be structured]
-Save analysis to: `./analyses/[descriptive-name].md`
-</output_format>
+## Analysis Requirements
 
-<verification>
-[How to validate the analysis is complete and accurate]
-</verification>
+### Metrics to Identify
+1. [Specific metric or pattern 1]
+2. [Specific metric or pattern 2]
+
+### Depth of Analysis
+[Use "thoroughly analyze" for complex tasks]
+
+### Comparisons
+- Compare [A] vs [B]
+- Benchmark against [standard]
+
+## Output Format
+Structure your analysis with these sections:
+- Executive summary
+- Detailed findings
+- Recommendations
+- Metrics
+
+**Save to:** `./analyses/[descriptive-name].md`
+
+## Verification
+Before completing, verify:
+- [ ] [How to validate the analysis is complete]
+- [ ] [How to confirm accuracy]
 ```
 
 ### For Research Tasks
-```xml
-<research_objective>
+```markdown
+## Research Objective
 [What information needs to be gathered]
 [Intended use of the research]
-For complex research, include: "Thoroughly explore multiple sources and consider various perspectives"
-</research_objective>
 
-<scope>
-[Boundaries of the research]
-[Sources to prioritize or avoid]
-[Time period or version constraints]
-</scope>
+For complex research: Thoroughly explore multiple sources and consider various perspectives.
 
-<deliverables>
-[Format of research output]
-[Level of detail needed]
-Save findings to: `./research/[topic].md`
-</deliverables>
+## Scope
 
-<evaluation_criteria>
-[How to assess quality/relevance of sources]
-[Key questions that must be answered]
-</evaluation_criteria>
+### Boundaries
+- In scope: [what to research]
+- Out of scope: [what to exclude]
 
-<verification>
+### Sources
+- Prioritize: [preferred sources]
+- Avoid: [sources to skip]
+- Time period: [if relevant]
+
+## Deliverables
+
+### Format
+[How to structure the research output]
+
+### Level of Detail
+[Depth required]
+
+**Save to:** `./research/[topic].md`
+
+## Evaluation Criteria
+
+### Quality Assessment
+- Source credibility: [how to assess]
+- Relevance: [how to determine]
+
+### Key Questions
+1. [Question that must be answered]
+2. [Question that must be answered]
+
+## Verification
 Before completing, verify:
-- [All key questions are answered]
-- [Sources are credible and relevant]
-</verification>
+- [ ] All key questions are answered
+- [ ] Sources are credible and relevant
+- [ ] Findings are well-organized
 ```
 
 ## Intelligence Rules
@@ -261,7 +304,7 @@ After saving the prompt(s), present this decision tree to the user:
 
 **Prompt(s) created successfully!**
 
-<single_prompt_scenario>
+**Single Prompt Scenario:**
 If you created ONE prompt (e.g., `./prompts/005-implement-feature.md`):
 
 ✓ Saved prompt to ./prompts/005-implement-feature.md
@@ -275,13 +318,12 @@ What's next?
 
 Choose (1-4): _
 
-<action>
-If user chooses #1, invoke via SlashCommand tool: `/prompt-run 005`
-</action>
-</single_prompt_scenario>
+*(If user chooses #1, invoke: `/prompt-run 005`)*
 
-<parallel_scenario>
-If you created MULTIPLE prompts that CAN run in parallel (e.g., independent modules, no shared files):
+---
+
+**Parallel Execution Scenario:**
+If you created MULTIPLE prompts that CAN run in parallel (independent tasks, no shared files):
 
 ✓ Saved prompts:
   - ./prompts/005-implement-auth.md
@@ -299,14 +341,13 @@ What's next?
 
 Choose (1-4): _
 
-<actions>
-If user chooses #1, invoke via SlashCommand tool: `/prompt-run 005 006 007 --parallel`
-If user chooses #2, invoke via SlashCommand tool: `/prompt-run 005 006 007 --sequential`
-</actions>
-</parallel_scenario>
+*(If user chooses #1, invoke: `/prompt-run 005 006 007 --parallel`)*
+*(If user chooses #2, invoke: `/prompt-run 005 006 007 --sequential`)*
 
-<sequential_scenario>
-If you created MULTIPLE prompts that MUST run sequentially (e.g., dependencies, shared files):
+---
+
+**Sequential Execution Scenario:**
+If you created MULTIPLE prompts that MUST run sequentially (dependencies, shared files):
 
 ✓ Saved prompts:
   - ./prompts/005-setup-database.md
@@ -324,18 +365,15 @@ What's next?
 
 Choose (1-4): _
 
-<actions>
-If user chooses #1, invoke via SlashCommand tool: `/prompt-run 005 006 007 --sequential`
-If user chooses #2, invoke via SlashCommand tool: `/prompt-run 005`
-</actions>
-</sequential_scenario>
+*(If user chooses #1, invoke: `/prompt-run 005 006 007 --sequential`)*
+*(If user chooses #2, invoke: `/prompt-run 005`)*
 
 ---
 
 ## Success Criteria
 - [ ] User's request clearly understood (or clarified)
 - [ ] Appropriate number of prompts created (single or multiple)
-- [ ] Prompts follow XML structure and best practices
+- [ ] Prompts follow Markdown structure and best practices
 - [ ] Prompts saved to correct location with proper naming
 - [ ] Decision tree presented to user
 - [ ] User can execute prompts immediately or review first
@@ -344,14 +382,13 @@ If user chooses #2, invoke via SlashCommand tool: `/prompt-run 005`
 
 ### Meta Instructions
 - First, check if clarification is needed before generating the prompt
-- Read `!`ls ./prompts/ 2>/dev/null | sort -V | tail -1`` to determine the next number in sequence
-- If ./prompts/ doesn't exist, create it with `!`mkdir -p ./prompts/`` before saving
+- Check existing prompts to determine the next number in sequence
+- If ./prompts/ doesn't exist, create it before saving
 - Keep prompt filenames descriptive but concise
-- Adapt the XML structure to fit the task - not every tag is needed every time
+- Adapt the Markdown structure to fit the task - not every section is needed every time
 - Consider the user's working directory as the root for all relative paths
 - Each prompt file should contain ONLY the prompt content, no preamble or explanation
 - After saving, present the appropriate decision tree based on what was created
-- Use the SlashCommand tool to invoke /prompt-run when user makes their choice
 
 ### Examples of When to Ask for Clarification
 - "Build a dashboard" → Ask: "What kind of dashboard? Admin, analytics, user-facing? What data should it display? Who will use it?"
