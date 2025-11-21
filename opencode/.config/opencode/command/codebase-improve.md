@@ -1,11 +1,11 @@
 ---
-description: Analyze codebase for simplification opportunities and create refactor task documents
+description: Analyze codebase for improvement opportunities and create refactor task documents
 ---
 
-# Codebase Simplify
+# Codebase Improve
 
 ## Objective
-Perform a comprehensive analysis of the entire codebase to identify opportunities for simplification and improvement. Present findings interactively for user approval, then automatically create implementation-ready refactor task documents for each approved simplification.
+Perform a comprehensive analysis of the entire codebase to identify opportunities for improvement. Present findings interactively for user approval, then automatically create implementation-ready refactor task documents for each approved improvement.
 
 ## Input
 Optional `$ARGUMENTS`:
@@ -201,7 +201,7 @@ mkdir -p ./docs/tasks/[task-name]
 
 ```markdown
 ---
-created_by: /codebase-simplify
+created_by: /codebase-improve
 analysis_date: [YYYY-MM-DD]
 priority: [Quick Win / Strategic / Low Priority]
 estimated_effort: [X hours]

@@ -2,7 +2,7 @@
 description: Run project tests and autonomously fix failing ones
 ---
 
-# Tests Fix
+# Test Fix
 
 ## Objective
 Execute the project's test suite, identify failing tests, and autonomously fix them by analyzing errors, modifying code, and validating fixes. Continue until all tests pass.

@@ -1,11 +1,31 @@
 ---
-description: Address PR review feedback with automated fixes
+description: Respond to PR review feedback with automated fixes
 ---
 
-# PR Review
+# PR Respond
 
 ## Objective
-Address PR review feedback comprehensively and automatically. Analyze comments critically, implement agreed-upon fixes, run tests, commit changes, and respond to reviewers.
+Respond to PR review feedback comprehensively and automatically. Analyze comments critically, implement agreed-upon fixes, run tests, commit changes, and respond to reviewers.
+
+## Core Principles
+
+### Critical Thinking
+- **Independent analysis:** Think critically about each review comment
+- **Evaluate merit:** Determine if feedback improves code quality, correctness, or maintainability
+- **Challenge when needed:** Respectfully disagree if feedback isn't appropriate
+- **Consider trade-offs:** Weigh benefits vs costs of proposed changes
+
+### Quality
+- **Root cause fixes:** Address underlying issues, not just symptoms
+- **Test coverage:** Ensure all changes are properly tested
+- **Follow conventions:** Adhere to project patterns and standards (check AGENTS.md)
+- **No regressions:** Verify fixes don't break existing functionality
+
+### Communication
+- **Be thorough:** Analyze all comments before implementing
+- **Be respectful:** Thank reviewers and explain reasoning clearly
+- **Be specific:** Reference file paths, line numbers, and commit hashes
+- **Be transparent:** Document what was fixed and why
 
 ## Process
 
