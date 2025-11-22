@@ -128,48 +128,112 @@ git checkout -b fix/[bug-name]
 
 **Important:** The branch name should match the bug document filename for seamless integration with the `/task-implement` command.
 
-### 5. Review & Save
+### 5. Generate Task Folder ID
+Before saving, generate a unique folder ID using the date-counter convention:
+
+```bash
+# Get today's date in YYYYMMDD format
+TODAY=$(date +%Y%m%d)
+
+# Find existing tasks with today's date
+EXISTING=$(find ./docs/tasks -maxdepth 1 -type d -name "${TODAY}-*" 2>/dev/null | wc -l)
+
+# Calculate next counter (pad to 3 digits)
+COUNTER=$(printf "%03d" $((EXISTING + 1)))
+
+# Generate folder ID
+FOLDER_ID="${TODAY}-${COUNTER}-[bug-name]"
+```
+
+**Example:**
+- Date: January 22, 2025
+- Existing tasks today: 2
+- New folder ID: `20250122-003-user-auth-timeout`
+
+### 6. Update tasks.json
+Create or update `./docs/tasks/tasks.json` to track this task:
+
+**If tasks.json doesn't exist, create it:**
+```json
+{
+  "tasks": []
+}
+```
+
+**Add new task entry:**
+```json
+{
+  "id": "20250122-003-user-auth-timeout",
+  "type": "bug",
+  "status": "pending",
+  "priority": null,
+  "created": "2025-01-22T15:45:00Z",
+  "branch": "fix/user-auth-timeout",
+  "description": "Fix user authentication timeout issue"
+}
+```
+
+**Priority Assignment:**
+- Ask user: "What priority should this bug fix have? (1=highest, 2, 3, etc., or leave empty for no priority)"
+- If user provides a number, set `priority` to that value
+- If user leaves empty, set `priority` to `null`
+- Consider severity when suggesting priority (Critical/High bugs typically get priority 1)
+
+**Notes:**
+- Use ISO 8601 format for timestamps
+- `status` starts as "pending" for new tasks
+- `priority` is optional (null) - used to order pending tasks
+
+### 7. Review & Save
 1. Review the document against the **Role & Standards**
 2. Ensure root cause is identified (or best hypothesis documented)
 3. Ensure fix requirements are implementation-ready
 4. Save the file:
-   - **Path:** `./docs/tasks/[bug-name]/bug-[bug-name].md`
-   - **Naming:** Use kebab-case matching the branch name (e.g., `user-authentication-timeout`)
+   - **Path:** `./docs/tasks/[FOLDER_ID]/bug-[bug-name].md`
+   - **Format:** `YYYYMMDD-NNN-[bug-name]/bug-[bug-name].md`
    - Create directory if needed
 
 **Example:**
-- Branch: `fix/user-authentication-timeout`
-- Document Path: `./docs/tasks/user-authentication-timeout/bug-user-authentication-timeout.md`
+- Branch: `fix/user-auth-timeout`
+- Folder ID: `20250122-003-user-auth-timeout`
+- Document Path: `./docs/tasks/20250122-003-user-auth-timeout/bug-user-auth-timeout.md`
+- tasks.json entry created with priority (if specified)
 
-### 6. Commit Document
-Commit the bug analysis to the fix branch:
+### 8. Commit Document and Metadata
+Commit the bug analysis and updated tasks.json to the fix branch:
 
 ```bash
-git add docs/tasks/[bug-name]/
+git add docs/tasks/[FOLDER_ID]/ docs/tasks/tasks.json
 git commit -m "docs: add bug analysis for [bug-name]
 
 - Document reproduction steps and root cause
 - Define fix requirements and testing strategy
-- Outline acceptance criteria"
+- Outline acceptance criteria
+- Add task tracking entry"
 ```
 
 ## Output
 - Fix branch created: `fix/[bug-name]`
-- Bug analysis document saved to `./docs/tasks/[bug-name]/bug-[bug-name].md`
-- Document committed to fix branch
+- Task folder created with unique ID: `./docs/tasks/[FOLDER_ID]/`
+- Bug analysis document saved to `./docs/tasks/[FOLDER_ID]/bug-[bug-name].md`
+- tasks.json updated with new task entry (status: pending, priority: user-specified or null)
+- Document and metadata committed to fix branch
 - Ready for implementation via `/task-implement` command
 
 ## Success Criteria
 - [ ] Fix branch created with consistent naming
+- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
 - [ ] Bug analysis contains all required sections
 - [ ] Reproduction steps are clear and actionable
 - [ ] Root cause is identified or best hypothesis documented
 - [ ] Fix requirements are atomic and testable
 - [ ] Testing strategy includes regression tests
 - [ ] Acceptance criteria are measurable
-- [ ] Document is saved to correct location
-- [ ] Document is committed to the fix branch
-- [ ] Branch name matches document filename
+- [ ] Document is saved to correct location with unique folder ID
+- [ ] tasks.json created (if needed) and updated with new task entry
+- [ ] Task entry includes: id, type, status, priority, created timestamp, branch, description
+- [ ] Document and tasks.json committed to the fix branch
+- [ ] Branch name matches task name (not folder ID prefix)
 - [ ] User has confirmed the analysis is complete and accurate
 
 ## Notes

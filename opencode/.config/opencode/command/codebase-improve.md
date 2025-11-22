@@ -188,16 +188,59 @@ If user confirms, proceed. If not, ask what to adjust.
 #### 3.2 Create Refactor Task Documents
 For each approved recommendation:
 
-**1. Generate task name:** 
-- Convert recommendation title to kebab-case
-- Example: "Extract Authentication Logic" → `extract-auth-logic`
+**1. Generate task folder ID:** 
+```bash
+# Get today's date in YYYYMMDD format
+TODAY=$(date +%Y%m%d)
+
+# Find existing tasks with today's date
+EXISTING=$(find ./docs/tasks -maxdepth 1 -type d -name "${TODAY}-*" 2>/dev/null | wc -l)
+
+# Calculate next counter (pad to 3 digits)
+COUNTER=$(printf "%03d" $((EXISTING + 1)))
+
+# Generate folder ID with kebab-case task name
+FOLDER_ID="${TODAY}-${COUNTER}-[task-name]"
+```
+
+Example: `20250122-005-extract-auth-logic`
 
 **2. Create directory:**
 ```bash
-mkdir -p ./docs/tasks/[task-name]
+mkdir -p ./docs/tasks/[FOLDER_ID]
 ```
 
-**3. Create `refactor-[task-name].md` with full specification:**
+**3. Update tasks.json:**
+Create or update `./docs/tasks/tasks.json`:
+
+**If tasks.json doesn't exist, create it:**
+```json
+{
+  "tasks": []
+}
+```
+
+**Add task entry for each refactoring:**
+```json
+{
+  "id": "20250122-005-extract-auth-logic",
+  "type": "refactor",
+  "status": "pending",
+  "priority": null,
+  "created": "2025-01-22T17:00:00Z",
+  "branch": "refactor/extract-auth-logic",
+  "description": "Extract authentication logic into separate service modules"
+}
+```
+
+**Notes:**
+- Generate one entry per approved refactoring
+- Use ISO 8601 format for timestamps
+- `status` starts as "pending"
+- `priority` will be set after all tasks created (see step 4)
+- `branch` uses standard naming: `refactor/[task-name]`
+
+**4. Create `refactor-[task-name].md` with full specification:**
 
 ```markdown
 ---
@@ -372,7 +415,51 @@ RR-5: Add new tests for refactored modules
 
 **4. Save the file**
 
-#### 3.3 Create Master Analysis Report
+#### 3.4 Assign Priorities
+After creating all task documents, ask user to prioritize:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PRIORITY ASSIGNMENT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+I've created Y refactor tasks. Let's assign priorities.
+
+Suggested priority order based on impact/effort analysis:
+
+1. [Task Name 1] (Quick Win - High impact, Easy effort)
+2. [Task Name 2] (Quick Win - High impact, Easy effort)
+3. [Task Name 3] (Strategic - High impact, Medium effort)
+4. [Task Name 4] (Low Priority - Medium impact, Medium effort)
+...
+
+Options:
+- Press ENTER to accept suggested order (priorities 1, 2, 3, 4...)
+- Type custom priorities: "2,1,3,4" to reorder
+- Type "skip" to leave all priorities as null
+
+Your choice:
+```
+
+**Update tasks.json with priorities:**
+```bash
+# Update each task's priority field based on user input
+jq '(.tasks[] | select(.id == "20250122-005-extract-auth-logic") | .priority) = 1' \
+   ./docs/tasks/tasks.json > tmp.json && mv tmp.json ./docs/tasks/tasks.json
+
+jq '(.tasks[] | select(.id == "20250122-006-remove-dead-code") | .priority) = 2' \
+   ./docs/tasks/tasks.json > tmp.json && mv tmp.json ./docs/tasks/tasks.json
+
+# ... repeat for each task
+```
+
+**Notes:**
+- Priority 1 = highest (do first)
+- Lower numbers = higher priority
+- Null priority = no specific order
+- Update all tasks in one session for consistency
+
+#### 3.5 Create Master Analysis Report
 Save comprehensive analysis to: `./analyses/codebase-simplification-[YYYY-MM-DD].md`
 
 **Structure:**
@@ -419,7 +506,7 @@ Save comprehensive analysis to: `./analyses/codebase-simplification-[YYYY-MM-DD]
 
 **Summary:** [Brief description]
 
-**Task Document:** `./docs/tasks/[name]/refactor-[name].md`
+**Task Document:** `./docs/tasks/[FOLDER_ID]/refactor-[name].md`
 
 **Next Steps:** Run `/task-implement` on `refactor/[name]` branch
 
@@ -491,29 +578,30 @@ After implementing all approved refactorings, expect:
 
 📁 Created Files:
 - Master analysis: ./analyses/codebase-simplification-[date].md
+- Task metadata: ./docs/tasks/tasks.json (Y tasks added)
 - Refactor tasks:
-  1. ./docs/tasks/[name-1]/refactor-[name-1].md
-  2. ./docs/tasks/[name-2]/refactor-[name-2].md
+  1. ./docs/tasks/[FOLDER_ID-1]/refactor-[name-1].md (Priority: 1)
+  2. ./docs/tasks/[FOLDER_ID-2]/refactor-[name-2].md (Priority: 2)
   ...
 
-🎯 Recommended Implementation Order:
+🎯 Recommended Implementation Order (by priority):
 
-**Quick Wins** (Start here - high impact, low effort):
-1. [task-name-1] (~X hours)
-   - Impact: [description]
-   - Run: /task-implement (will auto-detect on refactor/[name-1] branch)
+**Priority 1** (Start here - highest impact):
+- [task-name-1] (~X hours)
+  - Folder: ./docs/tasks/[FOLDER_ID-1]/
+  - Impact: [description]
+  - Run: /task-implement (will auto-detect on refactor/[name-1] branch)
 
-2. [task-name-2] (~X hours)
-   - Impact: [description]
-   - Run: /task-implement (will auto-detect on refactor/[name-2] branch)
+**Priority 2** (After priority 1):
+- [task-name-2] (~X hours)
+  - Folder: ./docs/tasks/[FOLDER_ID-2]/
+  - Impact: [description]
+  - Run: /task-implement (will auto-detect on refactor/[name-2] branch)
 
-**Strategic** (After quick wins - high impact, more effort):
-3. [task-name-3] (~X hours)
-   - Impact: [description]
-
-**Low Priority** (Nice to have):
-4. [task-name-4] (~X hours)
-   - Impact: [description]
+**Priority 3**:
+- [task-name-3] (~X hours)
+  - Folder: ./docs/tasks/[FOLDER_ID-3]/
+  - Impact: [description]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -524,12 +612,13 @@ Option 1 (Recommended): Implement highest priority refactor now
   (This will auto-create refactor/[name-1] branch and start implementation)
 
 Option 2: Review task documents first
-  $ cat ./docs/tasks/[name-1]/refactor-[name-1].md
+  $ cat ./docs/tasks/[FOLDER_ID-1]/refactor-[name-1].md
 
 Option 3: Review full analysis report
   $ cat ./analyses/codebase-simplification-[date].md
 
-Option 4: Implement multiple refactors (run sequentially, one at a time)
+Option 4: Check all pending tasks
+  $ jq '.tasks[] | select(.status=="pending") | {id, priority, description}' ./docs/tasks/tasks.json | sort_by(.priority)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
@@ -550,6 +639,10 @@ Option 4: Implement multiple refactors (run sequentially, one at a time)
 
 ### Task Documents Complete When:
 - [ ] One refactor-*.md created for each approved recommendation
+- [ ] Each document uses unique YYYYMMDD-NNN-[name] folder ID
+- [ ] tasks.json created (if needed) and updated with all refactor tasks
+- [ ] Each task entry includes: id, type, status, priority, created timestamp, branch, description
+- [ ] User has assigned priorities to all tasks (or explicitly skipped)
 - [ ] Each document contains:
   - [ ] Complete refactoring specification
   - [ ] Current and target state
@@ -558,7 +651,7 @@ Option 4: Implement multiple refactors (run sequentially, one at a time)
   - [ ] Trade-off analysis
   - [ ] Acceptance criteria
 - [ ] Master analysis report created with all findings
-- [ ] Clear implementation roadmap provided
+- [ ] Clear implementation roadmap provided (sorted by priority)
 - [ ] User knows exactly what to do next
 
 ### Quality Standards:

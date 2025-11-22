@@ -41,7 +41,26 @@ Determine which task document to implement by detecting task type from branch:
    git branch --show-current
    ```
 
-2. Detect task type from branch prefix and locate document:
+2. Detect task type from branch prefix and locate document in tasks.json:
+
+```bash
+# Read tasks.json and find task matching current branch
+BRANCH=$(git branch --show-current)
+TASK=$(jq -r --arg branch "$BRANCH" '.tasks[] | select(.branch == $branch)' ./docs/tasks/tasks.json)
+```
+
+**Detection Logic:**
+- Extract task from tasks.json where `branch` field matches current branch
+- If found: Use the `id` field to locate the folder (e.g., `20250122-001-user-profile`)
+- Build document path based on task type:
+  - `type: "feature"` → `./docs/tasks/[id]/prd-[name].md`
+  - `type: "bug"` → `./docs/tasks/[id]/bug-[name].md`
+  - `type: "refactor"` → `./docs/tasks/[id]/refactor-[name].md`
+- If found AND matches: Use automatically (no confirmation needed)
+- If not found in tasks.json: Fall back to legacy path detection
+
+**Legacy Path Detection (fallback):**
+If task not found in tasks.json, try legacy folder structure:
 
 | Branch Pattern | Task Type  | Expected Document Path                            |
 |---------------|------------|---------------------------------------------------|
@@ -49,27 +68,23 @@ Determine which task document to implement by detecting task type from branch:
 | `fix/*`       | Bug Fix    | `./docs/tasks/[name]/bug-[name].md`              |
 | `refactor/*`  | Refactor   | `./docs/tasks/[name]/refactor-[name].md`         |
 
-**Detection Logic:**
-- Extract task name from branch (e.g., `feature/user-profile-editing` → `user-profile-editing`)
-- Build expected path based on task type
-- If found AND branch name matches filename: Use automatically (no confirmation needed)
-- If found but names don't match: Ask user "Found task document at [path]. Use this? (Y/n)"
-- If not found: Proceed to manual input
-
-**Manual input (fallback):**
+**Manual input (last resort):**
 - If not on a recognized branch OR no matching document found OR user provided explicit path via `$ARGUMENTS`
 - Ask user for the exact file path of the task document
 
 **Examples:**
 ```
 Branch: feature/user-profile-editing
-Expected: ./docs/tasks/user-profile-editing/prd-user-profile-editing.md
+tasks.json lookup: finds id="20250122-001-user-profile-editing"
+Expected: ./docs/tasks/20250122-001-user-profile-editing/prd-user-profile-editing.md
 
 Branch: fix/auth-timeout
-Expected: ./docs/tasks/auth-timeout/bug-auth-timeout.md
+tasks.json lookup: finds id="20250122-002-auth-timeout"
+Expected: ./docs/tasks/20250122-002-auth-timeout/bug-auth-timeout.md
 
 Branch: refactor/database-layer
-Expected: ./docs/tasks/database-layer/refactor-database-layer.md
+tasks.json lookup: finds id="20250122-003-database-layer"
+Expected: ./docs/tasks/20250122-003-database-layer/refactor-database-layer.md
 ```
 
 #### 1.1 Analyze Task Document
@@ -136,15 +151,28 @@ For Refactorings:
 - Verify: No breaking changes, all tests pass
 ```
 
-#### 1.4 Git Setup
-Check if already on the correct task branch:
+#### 1.4 Git Setup & Update Task Status
+Check if already on the correct task branch and update task status:
 
 ```bash
 git branch --show-current
 ```
 
+**Update tasks.json status:**
+```bash
+# Find and update task status to "in_progress"
+jq --arg branch "$(git branch --show-current)" \
+   '(.tasks[] | select(.branch == $branch) | .status) = "in_progress"' \
+   ./docs/tasks/tasks.json > tmp.json && mv tmp.json ./docs/tasks/tasks.json
+
+# Commit the status change
+git add docs/tasks/tasks.json
+git commit -m "chore: mark task as in_progress"
+```
+
 **If already on task branch (e.g., from planning command):**
 - Stay on current branch
+- Update task status to "in_progress" in tasks.json
 - Ensure branch is up to date with main/develop:
   ```bash
   git fetch origin
@@ -158,13 +186,14 @@ git branch --show-current
   git pull origin main
   git checkout -b [prefix]/[task-name]
   ```
+- Update task status to "in_progress" in tasks.json
   
 **Branch prefixes by task type:**
 - Features: `feature/[name]`
 - Bug Fixes: `fix/[name]`
 - Refactorings: `refactor/[name]`
 
-**Note:** If the task document was created via a planning command, you should already be on the correct branch.
+**Note:** If the task document was created via a planning command, you should already be on the correct branch and the task should be in tasks.json.
 
 ### Phase 2: Implementation
 
@@ -242,6 +271,12 @@ Before requesting manual testing, verify:
 - [ ] Error handling and edge cases are covered
 - [ ] Documentation is updated
 
+**Update tasks.json status:**
+```bash
+# Update task status (keep as "in_progress" until user approves)
+# We'll mark it "done" only after manual testing approval
+```
+
 **Task-specific checks:**
 
 For Features:
@@ -281,6 +316,27 @@ If user reports issues:
 - Add new tasks for fixes to TodoWrite
 - Implement fixes autonomously
 - Re-test and request validation again
+
+**If user approves:**
+Update tasks.json to mark task as complete:
+```bash
+# Update task status to "done" and add completion timestamp
+jq --arg branch "$(git branch --show-current)" \
+   --arg completed "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
+   '(.tasks[] | select(.branch == $branch) | .status) = "done" | 
+    (.tasks[] | select(.branch == $branch) | .completed) = $completed | 
+    (.tasks[] | select(.branch == $branch) | .priority) = null' \
+   ./docs/tasks/tasks.json > tmp.json && mv tmp.json ./docs/tasks/tasks.json
+
+# Commit the status change
+git add docs/tasks/tasks.json
+git commit -m "chore: mark task as completed"
+```
+
+**Notes:**
+- `status` changes to "done"
+- `completed` timestamp added
+- `priority` set to null (completed tasks don't need priority)
 
 ### Phase 4: Pull Request Submission
 
@@ -365,6 +421,10 @@ After addressing all feedback:
 - Comprehensive implementation of task from document
 - All tests passing
 - Git commits following conventional commit format
+- tasks.json updated with task status:
+  - Status changed from "pending" → "in_progress" → "done"
+  - Completion timestamp added
+  - Priority cleared (set to null)
 - Pull request created and ready for review
 - User validation and approval
 
@@ -376,12 +436,14 @@ After addressing all feedback:
 - [ ] All requirements from task document are satisfied
 - [ ] Code is committed with clear, conventional commit messages
 - [ ] User has manually tested and approved functionality
+- [ ] tasks.json updated with status="done" and completion timestamp
 
 ### PR Complete When:
 - [ ] Pull request created with descriptive title and body
 - [ ] All review comments addressed (if applicable)
 - [ ] CI/CD checks pass
 - [ ] User is notified of PR status
+- [ ] tasks.json changes committed and pushed
 
 ## Notes
 

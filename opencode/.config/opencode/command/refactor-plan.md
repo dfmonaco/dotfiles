@@ -231,40 +231,102 @@ git checkout -b refactor/[refactor-name]
 
 **Important:** The branch name should match the refactoring document filename for seamless integration with the `/task-implement` command.
 
-### 5. Review & Save
+### 5. Generate Task Folder ID
+Before saving, generate a unique folder ID using the date-counter convention:
+
+```bash
+# Get today's date in YYYYMMDD format
+TODAY=$(date +%Y%m%d)
+
+# Find existing tasks with today's date
+EXISTING=$(find ./docs/tasks -maxdepth 1 -type d -name "${TODAY}-*" 2>/dev/null | wc -l)
+
+# Calculate next counter (pad to 3 digits)
+COUNTER=$(printf "%03d" $((EXISTING + 1)))
+
+# Generate folder ID
+FOLDER_ID="${TODAY}-${COUNTER}-[refactor-name]"
+```
+
+**Example:**
+- Date: January 22, 2025
+- Existing tasks today: 3
+- New folder ID: `20250122-004-auth-service-extraction`
+
+### 6. Update tasks.json
+Create or update `./docs/tasks/tasks.json` to track this task:
+
+**If tasks.json doesn't exist, create it:**
+```json
+{
+  "tasks": []
+}
+```
+
+**Add new task entry:**
+```json
+{
+  "id": "20250122-004-auth-service-extraction",
+  "type": "refactor",
+  "status": "pending",
+  "priority": null,
+  "created": "2025-01-22T16:20:00Z",
+  "branch": "refactor/auth-service-extraction",
+  "description": "Extract authentication logic into separate service modules"
+}
+```
+
+**Priority Assignment:**
+- Ask user: "What priority should this refactoring have? (1=highest, 2, 3, etc., or leave empty for no priority)"
+- If user provides a number, set `priority` to that value
+- If user leaves empty, set `priority` to `null`
+- Consider effort/impact when suggesting priority (Quick wins typically get higher priority)
+
+**Notes:**
+- Use ISO 8601 format for timestamps
+- `status` starts as "pending" for new tasks
+- `priority` is optional (null) - used to order pending tasks
+
+### 7. Review & Save
 1. Review the document against the **Role & Standards**
 2. Ensure current state is thoroughly documented
 3. Ensure target state is clear and achievable
 4. Ensure safety strategy is comprehensive
 5. Save the file:
-   - **Path:** `./docs/tasks/[refactor-name]/refactor-[refactor-name].md`
-   - **Naming:** Use kebab-case matching the branch name (e.g., `auth-service-extraction`)
+   - **Path:** `./docs/tasks/[FOLDER_ID]/refactor-[refactor-name].md`
+   - **Format:** `YYYYMMDD-NNN-[refactor-name]/refactor-[refactor-name].md`
    - Create directory if needed
 
 **Example:**
 - Branch: `refactor/auth-service-extraction`
-- Document Path: `./docs/tasks/auth-service-extraction/refactor-auth-service-extraction.md`
+- Folder ID: `20250122-004-auth-service-extraction`
+- Document Path: `./docs/tasks/20250122-004-auth-service-extraction/refactor-auth-service-extraction.md`
+- tasks.json entry created with priority (if specified)
 
-### 6. Commit Document
-Commit the refactoring spec to the refactor branch:
+### 8. Commit Document and Metadata
+Commit the refactoring spec and updated tasks.json to the refactor branch:
 
 ```bash
-git add docs/tasks/[refactor-name]/
+git add docs/tasks/[FOLDER_ID]/ docs/tasks/tasks.json
 git commit -m "docs: add refactoring spec for [refactor-name]
 
 - Document current state and target improvements
 - Define refactoring requirements and safety strategy
-- Outline acceptance criteria and rollback plan"
+- Outline acceptance criteria and rollback plan
+- Add task tracking entry"
 ```
 
 ## Output
 - Refactor branch created: `refactor/[refactor-name]`
-- Refactoring specification saved to `./docs/tasks/[refactor-name]/refactor-[refactor-name].md`
-- Document committed to refactor branch
+- Task folder created with unique ID: `./docs/tasks/[FOLDER_ID]/`
+- Refactoring specification saved to `./docs/tasks/[FOLDER_ID]/refactor-[refactor-name].md`
+- tasks.json updated with new task entry (status: pending, priority: user-specified or null)
+- Document and metadata committed to refactor branch
 - Ready for implementation via `/task-implement` command
 
 ## Success Criteria
 - [ ] Refactor branch created with consistent naming
+- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
 - [ ] Refactoring spec contains all required sections
 - [ ] Current state is thoroughly analyzed with file references
 - [ ] Target state is clear and well-defined
@@ -273,9 +335,11 @@ git commit -m "docs: add refactoring spec for [refactor-name]
 - [ ] Breaking changes are explicitly documented (preferably none)
 - [ ] Rollback strategy is defined
 - [ ] Acceptance criteria are measurable
-- [ ] Document is saved to correct location
-- [ ] Document is committed to the refactor branch
-- [ ] Branch name matches document filename
+- [ ] Document is saved to correct location with unique folder ID
+- [ ] tasks.json created (if needed) and updated with new task entry
+- [ ] Task entry includes: id, type, status, priority, created timestamp, branch, description
+- [ ] Document and tasks.json committed to the refactor branch
+- [ ] Branch name matches task name (not folder ID prefix)
 - [ ] User has confirmed the specification is complete and accurate
 
 ## Notes

@@ -86,42 +86,105 @@ git checkout -b feature/[feature-name]
 
 **Important:** The branch name should match the PRD filename for seamless integration with the `/task-implement` command.
 
-### 5. Review & Save
+### 5. Generate Task Folder ID
+Before saving, generate a unique folder ID using the date-counter convention:
+
+```bash
+# Get today's date in YYYYMMDD format
+TODAY=$(date +%Y%m%d)
+
+# Find existing tasks with today's date
+EXISTING=$(find ./docs/tasks -maxdepth 1 -type d -name "${TODAY}-*" 2>/dev/null | wc -l)
+
+# Calculate next counter (pad to 3 digits)
+COUNTER=$(printf "%03d" $((EXISTING + 1)))
+
+# Generate folder ID
+FOLDER_ID="${TODAY}-${COUNTER}-[feature-name]"
+```
+
+**Example:**
+- Date: January 22, 2025
+- Existing tasks today: 1 (20250122-001-user-auth)
+- New folder ID: `20250122-002-user-profile-editing`
+
+### 6. Update tasks.json
+Create or update `./docs/tasks/tasks.json` to track this task:
+
+**If tasks.json doesn't exist, create it:**
+```json
+{
+  "tasks": []
+}
+```
+
+**Add new task entry:**
+```json
+{
+  "id": "20250122-002-user-profile-editing",
+  "type": "feature",
+  "status": "pending",
+  "priority": null,
+  "created": "2025-01-22T14:30:00Z",
+  "branch": "feature/user-profile-editing",
+  "description": "Add user profile editing functionality"
+}
+```
+
+**Priority Assignment:**
+- Ask user: "What priority should this task have? (1=highest, 2, 3, etc., or leave empty for no priority)"
+- If user provides a number, set `priority` to that value
+- If user leaves empty, set `priority` to `null`
+
+**Notes:**
+- Use ISO 8601 format for timestamps
+- `status` starts as "pending" for new tasks
+- `priority` is optional (null) - used to order pending tasks
+
+### 7. Review & Save
 1. Review the PRD against the **Role & Standards**
 2. Ensure all Functional Requirements are implementation-ready
 3. Save the file:
-   - **Path:** `./docs/tasks/[feature-name]/prd-[feature-name].md`
-   - **Naming:** Use kebab-case matching the branch name (e.g., `user-profile-editing`)
+   - **Path:** `./docs/tasks/[FOLDER_ID]/prd-[feature-name].md`
+   - **Format:** `YYYYMMDD-NNN-[feature-name]/prd-[feature-name].md`
    - Create directory if needed
 
 **Example:**
 - Branch: `feature/user-profile-editing`
-- PRD Path: `./docs/tasks/user-profile-editing/prd-user-profile-editing.md`
+- Folder ID: `20250122-002-user-profile-editing`
+- PRD Path: `./docs/tasks/20250122-002-user-profile-editing/prd-user-profile-editing.md`
+- tasks.json entry created with priority (if specified)
 
-### 6. Commit PRD
-Commit the PRD to the feature branch:
+### 8. Commit PRD and Metadata
+Commit the PRD and updated tasks.json to the feature branch:
 
 ```bash
-git add docs/tasks/[feature-name]/
+git add docs/tasks/[FOLDER_ID]/ docs/tasks/tasks.json
 git commit -m "docs: add PRD for [feature-name]
 
 - Define feature requirements and scope
 - Include user stories and acceptance criteria
-- Document technical considerations"
+- Document technical considerations
+- Add task tracking entry"
 ```
 
 ## Output
 - Feature branch created: `feature/[feature-name]`
-- PRD document saved to `./docs/tasks/[feature-name]/prd-[feature-name].md`
-- PRD committed to feature branch
+- Task folder created with unique ID: `./docs/tasks/[FOLDER_ID]/`
+- PRD document saved to `./docs/tasks/[FOLDER_ID]/prd-[feature-name].md`
+- tasks.json updated with new task entry (status: pending, priority: user-specified or null)
+- PRD and metadata committed to feature branch
 - Ready for implementation via `/task-implement` command
 
 ## Success Criteria
 - [ ] Feature branch created with consistent naming
+- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
 - [ ] PRD contains all required sections
 - [ ] All Functional Requirements are atomic and testable
 - [ ] Edge cases and error states are documented
-- [ ] PRD is saved to correct location
-- [ ] PRD is committed to the feature branch
-- [ ] Branch name matches PRD filename
+- [ ] PRD is saved to correct location with unique folder ID
+- [ ] tasks.json created (if needed) and updated with new task entry
+- [ ] Task entry includes: id, type, status, priority, created timestamp, branch, description
+- [ ] PRD and tasks.json committed to the feature branch
+- [ ] Branch name matches task name (not folder ID prefix)
 - [ ] User has confirmed the PRD is complete and accurate
