@@ -37,6 +37,14 @@ return {
         desc = "Toggle Terminal 3",
         mode = { "n", "t" },
       },
+      {
+        "<C-6>",
+        function()
+          require("toggleterm").toggle(4, 80, nil, "vertical", "Console 4")
+        end,
+        desc = "Toggle Terminal 4",
+        mode = { "n", "t" },
+      },
     },
   },
   {
