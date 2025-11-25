@@ -18,11 +18,9 @@ keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving"
 -- Buffer operations (organized under <leader>b*)
 keymap.set("n", "<Tab>", ":bn<CR>", { desc = "Go to next buffer" })
 keymap.set("n", "<S-Tab>", ":bp<CR>", { desc = "Go to previous buffer" })
-keymap.set("n", "<leader>bn", ":bn<CR>", { desc = "Next buffer" })
-keymap.set("n", "<leader>bp", ":bp<CR>", { desc = "Previous buffer" })
-keymap.set("n", "<leader>bb", "<C-^>", { desc = "Toggle between last two buffers" })
 keymap.set("n", "<leader>ba", ":keepjumps normal! ggVG<CR>", { desc = "Select all in buffer" })
 keymap.set("n", "<leader>b=", "gg=G", { desc = "Auto-indent entire buffer" })
+keymap.set("n", "<leader><leader>", "<C-^>", { desc = "Toggle between last two buffers" })
 
 -- Delete buffer and file (dangerous operation under <leader>b*)
 local function confirm_and_delete_buffer()
