@@ -14,6 +14,8 @@ return {
       { "<leader>c", group = "code", icon = "" },
       { "<leader>f", group = "find", icon = "" },
       { "<leader>g", group = "git", icon = "" },
+      { "<leader>h", group = "hunk", icon = "" },
+      { "<leader>o", group = "opencode", icon = "" },
       { "<leader>gh", group = "github", icon = "" },
       { "<leader>s", group = "search", icon = "" },
       { "<leader>u", group = "ui/toggle", icon = "" },
