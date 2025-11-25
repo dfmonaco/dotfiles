@@ -228,20 +228,20 @@ Related to: [file paths and line numbers]"
 **Example commits:**
 ```bash
 # Commit 1 - Fix for comment #1
-git commit -m "fix: correct pib → self bug in dept_amg model
+git commit -m "fix: correct user → self bug in user model
 
 Addresses review comment #1: undefined method error
-- Changed pib.something to self.something in pib.rb:357
+- Changed user.something to self.something in user.rb:357
 
-Related to: app/models/dept_amg/pib.rb:357"
+Related to: app/models/user.rb:357"
 
 # Commit 2 - Fix for comment #2
-git commit -m "fix: add missing && operator in pib policy
+git commit -m "fix: add missing && operator in auth policy
 
 Addresses review comment #2: logic error in authorization
-- Added && between conditions in pib_policy.rb:88-89
+- Added && between conditions in auth_policy.rb:88-89
 
-Related to: app/policies/dept_amg/pib_policy.rb:88-89"
+Related to: app/policies/auth_policy.rb:88-89"
 ```
 
 ### 7. Push Changes
