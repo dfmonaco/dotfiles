@@ -149,7 +149,9 @@ Implement all agreed-upon fixes automatically:
 - Ensure changes follow project conventions (check AGENTS.md or similar files)
 - Write/update tests if needed
 - Verify the fix actually addresses the concern
-- Proceed to step 5 (Run Tests)
+- **Create one git commit per fix** (see step 6 for commit format)
+- Run tests after each commit to ensure no regressions
+- Proceed to step 5 (Run Tests) after all fixes are committed
 
 #### For Guided Mode:
 Execute fixes one-by-one with user approval:
@@ -175,45 +177,80 @@ For each task in the approved action plan:
    ✅ Fixed: [Task description]
    Changes made:
    - [List of specific changes]
+   ```
+
+4. **Commit the fix immediately** (see step 6 for commit format):
+   ```
+   Create commit for this fix? (yes/skip)
+   ```
    
-   Continue to next task? (yes/no)
+   If yes, create one git commit for this specific fix, then run tests to verify.
+
+5. Repeat until all tasks are processed or user aborts
+
+6. After all fixes are complete:
+   ```
+   All approved fixes completed and committed. Ready to push? (yes/no)
    ```
 
-4. Repeat until all tasks are processed or user aborts
-
-5. After all fixes are complete, ask:
-   ```
-   All approved fixes completed. Ready to run tests and commit? (yes/no)
-   ```
-
-Wait for final approval before proceeding to step 5.
+Wait for final approval before proceeding to step 7 (Push Changes).
 
 ### 5. Run Tests
-After all fixes are implemented:
+After each fix is implemented and committed:
 ```bash
 # Use the project's test command (check AGENTS.md)
 [test command from project]
 ```
 
-Verify all tests pass before proceeding.
+Verify all tests pass before proceeding to the next fix. If tests fail, fix the issue and amend the commit.
 
 ### 6. Commit Changes
-Create a well-structured commit:
-```bash
-git add -A
-git commit -m "fix: address PR review feedback - [brief summary]
+**IMPORTANT: Create one git commit per fixed issue/comment.**
 
-- [Comment #1]: [what was fixed]
-- [Comment #2]: [what was fixed]
-- [Comment #3]: [what was fixed]
-- Added/updated N tests
-- All tests passing"
+For each fix implemented, create a focused commit:
+```bash
+git add [files related to this specific fix]
+git commit -m "fix: [specific issue from Comment #N] - [brief summary]
+
+Addresses review comment #N: [comment summary]
+- [what was changed in this file]
+- [what was changed in that file]
+
+Related to: [file paths and line numbers]"
+```
+
+**Commit message guidelines:**
+- Reference the specific comment number being addressed
+- Keep the subject line focused on the single issue being fixed
+- Include file paths and line numbers in the body
+- Use conventional commit format (fix/refactor/test/etc.)
+
+**Example commits:**
+```bash
+# Commit 1 - Fix for comment #1
+git commit -m "fix: correct pib → self bug in dept_amg model
+
+Addresses review comment #1: undefined method error
+- Changed pib.something to self.something in pib.rb:357
+
+Related to: app/models/dept_amg/pib.rb:357"
+
+# Commit 2 - Fix for comment #2
+git commit -m "fix: add missing && operator in pib policy
+
+Addresses review comment #2: logic error in authorization
+- Added && between conditions in pib_policy.rb:88-89
+
+Related to: app/policies/dept_amg/pib_policy.rb:88-89"
 ```
 
 ### 7. Push Changes
+After all fixes are committed:
 ```bash
 git push
 ```
+
+This will push all individual commits for each fix to the remote branch.
 
 ### 8. Post Summary Comment
 Use the following command to post a summary comment on the PR (using the PR number identified earlier):
@@ -226,7 +263,7 @@ Your summary should:
 - List each comment with a ✅ or 💬 indicator
 - Explain what was fixed or why you disagree
 - Include test results
-- Reference the commit hash
+- Reference the commit hash(es) - one per fix
 
 Example format:
 ```markdown
@@ -235,10 +272,10 @@ Example format:
 Thanks for the thorough review!
 
 ### ✅ Comment #1: [Issue]
-**Fixed** - [Brief explanation of the fix]
+**Fixed in commit abc123** - [Brief explanation of the fix]
 
 ### ✅ Comment #2: [Issue]  
-**Fixed** - [Brief explanation of the fix]
+**Fixed in commit def456** - [Brief explanation of the fix]
 
 ### 💬 Comment #3: [Issue]
 **Discussion** - [Why you disagree and proposed alternative]
@@ -247,7 +284,7 @@ Thanks for the thorough review!
 - [Test command ran]
 - **All X tests passing** ✅
 
-Commit: [hash]
+Commits: abc123, def456, ghi789
 ```
 
 ### 9. Reply to Individual Comments
@@ -303,12 +340,13 @@ Current branch:
 1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
 2. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments`
 3. Analyze all comments and present assessment
-4. Implement all agreed-upon fixes automatically
-5. Run tests: `[project test command]`
-6. Commit: `git commit -m "fix: address PR review feedback"`
-7. Push: `git push`
-8. Post summary: `gh pr comment PR_NUMBER --body "..."`
-9. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
+4. For each agreed-upon fix:
+   - Implement the fix
+   - Run tests to verify
+   - Create one commit for this specific fix
+5. Push all commits: `git push`
+6. Post summary: `gh pr comment PR_NUMBER --body "..."`
+7. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ### Guided Mode
 1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
@@ -320,20 +358,20 @@ Current branch:
    - Present task details
    - Wait for user approval (yes/skip/abort)
    - If approved, implement fix and show changes
+   - Run tests to verify
+   - Create one commit for this specific fix
    - Ask to continue to next task
-7. After all tasks complete, ask for final approval
-8. Run tests: `[project test command]`
-9. Commit: `git commit -m "fix: address PR review feedback"`
-10. Push: `git push`
-11. Post summary: `gh pr comment PR_NUMBER --body "..."`
-12. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
+7. After all tasks complete, ask for final approval to push
+8. Push all commits: `git push`
+9. Post summary: `gh pr comment PR_NUMBER --body "..."`
+10. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ## Output
 - Detailed analysis of each review comment
 - Implemented fixes for agreed-upon issues
 - All tests passing
-- Commit with changes pushed to branch
-- Summary comment posted to PR
+- **One commit per fix** with changes pushed to branch
+- Summary comment posted to PR with all commit hashes
 - Individual replies to review comments
 
 ## Success Criteria
@@ -345,7 +383,9 @@ Current branch:
 - [ ] **Guided Mode Only**: Action plan presented and approved by user
 - [ ] **Guided Mode Only**: Each fix approved individually before implementation
 - [ ] All agreed fixes implemented correctly
-- [ ] All tests passing
+- [ ] All tests passing after each fix
+- [ ] **One commit created per fixed issue/comment**
+- [ ] Each commit message references the specific comment addressed
 - [ ] Changes committed and pushed
 - [ ] Summary comment posted to PR
 - [ ] Individual comments replied to
@@ -360,9 +400,10 @@ Current branch:
 4. **Categorize properly** - Distinguish between CRITICAL, IMPORTANT, and IMPROVEMENT severity levels
 5. **Guided mode patience** - Wait for user approval at each checkpoint before proceeding
 6. **Test everything** - Always run tests after making changes
-7. **One commit** - Make a single, well-structured commit with all fixes
-8. **Clear communication** - Make it easy for reviewers to see what was done
-9. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
+7. **One commit per fix** - Create a separate, focused commit for each issue/comment addressed
+8. **Commit message quality** - Each commit must reference the specific comment number and issue
+9. **Clear communication** - Make it easy for reviewers to see what was done
+10. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
 
 ### Severity Guidelines
 - **CRITICAL**: Bugs that cause errors, crashes, or incorrect behavior; security issues; data corruption
