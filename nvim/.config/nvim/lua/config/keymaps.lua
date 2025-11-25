@@ -13,7 +13,6 @@ keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight
 -- File operations
 keymap.set("n", "<leader>j", "<cmd>w<CR>", { desc = "Save file" })
 keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsaved changes)" })
-keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving" })
 
 -- Buffer operations (organized under <leader>b*)
 keymap.set("n", "<Tab>", ":bn<CR>", { desc = "Go to next buffer" })
