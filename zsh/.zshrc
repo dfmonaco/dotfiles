@@ -55,6 +55,7 @@ alias o='opencode'
 # editor
 alias v='nvim'
 alias vim='nvim'
+alias nvim-test='NVIM_APPNAME=nvim-test nvim'
 
 # ruby
 alias be='bundle exec'
