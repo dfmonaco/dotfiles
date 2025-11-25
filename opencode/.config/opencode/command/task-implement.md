@@ -123,6 +123,18 @@ Use the TodoWrite tool to create a comprehensive task list with:
 - **Testing Tasks:** Unit tests, integration tests, validation against requirements
 - **Finalization Tasks:** Documentation updates, cleanup
 
+**Task Priority Assignment:**
+Assign priority to each task based on best practice criteria without asking the user:
+- **high:** Critical path items that block other work, breaking bugs, security issues, core functionality
+- **medium:** Important features, non-blocking bugs, refactorings that improve maintainability
+- **low:** Nice-to-have features, minor optimizations, documentation updates, code cleanup
+
+Use your best judgment based on:
+- Dependencies between tasks (blockers = high priority)
+- Impact on functionality (core features = high, enhancements = medium/low)
+- Urgency and severity (critical bugs = high, minor issues = low)
+- Task type context (refactoring cleanup = low, refactoring core logic = medium/high)
+
 **Task Naming Convention (adapt based on task type):**
 
 For Features:
