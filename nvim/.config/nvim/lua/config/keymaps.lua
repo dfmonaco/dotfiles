@@ -10,7 +10,7 @@ vim.g.maplocalleader = " " -- Set space as local leader key
 -- General
 keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
--- File operations (kept simple for muscle memory)
+-- File operations
 keymap.set("n", "<leader>j", "<cmd>w<CR>", { desc = "Save file" })
 keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsaved changes)" })
 keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving" })
@@ -23,7 +23,6 @@ keymap.set("n", "<leader>bp", ":bp<CR>", { desc = "Previous buffer" })
 keymap.set("n", "<leader>bb", "<C-^>", { desc = "Toggle between last two buffers" })
 keymap.set("n", "<leader>ba", ":keepjumps normal! ggVG<CR>", { desc = "Select all in buffer" })
 keymap.set("n", "<leader>b=", "gg=G", { desc = "Auto-indent entire buffer" })
--- Note: <leader>bd is provided by snacks.nvim (smart buffer delete)
 
 -- Delete buffer and file (dangerous operation under <leader>b*)
 local function confirm_and_delete_buffer()
@@ -43,13 +42,8 @@ keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
 keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
 keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
--- Window management (organized under <leader>w*)
-keymap.set("n", "<leader>ww", "<C-w>w", { desc = "Switch to next window" })
+-- Window management
 keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
-keymap.set("n", "<leader>ws", "<cmd>split<CR>", { desc = "Split horizontal" })
-keymap.set("n", "<leader>wv", "<cmd>vsplit<CR>", { desc = "Split vertical" })
-keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize window sizes" })
-keymap.set("n", "<C-q>", "<C-w>c", { desc = "Close window (keeps buffer open)" })
 
 -- Terminal mode
 keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode to normal mode" })
