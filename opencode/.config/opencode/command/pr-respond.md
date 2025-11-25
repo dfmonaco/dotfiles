@@ -151,6 +151,9 @@ Implement all agreed-upon fixes automatically:
 - Verify the fix actually addresses the concern
 - **Create one git commit per fix** (see step 6 for commit format)
 - Run tests after each commit to ensure no regressions
+- **Push and reply to each comment** (see step 9 for reply format):
+  - Push the commit to remote: `git push`
+  - Reply to the specific comment explaining what was fixed and how
 - Proceed to step 5 (Run Tests) after all fixes are committed
 
 #### For Guided Mode:
@@ -169,7 +172,7 @@ For each task in the approved action plan:
 
 2. Wait for user input:
    - **yes**: Implement the fix and show the changes made
-   - **skip**: Skip this task and move to the next
+   - **skip**: Skip this task and reply to the comment explaining why we're skipping it (see step 9 for reply format)
    - **abort**: Stop the entire process
 
 3. After implementing each fix, show:
@@ -183,10 +186,14 @@ For each task in the approved action plan:
    ```
    Create commit for this fix? (yes/skip)
    ```
-   
+
    If yes, create one git commit for this specific fix, then run tests to verify.
 
-5. Repeat until all tasks are processed or user aborts
+5. **Reply to the comment** (see step 9 for reply format):
+   - Push the commit to remote: `git push`
+   - Reply to the specific comment explaining what was fixed and how
+
+6. Repeat until all tasks are processed or user aborts
 
 6. After all fixes are complete:
    ```
@@ -344,9 +351,9 @@ Current branch:
    - Implement the fix
    - Run tests to verify
    - Create one commit for this specific fix
-5. Push all commits: `git push`
-6. Post summary: `gh pr comment PR_NUMBER --body "..."`
-7. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
+   - Push commit and reply to the specific comment
+5. Post summary: `gh pr comment PR_NUMBER --body "..."`
+6. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ### Guided Mode
 1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
@@ -357,12 +364,11 @@ Current branch:
 6. For each task in approved plan:
    - Present task details
    - Wait for user approval (yes/skip/abort)
-   - If approved, implement fix and show changes
-   - Run tests to verify
-   - Create one commit for this specific fix
+   - If approved: implement fix, show changes, run tests, create commit, push and reply to comment
+   - If skipped: reply to comment explaining why we're skipping it
    - Ask to continue to next task
-7. After all tasks complete, ask for final approval to push
-8. Push all commits: `git push`
+7. After all tasks complete, ask for final approval to push remaining commits
+8. Push any remaining commits: `git push`
 9. Post summary: `gh pr comment PR_NUMBER --body "..."`
 10. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
@@ -386,6 +392,8 @@ Current branch:
 - [ ] All tests passing after each fix
 - [ ] **One commit created per fixed issue/comment**
 - [ ] Each commit message references the specific comment addressed
+- [ ] **Each fixed comment replied to with explanation of fix**
+- [ ] **Each skipped comment replied to with explanation of skip**
 - [ ] Changes committed and pushed
 - [ ] Summary comment posted to PR
 - [ ] Individual comments replied to
@@ -402,8 +410,9 @@ Current branch:
 6. **Test everything** - Always run tests after making changes
 7. **One commit per fix** - Create a separate, focused commit for each issue/comment addressed
 8. **Commit message quality** - Each commit must reference the specific comment number and issue
-9. **Clear communication** - Make it easy for reviewers to see what was done
-10. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
+9. **Reply to each comment** - After fixing or skipping, reply to the specific comment explaining what was done
+10. **Clear communication** - Make it easy for reviewers to see what was done
+11. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
 
 ### Severity Guidelines
 - **CRITICAL**: Bugs that cause errors, crashes, or incorrect behavior; security issues; data corruption
