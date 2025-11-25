@@ -2,47 +2,85 @@
 -- https://github.com/nvim-lualine/lualine.nvim
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-  event = "VeryLazy",
   opts = {
     options = {
-      icons_enabled = true,
-      theme = "auto", -- Auto-detect from colorscheme
-      component_separators = { left = "", right = "" },
-      section_separators = { left = "", right = "" },
-      disabled_filetypes = {
-        statusline = {},
-        winbar = {},
-      },
-      ignore_focus = {},
-      always_divide_middle = true,
-      always_show_tabline = true,
-      globalstatus = false,
-      refresh = {
-        statusline = 1000,
-        tabline = 1000,
-        winbar = 1000,
-      },
+      theme = "auto",
+      component_separators = "",
+      section_separators = "",
+      globalstatus = true,
     },
     sections = {
-      lualine_a = { "mode" },
-      lualine_b = { "branch", "diff", "diagnostics" },
-      lualine_c = { "filename" },
-      lualine_x = { "encoding", "fileformat", "filetype" },
-      lualine_y = { "progress" },
-      lualine_z = { "location" },
+      -- Left side
+      lualine_a = {
+        {
+          "mode",
+          fmt = function(mode)
+            local mode_map = {
+              ["NORMAL"] = "N",
+              ["INSERT"] = "I",
+              ["VISUAL"] = "V",
+              ["V-LINE"] = "VL",
+              ["V-BLOCK"] = "VB",
+              ["COMMAND"] = "C",
+              ["REPLACE"] = "R",
+              ["TERMINAL"] = "T",
+              ["SELECT"] = "S",
+              ["S-LINE"] = "SL",
+              ["S-BLOCK"] = "SB",
+              ["EX"] = "E",
+              ["O-PENDING"] = "O",
+            }
+            return mode_map[mode] or mode:sub(1, 1)
+          end,
+        },
+      },
+      lualine_b = {
+        {
+          function()
+            local cwd = vim.fn.getcwd()
+            local home = vim.env.HOME
+            if cwd:find(home, 1, true) == 1 then
+              return "~" .. cwd:sub(#home + 1)
+            end
+            return cwd
+          end,
+        },
+      },
+      lualine_c = {
+        {
+          "branch",
+          icon = "",
+        },
+      },
+      -- Right side
+      lualine_x = {
+        -- Prompt buffer icon indicator
+        {
+          function()
+            local status = require('nvim-opencode').statusline.get_status()
+            if status.prompt_buffer then
+              return status.prompt_icon  -- Returns 💬
+            end
+            return ''
+          end,
+        },
+        -- OpenCode statusline component
+        {
+          function()
+            return require('nvim-opencode').statusline.get_component()
+          end,
+        },
+      },
+      lualine_y = {},
+      lualine_z = {},
     },
     inactive_sections = {
       lualine_a = {},
       lualine_b = {},
-      lualine_c = { "filename" },
-      lualine_x = { "location" },
+      lualine_c = {},
+      lualine_x = {},
       lualine_y = {},
       lualine_z = {},
     },
-    tabline = {},
-    winbar = {},
-    inactive_winbar = {},
-    extensions = {},
   },
 }
