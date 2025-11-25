@@ -11,7 +11,7 @@ vim.g.maplocalleader = " " -- Set space as local leader key
 keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
 -- File operations
-keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
+keymap.set("n", "<leader>j", "<cmd>w<CR>", { desc = "Save file" })
 keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsaved changes)" })
 keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving" })
 
@@ -34,9 +34,7 @@ keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
 keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 
 -- Window management
-keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
-keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
-keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
+keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
 keymap.set("n", "<C-q>", "<C-w>c", { desc = "Close window (keeps buffer open)" })
 
 -- Terminal mode
