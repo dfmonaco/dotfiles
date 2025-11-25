@@ -12,10 +12,11 @@ return {
     spec = {
       { "<leader>f", group = "find", icon = "" },
       { "<leader>g", group = "git", icon = "" },
-      { "<leader>gh", group = "hunks", icon = "" },
+      { "<leader>gh", group = "github", icon = "" },
       { "<leader>b", group = "buffer", icon = "" },
       { "<leader>c", group = "code", icon = "" },
       { "<leader>s", group = "search", icon = "" },
+      { "<leader>u", group = "ui/toggle", icon = "" },
       { "<leader>w", group = "windows", proxy = "<c-w>", icon = "" },
     },
 
