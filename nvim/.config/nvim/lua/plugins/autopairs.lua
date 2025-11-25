@@ -8,15 +8,6 @@ return {
       javascript = { "string", "template_string" },
       typescript = { "string", "template_string" },
     },
+    map_cr = true, -- Map <CR> to insert closing pair
   },
-  config = function(_, opts)
-    local npairs = require("nvim-autopairs")
-    npairs.setup(opts)
-
-    -- Integration with blink.cmp
-    local cmp = require("blink.cmp")
-    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-
-    cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-  end,
 }
