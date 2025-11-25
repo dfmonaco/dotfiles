@@ -10,43 +10,22 @@ vim.g.maplocalleader = " " -- Set space as local leader key
 -- General
 keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
 
--- File operations
+-- File operations (kept simple for muscle memory)
 keymap.set("n", "<leader>j", "<cmd>w<CR>", { desc = "Save file" })
 keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsaved changes)" })
 keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving" })
 
--- Buffer operations
+-- Buffer operations (organized under <leader>b*)
 keymap.set("n", "<Tab>", ":bn<CR>", { desc = "Go to next buffer" })
 keymap.set("n", "<S-Tab>", ":bp<CR>", { desc = "Go to previous buffer" })
-keymap.set("n", "<leader>d", "<cmd>bdelete<CR>", { desc = "Delete current buffer" })
-keymap.set("n", "<leader><leader>", "<C-^>", { desc = "Toggle between last two buffers" })
+keymap.set("n", "<leader>bn", ":bn<CR>", { desc = "Next buffer" })
+keymap.set("n", "<leader>bp", ":bp<CR>", { desc = "Previous buffer" })
+keymap.set("n", "<leader>bb", "<C-^>", { desc = "Toggle between last two buffers" })
+keymap.set("n", "<leader>ba", ":keepjumps normal! ggVG<CR>", { desc = "Select all in buffer" })
+keymap.set("n", "<leader>b=", "gg=G", { desc = "Auto-indent entire buffer" })
+-- Note: <leader>bd is provided by snacks.nvim (smart buffer delete)
 
--- Selection
-keymap.set("n", "<leader>0", ":keepjumps normal! ggVG<CR>", { desc = "Select entire buffer" })
-
--- Formatting
-keymap.set("n", "<leader>=", "gg=G", { desc = "Auto-indent entire file" })
-
--- Window navigation
-keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
-keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
-keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
-keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
-
--- Window management
-keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
-keymap.set("n", "<C-q>", "<C-w>c", { desc = "Close window (keeps buffer open)" })
-
--- Terminal mode
-keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode to normal mode" })
-
--- Visual mode indenting
--- Keeps selection after indenting so you can indent multiple times
-keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
-keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
-
--- Delete buffer and file
--- This is dangerous! It deletes both the buffer AND the actual file from disk
+-- Delete buffer and file (dangerous operation under <leader>b*)
 local function confirm_and_delete_buffer()
   local confirm = vim.fn.confirm("Delete buffer and file from disk?", "&Yes\n&No", 2)
   if confirm == 1 then
@@ -56,5 +35,26 @@ local function confirm_and_delete_buffer()
     vim.notify("Deleted: " .. filepath, vim.log.levels.INFO)
   end
 end
+keymap.set("n", "<leader>bD", confirm_and_delete_buffer, { desc = "Delete buffer AND file (dangerous!)" })
 
-keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "Delete buffer AND file (dangerous!)" })
+-- Window navigation
+keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
+keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
+keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Window management (organized under <leader>w*)
+keymap.set("n", "<leader>ww", "<C-w>w", { desc = "Switch to next window" })
+keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
+keymap.set("n", "<leader>ws", "<cmd>split<CR>", { desc = "Split horizontal" })
+keymap.set("n", "<leader>wv", "<cmd>vsplit<CR>", { desc = "Split vertical" })
+keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Equalize window sizes" })
+keymap.set("n", "<C-q>", "<C-w>c", { desc = "Close window (keeps buffer open)" })
+
+-- Terminal mode
+keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode to normal mode" })
+
+-- Visual mode indenting
+-- Keeps selection after indenting so you can indent multiple times
+keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
