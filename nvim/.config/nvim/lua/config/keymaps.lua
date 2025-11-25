@@ -1,0 +1,62 @@
+-- Key mappings
+local keymap = vim.keymap
+
+-- Leader key setup
+-- Disable space in normal mode to prevent conflicts before setting it as leader
+keymap.set("n", "<Space>", "<Nop>", { silent = true })
+vim.g.mapleader = " " -- Set space as leader key
+vim.g.maplocalleader = " " -- Set space as local leader key
+
+-- General
+keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
+
+-- File operations
+keymap.set("n", "<leader>w", "<cmd>w<CR>", { desc = "Save file" })
+keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsaved changes)" })
+keymap.set("n", "<leader>x", "<cmd>q!<CR>", { desc = "Force quit without saving" })
+
+-- Buffer operations
+keymap.set("n", "<Tab>", ":bn<CR>", { desc = "Go to next buffer" })
+keymap.set("n", "<S-Tab>", ":bp<CR>", { desc = "Go to previous buffer" })
+keymap.set("n", "<leader>d", "<cmd>bdelete<CR>", { desc = "Delete current buffer" })
+keymap.set("n", "<leader><leader>", "<C-^>", { desc = "Toggle between last two buffers" })
+
+-- Selection
+keymap.set("n", "<leader>0", ":keepjumps normal! ggVG<CR>", { desc = "Select entire buffer" })
+
+-- Formatting
+keymap.set("n", "<leader>=", "gg=G", { desc = "Auto-indent entire file" })
+
+-- Window navigation
+keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move to left window" })
+keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move to bottom window" })
+keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move to top window" })
+keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
+
+-- Window management
+keymap.set("n", "<leader>sv", "<C-w>v", { desc = "Split window vertically" })
+keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
+keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
+keymap.set("n", "<C-q>", "<C-w>c", { desc = "Close window (keeps buffer open)" })
+
+-- Terminal mode
+keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode to normal mode" })
+
+-- Visual mode indenting
+-- Keeps selection after indenting so you can indent multiple times
+keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- Delete buffer and file
+-- This is dangerous! It deletes both the buffer AND the actual file from disk
+local function confirm_and_delete_buffer()
+  local confirm = vim.fn.confirm("Delete buffer and file from disk?", "&Yes\n&No", 2)
+  if confirm == 1 then
+    local filepath = vim.fn.expand("%")
+    os.remove(filepath)
+    vim.api.nvim_buf_delete(0, { force = true })
+    vim.notify("Deleted: " .. filepath, vim.log.levels.INFO)
+  end
+end
+
+keymap.set("n", "<leader>D", confirm_and_delete_buffer, { desc = "Delete buffer AND file (dangerous!)" })
