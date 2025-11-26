@@ -7,6 +7,26 @@ description: Interactively configure Neovim plugins with latest documentation
 ## Objective
 Interactively configure Neovim plugins by fetching the latest documentation, proposing configurations that follow best practices, and applying changes to your Neovim setup. Handles adding new plugins, fixing issues, updating configurations, and removing plugins with validation and testing.
 
+## CRITICAL: Neovim Configuration Directory
+
+**ALWAYS use this exact directory path for ALL Neovim configuration operations:**
+```
+./nvim/.config/nvim/
+```
+
+This is the ONLY correct location for Neovim config files in this dotfiles repository. Specifically:
+- Plugin files: `./nvim/.config/nvim/lua/plugins/*.lua`
+- Core config files: `./nvim/.config/nvim/lua/config/*.lua`
+- Main init file: `./nvim/.config/nvim/init.lua`
+
+**DO NOT use these incorrect paths:**
+- ❌ `~/.config/nvim/`
+- ❌ `.config/nvim/`
+- ❌ `/home/user/.config/nvim/`
+- ❌ Any other variation
+
+**Before ANY file operations, verify you are using `./nvim/.config/nvim/` as the base path.**
+
 ## Input
 - **Optional argument:** Task type (`add`, `fix`, `update`, `remove`)
   - If provided via `$ARGUMENTS`: Use that task type directly
@@ -365,18 +385,21 @@ Once the user approves the configuration:
    ```
 
 2. **Write the configuration:**
-   - Write to: `./nvim/.config/nvim/lua/plugins/[plugin-name].lua`
+   - CRITICAL: Write to `./nvim/.config/nvim/lua/plugins/[plugin-name].lua`
+   - VERIFY the path starts with `./nvim/.config/nvim/`
    - Use the approved configuration
    - Ensure proper Lua formatting
 
 3. **Update related files if needed:**
-   - If keybindings should be in `keymaps.lua` instead, update that file
-   - If global options are needed, update `options.lua`
+   - If keybindings should be in `keymaps.lua` instead, update `./nvim/.config/nvim/lua/config/keymaps.lua`
+   - If global options are needed, update `./nvim/.config/nvim/lua/config/options.lua`
+   - Always verify paths start with `./nvim/.config/nvim/`
 
 #### For FIX/UPDATE Tasks
 
 1. **Backup the current configuration:**
    ```bash
+   # CRITICAL: Use the correct dotfiles path
    cp ./nvim/.config/nvim/lua/plugins/[plugin-name].lua ./nvim/.config/nvim/lua/plugins/[plugin-name].lua.bak
    ```
 
@@ -392,6 +415,7 @@ Once the user approves the configuration:
 
 1. **Remove the plugin file:**
    ```bash
+   # CRITICAL: Use the correct dotfiles path
    rm ./nvim/.config/nvim/lua/plugins/[plugin-name].lua
    ```
 
@@ -411,6 +435,7 @@ Perform automated checks and guide user through manual testing:
 
 1. **Check Lua syntax:**
    ```bash
+   # CRITICAL: Use the correct dotfiles path
    nvim --headless -c "lua dofile('./nvim/.config/nvim/lua/plugins/[plugin-name].lua')" -c "q" 2>&1
    ```
 
@@ -562,6 +587,7 @@ Commit the configuration changes with a descriptive message:
 
 1. **Stage changes:**
    ```bash
+   # CRITICAL: Use the correct dotfiles path
    # Stage the plugin configuration file
    git add ./nvim/.config/nvim/lua/plugins/[plugin-name].lua
    
