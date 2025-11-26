@@ -38,11 +38,7 @@ return {
         {
           function()
             local cwd = vim.fn.getcwd()
-            local home = vim.env.HOME
-            if cwd:find(home, 1, true) == 1 then
-              return "~" .. cwd:sub(#home + 1)
-            end
-            return cwd
+            return vim.fn.fnamemodify(cwd, ":t")
           end,
         },
       },
