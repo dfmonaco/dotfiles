@@ -45,7 +45,7 @@ return {
       lualine_c = {
         {
           "branch",
-          icon = "",
+          icon = "󰊢",
         },
       },
       -- Right side
