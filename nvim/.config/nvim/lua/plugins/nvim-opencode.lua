@@ -3,5 +3,8 @@
 return {
   {
     dir = "~/code/nvim-opencode",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+    },
   },
 }
