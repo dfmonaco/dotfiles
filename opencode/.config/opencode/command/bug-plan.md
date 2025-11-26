@@ -173,16 +173,21 @@ Create or update `./docs/tasks/tasks.json` to track this task:
 }
 ```
 
-**Priority Assignment:**
-- Ask user: "What priority should this bug fix have? (1=highest, 2, 3, etc., or leave empty for no priority)"
-- If user provides a number, set `priority` to that value
-- If user leaves empty, set `priority` to `null`
-- Consider severity when suggesting priority (Critical/High bugs typically get priority 1)
+**Task Priority Assignment:**
+Assign priority to each task based on best practice criteria without asking the user:
+- **high:** Critical path items that block other work, breaking bugs, security issues, core functionality
+- **medium:** Important features, non-blocking bugs, refactorings that improve maintainability
+- **low:** Nice-to-have features, minor optimizations, documentation updates, code cleanup
+
+Use your best judgment based on:
+- Dependencies between tasks (blockers = high priority)
+- Impact on functionality (core features = high, enhancements = medium/low)
+- Urgency and severity (critical bugs = high, minor issues = low)
+- Task type context (refactoring cleanup = low, refactoring core logic = medium/high)
 
 **Notes:**
 - Use ISO 8601 format for timestamps
 - `status` starts as "pending" for new tasks
-- `priority` is optional (null) - used to order pending tasks
 
 ### 7. Review & Save
 1. Review the document against the **Role & Standards**
