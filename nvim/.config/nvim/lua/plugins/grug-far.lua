@@ -82,7 +82,7 @@ return {
         -- Preview
         preview = "<localleader>p",
         -- Quickfix
-        qflist = "<localleader>q",
+        qflist = "<localleader>f",
       },
       
       -- Window options
