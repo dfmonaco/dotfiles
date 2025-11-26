@@ -26,10 +26,37 @@ return {
         --- Please note some names can/will break the
         --- bufferline so use this at your discretion knowing that it has
         --- some limitations that will *NOT* be fixed.
-        max_name_length = 18,
-        max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
+        
+        -- UPDATED: Custom name formatter to show parent directory for duplicates
+        name_formatter = function(buf)
+          -- Get the full path
+          local path = buf.path
+          local filename = vim.fn.fnamemodify(path, ":t")
+          
+          -- Check if there are other buffers with the same filename
+          local buffers = vim.fn.getbufinfo({ buflisted = 1 })
+          local duplicates = {}
+          
+          for _, b in ipairs(buffers) do
+            if vim.fn.fnamemodify(b.name, ":t") == filename and b.bufnr ~= buf.bufnr then
+              table.insert(duplicates, b.name)
+            end
+          end
+          
+          -- If duplicates exist, show parent directory
+          if #duplicates > 0 then
+            local parent = vim.fn.fnamemodify(path, ":h:t")
+            return parent .. "/" .. filename
+          end
+          
+          -- Otherwise just show filename
+          return filename
+        end,
+        
+        max_name_length = 25, -- UPDATED: Increased to accommodate parent folder
+        max_prefix_length = 20, -- UPDATED: Increased for better visibility
         truncate_names = true, -- whether or not tab names should be truncated
-        tab_size = 18,
+        tab_size = 25, -- UPDATED: Increased for parent folder display
         diagnostics = false, -- | "nvim_lsp" | "coc"
         diagnostics_update_in_insert = false,
         -- The diagnostics indicator can be set to nil to keep the buffer name highlight but delete the highlighting
@@ -38,7 +65,7 @@ return {
         show_buffer_close_icons = true,
         show_close_icon = true,
         show_tab_indicators = true,
-        show_duplicate_prefix = true, -- whether to show duplicate buffer prefix
+        show_duplicate_prefix = true, -- UPDATED: Enable showing duplicate prefix
         duplicates_across_groups = true, -- whether to consider duplicate paths in different groups as duplicates
         persist_buffer_sort = true, -- whether or not custom sorted buffers should persist
         move_wraps_at_ends = false, -- whether or not the move command "wraps" at the first or last position
