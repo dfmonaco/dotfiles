@@ -72,6 +72,7 @@ alias gd='git diff'
 alias gds='git diff --staged'
 alias gco='git checkout'
 alias lg='lazygit'
+alias prm='gh pr merge --merge --delete-branch'
 
 # yazi
 alias e='yazi'
