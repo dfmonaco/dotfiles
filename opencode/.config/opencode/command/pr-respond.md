@@ -70,9 +70,74 @@ This will return the PR number for the current branch. Store this as the PR numb
 **Note:** If no PR is found for the current branch, inform the user and exit. The command requires an active PR for the current branch.
 
 ### 2. Fetch Review Comments
-Use the following command to fetch all review comments from the PR (replace PR_NUMBER with the number identified above):
+
+**⚠️ CRITICAL: Data Truncation Risk**
+
+GitHub API responses can be truncated when there are many comments. **YOU MUST VALIDATE COMPLETENESS BEFORE PROCEEDING.**
+
+#### Step 2.1: Validate Comment Count
+
+First, count the total number of comments and verify completeness:
+
+```bash
+# 1. Get comment count from API
+COMMENT_COUNT=$(gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments | jq 'length')
+echo "📊 API returned $COMMENT_COUNT review comments"
+
+# 2. Check for truncation warning in bash output
+# If you see "(Output was truncated due to length limit)" - DATA IS INCOMPLETE!
+
+# 3. Get comment summaries to verify completeness
+echo ""
+echo "📝 Review comment summaries:"
+gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments | jq -r '.[] | "Comment #\(.id) - \(.path):\(.line) - \(.body[0:80])..."'
+```
+
+**⚠️ TRUNCATION CHECK:**
+- If bash output shows `(Output was truncated due to length limit)` → **STOP AND USE ALTERNATIVE METHOD**
+- If the summaries list looks incomplete or cut off → **STOP AND USE ALTERNATIVE METHOD**
+- If you're unsure about completeness → **ASK USER TO VERIFY**
+
+#### Step 2.2: Alternative Method for Large Comment Threads
+
+If data appears truncated, use paginated fetching:
+
+```bash
+# Fetch with pagination (100 comments per page)
+gh api --paginate repos/OWNER/REPO/pulls/PR_NUMBER/comments > /tmp/pr_comments_full.json
+
+# Count total comments from paginated response
+TOTAL_COMMENTS=$(jq 'length' /tmp/pr_comments_full.json)
+echo "📊 Total comments (paginated): $TOTAL_COMMENTS"
+
+# Verify file is complete (check if it ends with valid JSON)
+tail -1 /tmp/pr_comments_full.json | jq . > /dev/null && echo "✅ JSON is valid and complete" || echo "❌ JSON is truncated or invalid"
+```
+
+#### Step 2.3: User Verification
+
+**BEFORE PROCEEDING, ALWAYS ASK:**
+
+```
+Found $COMMENT_COUNT review comments on PR #$PR_NUMBER
+
+Please verify this matches what you see on GitHub:
+- Open: https://github.com/OWNER/REPO/pull/PR_NUMBER/files
+- Check the "Conversations" tab for total comment count
+
+Does the count match? (yes/no/unsure)
+```
+
+**Wait for user confirmation before proceeding.** If user says "no" or "unsure", use the alternative paginated method.
+
+#### Step 2.4: Parse Comments
+
+Once data completeness is verified, use the following command to fetch all review comments from the PR:
+
 ```bash
 gh api repos/OWNER/REPO/pulls/PR_NUMBER/comments
+# OR if using paginated method:
+cat /tmp/pr_comments_full.json
 ```
 
 Parse the JSON response to extract:
@@ -81,6 +146,12 @@ Parse the JSON response to extract:
 - `path` - The file path
 - `body` - The review comment text
 - `in_reply_to_id` - If this is a reply (usually null for original comments)
+
+**⚠️ VALIDATION CHECKPOINT:**
+After parsing, verify:
+- Total comments parsed matches the count from Step 2.1
+- All comment IDs are present in your analysis
+- No comment bodies are incomplete or cut off mid-sentence
 
 ### 3. Analyze Each Comment
 For each review comment:
@@ -345,32 +416,36 @@ Current branch:
 
 ### Autonomous Mode
 1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
-2. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments`
-3. Analyze all comments and present assessment
-4. For each agreed-upon fix:
+2. **Validate comment count and check for truncation** (Step 2.1-2.3)
+3. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments` (or paginated if needed)
+4. **Wait for user confirmation that count matches GitHub UI**
+5. Analyze all comments and present assessment
+6. For each agreed-upon fix:
    - Implement the fix
    - Run tests to verify
    - Create one commit for this specific fix
    - Push commit and reply to the specific comment
-5. Post summary: `gh pr comment PR_NUMBER --body "..."`
-6. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
+7. Post summary: `gh pr comment PR_NUMBER --body "..."`
+8. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ### Guided Mode
 1. Identify PR: `gh pr list --head $(git branch --show-current) --json number --jq '.[0].number'`
-2. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments`
-3. Analyze all comments and categorize by severity
-4. Present comprehensive action plan with phases
-5. Wait for user approval of action plan
-6. For each task in approved plan:
+2. **Validate comment count and check for truncation** (Step 2.1-2.3)
+3. Fetch comments: `gh api repos/owner/repo/pulls/PR_NUMBER/comments` (or paginated if needed)
+4. **Wait for user confirmation that count matches GitHub UI**
+5. Analyze all comments and categorize by severity
+6. Present comprehensive action plan with phases
+7. Wait for user approval of action plan
+8. For each task in approved plan:
    - Present task details
    - Wait for user approval (yes/skip/abort)
    - If approved: implement fix, show changes, run tests, create commit, push and reply to comment
    - If skipped: reply to comment explaining why we're skipping it
    - Ask to continue to next task
-7. After all tasks complete, ask for final approval to push remaining commits
-8. Push any remaining commits: `git push`
-9. Post summary: `gh pr comment PR_NUMBER --body "..."`
-10. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
+9. After all tasks complete, ask for final approval to push remaining commits
+10. Push any remaining commits: `git push`
+11. Post summary: `gh pr comment PR_NUMBER --body "..."`
+12. Reply to each comment: `gh api -X POST repos/owner/repo/pulls/PR_NUMBER/comments ...`
 
 ## Output
 - Detailed analysis of each review comment
@@ -383,6 +458,8 @@ Current branch:
 ## Success Criteria
 - [ ] User selected operation mode (Autonomous or Guided)
 - [ ] PR number successfully identified from current branch
+- [ ] **Comment data completeness validated (no truncation)**
+- [ ] **User confirmed comment count matches GitHub UI**
 - [ ] All review comments fetched and analyzed
 - [ ] Each comment has clear agree/disagree reasoning
 - [ ] Comments categorized by severity (CRITICAL/IMPORTANT/IMPROVEMENT)
@@ -403,16 +480,41 @@ Current branch:
 
 ### Important Guidelines
 1. **Mode selection first** - Always ask for mode immediately after command execution
-2. **Be thorough** - Don't skip analysis even if you agree immediately
-3. **Be honest** - If you disagree, explain why clearly
-4. **Categorize properly** - Distinguish between CRITICAL, IMPORTANT, and IMPROVEMENT severity levels
-5. **Guided mode patience** - Wait for user approval at each checkpoint before proceeding
-6. **Test everything** - Always run tests after making changes
-7. **One commit per fix** - Create a separate, focused commit for each issue/comment addressed
-8. **Commit message quality** - Each commit must reference the specific comment number and issue
-9. **Reply to each comment** - After fixing or skipping, reply to the specific comment explaining what was done
-10. **Clear communication** - Make it easy for reviewers to see what was done
-11. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
+2. **Validate data completeness** - ALWAYS check for truncation before processing comments (see Step 2.1-2.3)
+3. **Be thorough** - Don't skip analysis even if you agree immediately
+4. **Be honest** - If you disagree, explain why clearly
+5. **Categorize properly** - Distinguish between CRITICAL, IMPORTANT, and IMPROVEMENT severity levels
+6. **Guided mode patience** - Wait for user approval at each checkpoint before proceeding
+7. **Test everything** - Always run tests after making changes
+8. **One commit per fix** - Create a separate, focused commit for each issue/comment addressed
+9. **Commit message quality** - Each commit must reference the specific comment number and issue
+10. **Reply to each comment** - After fixing or skipping, reply to the specific comment explaining what was done
+11. **Clear communication** - Make it easy for reviewers to see what was done
+12. **Reference specifics** - Always cite line numbers, commit hashes, and comment IDs
+
+### Truncation Risk Management
+
+**⚠️ CRITICAL: API responses can be truncated with large comment threads.**
+
+**Always validate before processing:**
+1. Check bash output for `(Output was truncated due to length limit)` warning
+2. Count comments and verify with user
+3. Use paginated fetching (`--paginate`) for large responses
+4. Validate JSON completeness (proper closing brackets, valid parse)
+5. Verify parsed comment count matches API count
+
+**Signs of truncation:**
+- Bash output shows truncation warning
+- Comment summaries cut off mid-list
+- JSON parsing errors
+- Comment bodies end abruptly
+- Missing expected comments user mentions
+
+**If truncation detected:**
+1. STOP processing immediately
+2. Switch to paginated method (Step 2.2)
+3. Save to temp file for validation
+4. Re-verify completeness before continuing
 
 ### Severity Guidelines
 - **CRITICAL**: Bugs that cause errors, crashes, or incorrect behavior; security issues; data corruption
