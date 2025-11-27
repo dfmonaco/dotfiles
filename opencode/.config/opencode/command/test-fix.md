@@ -74,20 +74,29 @@ If test command is unclear:
 3. Look for test framework config files (jest.config.js, pytest.ini, etc.)
 
 #### 1.3 Run Initial Test Suite
-Execute the test command and capture output:
+Execute the test command **in non-verbose mode first** to quickly detect failures:
 
 ```bash
 [test command] 2>&1
 ```
 
-**Important:** Capture full output including error messages, stack traces, and failure summaries.
+**Important:**
+- Run tests WITHOUT verbose flags first (e.g., use `npm test` not `npm test -- --verbose`)
+- Only capture basic pass/fail summary initially
+- This provides fast feedback on whether anything is broken
 
-#### 1.4 Analyze Results
+#### 1.4 Analyze Results & Get Context if Needed
 Parse test output to identify:
 - **Total tests:** How many tests exist
 - **Passing tests:** Current success count
 - **Failing tests:** List of failures with error messages
 - **Test categories:** Unit, integration, e2e, etc.
+
+**If tests fail and more context is needed:**
+- Re-run the specific failing tests with verbose flags
+- Add debugging output or use test framework's detailed error reporting
+- Example: `npm test -- --verbose path/to/failing-test.spec.ts`
+- Only run verbose mode when non-verbose output doesn't provide enough information to fix
 
 #### 1.5 Create Task Plan
 If tests are failing, use TodoWrite to create a task list:
@@ -101,7 +110,7 @@ If tests are failing, use TodoWrite to create a task list:
 ```
 - Fix: [TestName] - [brief error summary] (path/to/test.spec.ts)
 - Fix: [Category] tests - [common issue across multiple tests]
-- Verify: Run full test suite and confirm all passing
+- Verify: Run full test suite (non-verbose) and confirm all passing
 ```
 
 ### Phase 2: Fix Tests
@@ -115,6 +124,7 @@ For each failing test or group:
    - Read the implementation file being tested
    - Understand what the test expects vs. what's happening
    - Identify root cause (bug in code, outdated test, missing dependency, etc.)
+   - **If non-verbose output lacks detail:** Re-run the specific failing test with verbose flags
 
 3. **Determine fix strategy:**
    - **Code bug:** Fix the implementation
@@ -128,7 +138,8 @@ For each failing test or group:
    - Add explanatory comments if the fix is non-obvious
 
 5. **Verify the fix:**
-   - Run the specific test(s) to confirm they now pass
+   - Run the specific test(s) in non-verbose mode to confirm they now pass
+   - Only use verbose mode if non-verbose doesn't clearly show pass/fail
    - Check for new failures (regressions)
 
 6. **Commit the fix:**
@@ -163,23 +174,28 @@ When fixing code (not tests):
 
 ### Phase 3: Verification
 
-#### 3.1 Run Complete Test Suite
-After all individual fixes, run the full test suite:
+#### 3.1 Run Complete Test Suite (Non-Verbose)
+After all individual fixes, run the full test suite in **non-verbose mode**:
 
 ```bash
 [test command] 2>&1
 ```
 
+**Important:**
+- Run WITHOUT verbose flags for speed
+- Only check if all tests pass or if any failures remain
+- If new failures appear, gather verbose context only for those specific tests
+
 #### 3.2 Validate Results
 Confirm:
 - [ ] All tests pass
-- [ ] No new failures introduced
+- [ ] No new failures introduced (regressions)
 - [ ] Test execution completes without errors
-- [ ] Test coverage maintained or improved (if tracked)
 
 #### 3.3 Handle Remaining Failures
 If tests still fail:
 - Analyze new or persistent failures
+- Run verbose mode only for the failing tests to get context
 - Add new tasks to TodoWrite
 - Continue fixing autonomously
 
@@ -238,7 +254,7 @@ refactor: improve [component] to pass tests
 ## Success Criteria
 
 ### Fix Complete When:
-- [ ] All tests in the suite pass
+- [ ] All tests in the suite pass (verified in non-verbose final run)
 - [ ] No regressions introduced
 - [ ] All fixes committed with clear messages
 - [ ] TodoWrite list shows all tasks completed
@@ -254,6 +270,9 @@ refactor: improve [component] to pass tests
 ## Notes
 
 ### Best Practices
+- **Start non-verbose:** Always run tests without verbose flags initially for speed
+- **Verbose only when needed:** Use verbose/detailed output only when errors need more context
+- **Final verification matters:** Always run full suite at the end to catch regressions
 - **Read before fixing:** Always examine both test and implementation files
 - **Test isolation:** Run individual tests when possible to isolate issues
 - **Think holistically:** Consider how changes affect the entire codebase
