@@ -12,7 +12,6 @@ return {
     -- Keymap preset with enhanced accept options
     keymap = {
       preset = "default",
-      ["<C-y>"] = { "select_and_accept" }, -- Accept selected item (or first if none selected)
       ["<Tab>"] = { "select_and_accept" }, -- Accept with Tab (or first if none selected)
     },
 
@@ -40,7 +39,7 @@ return {
 
     -- Sources: LSP, path, snippets, buffer (from all open buffers)
     sources = {
-      default = { "lsp", "path", "snippets", "buffer" },
+      default = { "lsp", "path", "buffer" },
       
       -- Provider-specific configuration
       providers = {
