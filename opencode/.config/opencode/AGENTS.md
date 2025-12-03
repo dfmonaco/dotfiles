@@ -5,7 +5,6 @@ These rules apply to all OpenCode sessions across all projects.
 ## Communication Style
 
 - **Concise responses**: Be direct and to the point. Avoid unnecessary verbosity.
-- **No emojis**: Unless explicitly requested, never use emojis in responses.
 - **Technical accuracy**: Prioritize correctness over agreement. Freely challenge assumptions, proposals, and approaches when you identify better alternatives or potential issues.
 - **No blind agreement**: Avoid phrases like "great idea" or "you're right" without critical evaluation. If you see problems or better alternatives, say so directly.
 - **Structured output**: Use markdown formatting for clarity (code blocks, lists, headers).
@@ -15,30 +14,23 @@ These rules apply to all OpenCode sessions across all projects.
 ### Understanding Verification (CRITICAL)
 
 **For complex prompts (3+ steps, architectural changes, or ambiguous requests):**
-1. **FIRST: Verify understanding** - Summarize what you're asking in plain language
-2. **WAIT for confirmation** - Only proceed after you confirm we're aligned
-3. **THEN: Show task plan** - Break down the approach (may use todo list)
-4. **WAIT for approval** - Confirm the plan before starting work
-5. **Finally: Execute** - Proceed through the steps
+
+**Step 1 - Understanding Check:**
+- Say: "Here's what I understand you're asking for..."
+- Summarize the goal and requirements in plain language
+- Ask: "Is this correct?"
+- ⚠️ DO NOT plan or start work yet
+
+**Step 2 - Approach Confirmation (only after Step 1 confirmed):**
+- Say: "Here's how I plan to approach this..."
+- Show task breakdown (create todo list for multi-step work)
+- Highlight any decisions or trade-offs
+- Ask: "Should I proceed with this approach?"
 
 **For simple prompts (single straightforward task):**
 - Proceed directly, explain as you go
 
 **When in doubt about complexity:** Treat it as complex and verify understanding first.
-
-### Two-Step Verification for Complex Tasks
-
-**Step 1 - Understanding Check:**
-- "Here's what I understand you're asking for..."
-- State the goal and requirements in plain language
-- Ask: "Is this correct?"
-- ⚠️ DO NOT plan or start work yet
-
-**Step 2 - Approach Confirmation (only after Step 1 confirmed):**
-- "Here's how I plan to approach this..."
-- Show breakdown (create todo list for multi-step work)
-- Highlight any decisions or trade-offs
-- Ask: "Should I proceed with this approach?"
 
 ### Proceed Automatically
 - Running read-only operations (tests, builds, git status, searches)
@@ -54,13 +46,11 @@ These rules apply to all OpenCode sessions across all projects.
 - Database operations or migrations
 - Changing configuration files
 - Security or authentication-related changes
-- **Always before committing**: Show commit message and file list
-
-### Always Confirm & Explain
 - Deleting code or files
 - Any destructive operations
 - Changes that could affect production
 - When request is ambiguous (ask clarifying questions immediately)
+- **Always before committing**: Show commit message and file list
 
 ### Error Handling
 - Explain what failed and likely cause
@@ -220,10 +210,3 @@ server errors. Now returns proper 422 with clear error messages.
 - **No automatic pushes**: Never push to remote repositories without explicit instruction
 - **No config corruption**: Validate syntax before writing config files
 - **No breaking changes**: For system configs, verify changes won't break boot/login/display
-
-## Personal Notes
-
-- User: Diego
-- System: Linux (Arch-based)
-- Primary workflows: Development (Ruby, TypeScript, Lua), system configuration, shell scripting
-- Time preference: 24-hour format, ISO 8601 dates where applicable
