@@ -163,16 +163,6 @@ feat(auth): add password reset functionality
 Users were locked out when forgetting passwords, requiring admin
 intervention. This implements self-service password reset via
 email tokens that expire after 1 hour for security.
-
-Closes #123
-```
-
-```
-refactor(users): extract validation logic to concern
-
-Validation logic was duplicated across User and AdminUser models.
-Extracting to a concern enables sharing validation rules and
-maintains consistency across user types.
 ```
 
 ```
@@ -183,16 +173,6 @@ impossible for clients to distinguish between client errors and
 server errors. Now returns proper 422 with clear error messages.
 ```
 
-```
-perf(dashboard): add database indexes for user queries
-
-Dashboard page was timing out for users with many records (5+ seconds).
-Adding composite index on (user_id, created_at) reduces query time
-to under 100ms.
-```
-
-**Notice:** Every example clearly states the problem or motivation, not just what changed.
-
 ## Testing Philosophy & Practices
 
 ### Core Principles
@@ -200,118 +180,17 @@ to under 100ms.
 **TDD Preferred:**
 - Write tests first when possible (especially for new features and bug fixes)
 - Red → Green → Refactor cycle
-- Tests define the contract and expected behavior
-
-**Pragmatic Testing:**
 - Always add tests when the opportunity arises
-- Existing code without tests → add them when touching that code
-- If fixing a bug → write a failing test first, then fix
-
-### Test Coverage Expectations
-
-**Must have tests:**
-- New features and functionality
-- Bug fixes (regression tests)
-- Public APIs and interfaces
-- Business logic and critical paths
-- Complex algorithms or calculations
-
-**Lower priority for tests:**
-- Simple getters/setters
-- Configuration files
-- View/presentation logic (unless complex)
-
-### Test Types & When to Use
-
-**Unit Tests:**
-- Test individual methods/functions in isolation
-- Fast, focused, no external dependencies
-- Primary test type for business logic
-
-**Integration Tests:**
-- Test interaction between components
-- Database interactions, API calls
-- Critical user flows
-
-**System/E2E Tests:**
-- Test complete user workflows
-- Use sparingly (slow, brittle)
-- Focus on critical happy paths
-
-### Testing Workflow
-
-**For new features:**
-1. Discuss the feature requirements
-2. Write failing tests that define expected behavior
-3. Implement the feature to make tests pass
-4. Refactor with confidence (tests protect you)
 
 **For bug fixes:**
-1. Write a failing test that reproduces the bug
-2. Fix the bug
-3. Verify the test now passes
-4. Prevents regression
-
-**For refactoring:**
-1. Ensure existing tests pass first
-2. Refactor code
-3. Tests should still pass (behavior unchanged)
-4. Add tests if coverage gaps discovered
-
-### Test Quality
+- Write a failing test that reproduces the bug first
+- Then fix the bug
+- Prevents regression
 
 **Good tests are:**
-- **Readable:** Clear setup, action, assertion (Arrange-Act-Assert)
-- **Fast:** Run quickly, enable rapid feedback
-- **Independent:** Can run in any order, no shared state
-- **Deterministic:** Same input always produces same result
-- **Focused:** Test one thing, clear failure messages
-
-**Avoid:**
-- Testing implementation details
-- Brittle tests that break on refactoring
-- Tests that depend on external state
-- Overly complex test setup
-
-## Code Style & Conventions
-
-### General
-- **Clean code**: Prioritize readability and maintainability over cleverness.
-- **Documentation**: Add comments for complex logic, but let code be self-documenting where possible.
-- **Naming**: Use descriptive names; avoid abbreviations unless widely understood.
-
-### Language-Specific
-
-**Ruby / Rails:**
-- Follow RuboCop guidelines and project's .rubocop.yml
-- Use Ruby 3+ features appropriately (pattern matching, endless methods when clear)
-- Prefer explicit over implicit (clear code over clever code)
-- Use `frozen_string_literal: true`
-- Rails conventions: fat models, skinny controllers → but prefer service objects for complex logic
-- Use strong parameters in controllers
-- Prefer ActiveRecord query interface over raw SQL (unless performance requires it)
-- Name things clearly: `User.active` not `User.a`, `calculate_total` not `calc_tot`
-- Use RSpec for tests (describe/context/it structure)
-- Avoid n+1 queries (use includes/joins appropriately)
-
-**Lua (Neovim):**
-- Follow Neovim plugin conventions and style
-- Use snake_case for functions and variables
-- Prefer local variables (limit scope, better performance)
-- Use `vim.api.*` for Neovim API calls
-- Modular structure: separate concerns into logical files
-- Use lazy loading for plugins when appropriate (lazy.nvim)
-- Document non-obvious behavior with comments
-- Return early pattern for guard clauses
-- Prefer `vim.keymap.set` over legacy key mapping APIs
-
-**Shell/Bash:**
-- Use shellcheck-compliant code; quote variables; use `set -euo pipefail`
-- Prefer modern tools (rg over grep, fd over find, bat over cat)
-
-**Configuration files:**
-- Maintain consistent formatting; add comments explaining non-obvious settings
-- Validate syntax before writing (JSON, YAML, TOML, etc.)
+- Readable (Arrange-Act-Assert)
+- Fast and independent
+- Deterministic and focused
 
 ## Workflow Preferences
 
@@ -345,4 +224,5 @@ to under 100ms.
 
 - User: Diego
 - System: Linux (Arch-based)
-- Primary workflows: Ruby/Rails development, Neovim/Lua configuration
+- Primary workflows: Development (Ruby, TypeScript, Lua), system configuration, shell scripting
+- Time preference: 24-hour format, ISO 8601 dates where applicable
