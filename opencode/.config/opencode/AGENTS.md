@@ -155,6 +155,106 @@ impossible for clients to distinguish between client errors and
 server errors. Now returns proper 422 with clear error messages.
 ```
 
+## Git Branching Flow
+
+### Branch Strategy
+
+**Production Branches:**
+- `master`: Production-ready, always deployable
+- `develop`: Development branch, default for branching
+
+**Working Branches:**
+- `feature/`: New features
+- `fix/`: Bug fixes
+- `chore/`: Maintenance tasks
+
+**Branch Naming:**
+- Use conventional prefixes: `feature/`, `fix/`, `chore/`
+- Descriptive kebab-case names: `feature/user-authentication`
+- Include issue/ticket numbers when applicable: `fix/123-login-redirect`
+
+### Standard Workflow (Features, Fixes, Chores)
+
+**Agent should automatically:**
+1. Create branch from `develop` with appropriate name
+2. Make atomic commits (following commit guidelines)
+3. Push branch to remote for backup
+4. Create GitHub PR with auto-generated title and description
+5. Use merge commit strategy (not squash or rebase)
+6. Delete local and remote branch after merge
+
+**Example:**
+```bash
+# Agent automatically:
+git checkout develop
+git pull origin develop
+git checkout -b feature/payment-integration
+# ... work and commits ...
+git push -u origin feature/payment-integration
+gh pr create --base develop --title "..." --body "..."
+# After merge:
+git branch -d feature/payment-integration
+git push origin --delete feature/payment-integration
+```
+
+### Hotfix Workflow (Urgent Production)
+
+**For critical production issues:**
+1. Branch from `master`: `hotfix/critical-issue`
+2. Make fix commits
+3. Create PR against `master` (not develop)
+4. After merge to `master`, merge `master` back into `develop`
+5. Delete hotfix branch
+
+**Example:**
+```bash
+# Agent automatically:
+git checkout master
+git pull origin master
+git checkout -b hotfix/payment-crash
+# ... fix commits ...
+gh pr create --base master --title "..." --body "..."
+# After merge:
+git checkout develop
+git merge master  # Sync fix back to develop
+git branch -d hotfix/payment-crash
+```
+
+### Trivial Changes (No Branch Required)
+
+**Commit directly to `develop` for:**
+- Typo fixes
+- Documentation updates (README, comments)
+- Formatting/linting only changes
+- Single-line config tweaks
+
+**Everything else requires a branch.**
+
+### PR Title & Description
+
+**Agent should auto-generate:**
+- **Title**: Use the primary commit message (with WHY)
+- **Description**: Summarize commits, include motivation/context
+- Follow same "explain WHY" principle as commits
+
+**Example PR:**
+```
+Title: add rate limiting to prevent API abuse
+
+Description:
+- Implements token bucket algorithm for API endpoints
+- Prevents abuse that was causing service degradation
+- Configurable limits per endpoint (default: 100 req/min)
+
+Fixes #123
+```
+
+### Branch Deployment Sync
+
+- `develop` → `master` sync only when ready to deploy/release
+- Not automatic after every feature merge
+- Coordinate timing for production deployments
+
 ## Testing Philosophy & Practices
 
 ### Core Principles
