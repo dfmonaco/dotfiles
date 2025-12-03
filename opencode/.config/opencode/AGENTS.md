@@ -145,6 +145,16 @@ Use conventional commits format:
 - The message is generic or vague
 - Multiple unrelated WHYs are in one commit
 
+### Example - Focus on WHY
+
+```
+fix(api): return 422 for missing required parameters
+
+API was returning 500 errors for missing parameters, making it
+impossible for clients to distinguish between client errors and
+server errors. Now returns proper 422 with clear error messages.
+```
+
 ## Testing Philosophy & Practices
 
 ### Core Principles
