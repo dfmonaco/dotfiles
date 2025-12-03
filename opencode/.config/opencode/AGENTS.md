@@ -93,7 +93,6 @@ Use conventional commits format:
 - Focus on the WHY or the problem being solved
 - Use imperative mood ("add" not "added" or "adds")
 - Don't capitalize first letter
-- No period at the end
 - Max 50 characters
 - Be specific and meaningful
 
@@ -146,24 +145,6 @@ Use conventional commits format:
 - The message is generic or vague
 - Multiple unrelated WHYs are in one commit
 
-### Examples - Focus on WHY
-
-```
-feat(auth): add password reset functionality
-
-Users were locked out when forgetting passwords, requiring admin
-intervention. This implements self-service password reset via
-email tokens that expire after 1 hour for security.
-```
-
-```
-fix(api): return 422 for missing required parameters
-
-API was returning 500 errors for missing parameters, making it
-impossible for clients to distinguish between client errors and
-server errors. Now returns proper 422 with clear error messages.
-```
-
 ## Testing Philosophy & Practices
 
 ### Core Principles
@@ -194,10 +175,6 @@ server errors. Now returns proper 422 with clear error messages.
 - **Test commands**: When suggesting shell commands, explain what they do and potential side effects
 - **Destructive operations**: Always warn before operations that delete/overwrite data
 - **Symlink awareness**: Be careful with symlinked files (dotfiles managed by stow)
-
-### Tool Preferences
-- **Editor**: Primary: Neovim
-- **Package managers**: Use appropriate manager for context (bun, npm, cargo, pacman, bundle, etc.)
 
 ## Learning & Adaptation
 
