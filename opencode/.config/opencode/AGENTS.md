@@ -202,3 +202,74 @@ This applies to ALL questions I ask you - technical decisions, clarifications, c
 ### After Making Changes:
 - Briefly explain what changed and why
 - Mention related issues but only fix trivial ones automatically
+
+---
+
+# Git Standards
+
+## Commit Message Format
+
+Use conventional commits format:
+```
+<type>(<scope>): <subject>
+
+<body>
+
+<footer>
+```
+
+**Subject line (required):**
+- Focus on the WHY or the problem being solved
+- Use imperative mood ("add" not "added" or "adds")
+- Don't capitalize first letter
+- Max 50 characters
+- Be specific and meaningful
+
+**Body (use when subject alone doesn't explain WHY):**
+- Explain the motivation and reasoning
+- Describe the problem being solved
+- Explain why this approach was chosen
+- Include context that won't be obvious from code
+- Wrap at 72 characters
+
+**Footer (optional):**
+- Reference issues: `Fixes #123`, `Closes #456`
+- Breaking changes: `BREAKING CHANGE: description`
+
+**Types:**
+- `feat`: New feature for the user
+- `fix`: Bug fix for the user
+- `docs`: Documentation changes
+- `refactor`: Code restructuring without behavior change
+- `perf`: Performance improvement
+- `test`: Adding or updating tests
+- `chore`: Maintenance (dependencies, tooling)
+- `style`: Formatting only (no logic change)
+
+**Example:**
+```
+fix(api): return 422 for missing required parameters
+
+API was returning 500 errors for missing parameters, making it
+impossible for clients to distinguish between client errors and
+server errors. Now returns proper 422 with clear error messages.
+
+Fixes #789
+```
+
+---
+
+## Basic Branching
+
+**Simple workflow:**
+1. Create a feature branch for non-trivial changes
+2. Make atomic commits following the guidelines above
+3. Merge when ready
+
+**Branch naming conventions:**
+- `feature/descriptive-name` - New features
+- `fix/descriptive-name` - Bug fixes
+- `chore/descriptive-name` - Maintenance tasks
+- Include issue numbers when applicable: `fix/123-login-error`
+
+**Note:** Specific branching workflows (develop/master, PR processes, etc.) should be defined in project-specific AGENTS.md files.
