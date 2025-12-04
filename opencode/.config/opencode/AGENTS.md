@@ -2,298 +2,134 @@
 
 These rules apply to all OpenCode sessions across all projects.
 
-## Communication Style
+---
 
-- **Concise responses**: Be direct and to the point. Avoid unnecessary verbosity.
-- **Technical accuracy**: Prioritize correctness over agreement. Freely challenge assumptions, proposals, and approaches when you identify better alternatives or potential issues.
-- **No blind agreement**: Avoid phrases like "great idea" or "you're right" without critical evaluation. If you see problems or better alternatives, say so directly.
-- **Structured output**: Use markdown formatting for clarity (code blocks, lists, headers).
+# 🚨 CRITICAL RULES - Never Violate These
 
-## AI Agent Autonomy & Decision Making
+These three rules are non-negotiable. Violating them is unacceptable.
 
-### Understanding Verification (CRITICAL)
+## Rule 1: Critical Thinking Over Blind Agreement
 
-**For complex prompts (3+ steps, architectural changes, or ambiguous requests):**
+**Always challenge assumptions and proposals when you identify issues or better alternatives.**
 
-**Step 1 - Understanding Check:**
-- Say: "Here's what I understand you're asking for..."
-- Summarize the goal and requirements in plain language
-- Ask: "Is this correct?"
-- ⚠️ DO NOT plan or start work yet
+I want your honest technical opinion, not validation. If you see problems, better approaches, or flaws in my reasoning - say so directly.
 
-**Step 2 - Approach Confirmation (only after Step 1 confirmed):**
-- Say: "Here's how I plan to approach this..."
-- Show task breakdown (create todo list for multi-step work)
-- Highlight any decisions or trade-offs
-- Ask: "Should I proceed with this approach?"
-
-**For simple prompts (single straightforward task):**
-- Proceed directly, explain as you go
-
-**When in doubt about complexity:** Treat it as complex and verify understanding first.
-
-### Proceed Automatically
-- Running read-only operations (tests, builds, git status, searches)
-- Adding/improving documentation and comments
-- Fixing obvious typos, linting, formatting issues
-- Refactoring within a single function (no signature changes)
-- Fixing trivial issues in files already being edited
-
-### Ask Before Acting
-- Installing or updating dependencies
-- Creating new files or major structural changes
-- Modifying function/method signatures
-- Database operations or migrations
-- Changing configuration files
-- Security or authentication-related changes
-- Deleting code or files
-- Any destructive operations
-- Changes that could affect production
-- When request is ambiguous (ask clarifying questions immediately)
-- **Always before committing**: Show commit message and file list
-
-### Error Handling
-- Explain what failed and likely cause
-- Suggest alternatives
-- Try obvious, safe fixes automatically
-- Ask before attempting risky recovery
-
-### Communication Style
-- **After changes**: Briefly explain what changed and why
-- **Scope creep**: Mention related issues; fix only trivial ones automatically
-- **Ambiguity**: Always ask clarifying questions rather than assume
-
-## Git Commit Guidelines
-
-### The Golden Rule: Always Explain WHY
-
-**CRITICAL:** Every commit message must explain **WHY** the change was made, not WHAT changed.
-- ❌ BAD: "add validation to user model"
-- ❌ BAD: "update authentication logic"
-- ✅ GOOD: "add validation to prevent duplicate emails in database"
-- ✅ GOOD: "fix authentication to handle expired tokens correctly"
-
-The code diff shows WHAT changed. The commit message must answer:
-- Why was this change necessary?
-- What problem does it solve?
-- What was the motivation?
-
-### Commit Message Format
-
-Use conventional commits format:
+❌ **WRONG:**
 ```
-<type>(<scope>): <subject>
-
-<body>
-
-<footer>
+User: "Let's add this feature by modifying the core authentication"
+Agent: "Great idea! I'll get started on that."
 ```
 
-**Subject line (required):**
-- Focus on the WHY or the problem being solved
-- Use imperative mood ("add" not "added" or "adds")
-- Don't capitalize first letter
-- Max 50 characters
-- Be specific and meaningful
+✅ **CORRECT:**
+```
+User: "Let's add this feature by modifying the core authentication"  
+Agent: "I see what you're trying to achieve, but modifying core auth could introduce security risks and break existing functionality. My recommendation: implement this as a middleware layer instead, because it's isolated and easier to test. Thoughts?"
+```
 
-**Body (use when subject alone doesn't explain WHY):**
-- Explain the motivation and reasoning
-- Describe the problem being solved
-- Explain why this approach was chosen
-- Include context that won't be obvious from code
-- Wrap at 72 characters
+**When you see:**
+- Potential bugs or edge cases I haven't considered
+- More efficient or cleaner approaches
+- Security, performance, or maintainability concerns
+- Violations of best practices
 
-**Types:**
-- `feat`: New feature for the user
-- `fix`: Bug fix for the user
-- `docs`: Documentation changes
-- `refactor`: Code restructuring without behavior change
-- `perf`: Performance improvement
-- `test`: Adding or updating tests
-- `chore`: Maintenance (dependencies, tooling)
-- `style`: Formatting only (no logic change)
+**You must:** Point it out clearly, explain why, and recommend alternatives.
 
-### Commit Strategy
+---
 
-**Atomic commits:**
-- Each commit = one logical change with one clear WHY
-- Should be independently revertable
-- Should pass tests (don't break the build)
+## Rule 2: Atomic Commits (One WHY = One Commit)
 
-**When to split commits:**
+**Every commit must contain changes that belong together and serve a single purpose.**
+
+**WHY THIS MATTERS:**
+- Each commit can be reverted independently without side effects
+- Project history tells a clear story of how features were built
+- Easier to understand implementation progress
+- Easier to debug (git bisect, blame, etc.)
+
+❌ **WRONG - Multiple unrelated changes:**
+```
+commit: "add user validation and fix typo in README and update deps"
+- src/user.js: add email validation
+- README.md: fix typo
+- package.json: update 3 dependencies
+```
+This has 3 different WHYs → should be 3 commits
+
+✅ **CORRECT - Atomic commits:**
+```
+commit 1: "add email validation to prevent duplicate accounts"
+- src/user.js: add email validation
+
+commit 2: "fix typo in installation instructions"  
+- README.md: fix typo
+
+commit 3: "update dependencies to fix security vulnerabilities"
+- package.json: update vulnerable deps
+```
+
+**When to SPLIT commits:**
 - Different WHYs = different commits
-- Feature + unrelated refactoring → 2 commits (refactor first, then feature)
-- Multiple unrelated fixes → separate commits (each has its own WHY)
+- Feature + unrelated bug fix → 2 commits
+- Multiple unrelated fixes → separate commits
 - Large feature → break into logical steps with clear purpose for each
 
-**When to combine:**
+**When to COMBINE into one commit:**
 - Same WHY = one commit
 - Fix + test for that fix → one commit (WHY: fix the bug)
 - Feature + documentation for that feature → one commit
 - Refactoring that directly enables the feature → one commit
 
-### Commit Approval Process
+**BEFORE committing, I will:**
+1. Analyze all current changes
+2. Group changes by their WHY
+3. Show you my proposed commit breakdown:
+   ```
+   I see 3 logical groups of changes:
+   
+   Commit 1: "add email validation to prevent duplicates"
+   - user.js
+   - user.test.js
+   
+   Commit 2: "refactor validation helpers for reusability"
+   - validation.js
+   
+   Commit 3: "update docs to reflect new validation"
+   - README.md
+   
+   Should I proceed with these 3 atomic commits?
+   ```
+4. Wait for your approval
 
-**Before committing, I will always:**
-1. Show the proposed commit message (emphasizing the WHY)
+---
+
+## Rule 3: Commit Messages Must Explain WHY
+
+**The code diff shows WHAT changed. The commit message must explain WHY the change was necessary.**
+
+❌ **WRONG - Describes WHAT:**
+- "add validation to user model"
+- "update authentication logic"
+- "refactor database queries"
+- "fix bug in payment service"
+
+✅ **CORRECT - Explains WHY:**
+- "add validation to prevent duplicate emails in database"
+- "fix authentication to handle expired tokens correctly"
+- "refactor queries to improve page load performance"
+- "fix payment service to handle concurrent transactions"
+
+**Every commit message must answer:**
+- Why was this change necessary?
+- What problem does it solve?
+- What was the motivation?
+
+**Before committing, I will:**
+1. Show you the proposed commit message emphasizing the WHY
 2. List all files to be included
-3. Explain the reasoning for commit boundaries (if multiple commits)
-4. Wait for your approval or modifications
+3. Explain the reasoning if multiple commits
+4. Wait for your approval
 
-**I will be rejected if:**
+**You should reject my commit if:**
 - The message doesn't clearly explain WHY
 - The message is generic or vague
-- Multiple unrelated WHYs are in one commit
-
-### Example - Focus on WHY
-
-```
-fix(api): return 422 for missing required parameters
-
-API was returning 500 errors for missing parameters, making it
-impossible for clients to distinguish between client errors and
-server errors. Now returns proper 422 with clear error messages.
-```
-
-## Git Branching Flow
-
-### Branch Strategy
-
-**Production Branches:**
-- `master`: Production-ready, always deployable
-- `develop`: Development branch, default for branching
-
-**Working Branches:**
-- `feature/`: New features
-- `fix/`: Bug fixes
-- `chore/`: Maintenance tasks
-
-**Branch Naming:**
-- Use conventional prefixes: `feature/`, `fix/`, `chore/`
-- Descriptive kebab-case names: `feature/user-authentication`
-- Include issue/ticket numbers when applicable: `fix/123-login-redirect`
-
-### Standard Workflow (Features, Fixes, Chores)
-
-**Agent should automatically:**
-1. Create branch from `develop` with appropriate name
-2. Make atomic commits (following commit guidelines)
-3. Push branch to remote for backup
-4. Create GitHub PR with auto-generated title and description
-5. Use merge commit strategy (not squash or rebase)
-6. Delete local and remote branch after merge
-
-**Example:**
-```bash
-# Agent automatically:
-git checkout develop
-git pull origin develop
-git checkout -b feature/payment-integration
-# ... work and commits ...
-git push -u origin feature/payment-integration
-gh pr create --base develop --title "..." --body "..."
-# After merge:
-git branch -d feature/payment-integration
-git push origin --delete feature/payment-integration
-```
-
-### Hotfix Workflow (Urgent Production)
-
-**For critical production issues:**
-1. Branch from `master`: `hotfix/critical-issue`
-2. Make fix commits
-3. Create PR against `master` (not develop)
-4. After merge to `master`, merge `master` back into `develop`
-5. Delete hotfix branch
-
-**Example:**
-```bash
-# Agent automatically:
-git checkout master
-git pull origin master
-git checkout -b hotfix/payment-crash
-# ... fix commits ...
-gh pr create --base master --title "..." --body "..."
-# After merge:
-git checkout develop
-git merge master  # Sync fix back to develop
-git branch -d hotfix/payment-crash
-```
-
-### Trivial Changes (No Branch Required)
-
-**Commit directly to `develop` for:**
-- Typo fixes
-- Documentation updates (README, comments)
-- Formatting/linting only changes
-- Single-line config tweaks
-
-**Everything else requires a branch.**
-
-### PR Title & Description
-
-**Agent should auto-generate:**
-- **Title**: Use the primary commit message (with WHY)
-- **Description**: Summarize commits, include motivation/context
-- Follow same "explain WHY" principle as commits
-
-**Example PR:**
-```
-Title: add rate limiting to prevent API abuse
-
-Description:
-- Implements token bucket algorithm for API endpoints
-- Prevents abuse that was causing service degradation
-- Configurable limits per endpoint (default: 100 req/min)
-
-Fixes #123
-```
-
-### Branch Deployment Sync
-
-- `develop` → `master` sync only when ready to deploy/release
-- Not automatic after every feature merge
-- Coordinate timing for production deployments
-
-## Testing Philosophy & Practices
-
-### Core Principles
-
-**TDD Preferred:**
-- Write tests first when possible (especially for new features and bug fixes)
-- Red → Green → Refactor cycle
-- Always add tests when the opportunity arises
-
-**For bug fixes:**
-- Write a failing test that reproduces the bug first
-- Then fix the bug
-- Prevents regression
-
-**Good tests are:**
-- Readable (Arrange-Act-Assert)
-- Fast and independent
-- Deterministic and focused
-
-## Workflow Preferences
-
-### Before Making Changes
-- **Ask first for critical files**: Configuration files, scripts that run on startup/boot
-- **Show diffs**: When modifying existing files, explain what's changing and why
-- **Verify context**: Read existing files to understand current implementation before suggesting changes
-
-### Safety & Backups
-- **Test commands**: When suggesting shell commands, explain what they do and potential side effects
-- **Destructive operations**: Always warn before operations that delete/overwrite data
-- **Symlink awareness**: Be careful with symlinked files (dotfiles managed by stow)
-
-## Learning & Adaptation
-
-- **Ask for feedback**: When unsure about preferences, ask rather than assume
-- **Update rules**: These rules should evolve; suggest updates when patterns emerge
-- **Context retention**: Remember decisions made in the current session to maintain consistency
-
-## Restrictions
-
-- **No automatic pushes**: Never push to remote repositories without explicit instruction
-- **No config corruption**: Validate syntax before writing config files
-- **No breaking changes**: For system configs, verify changes won't break boot/login/display
+- Multiple unrelated WHYs are in one commit (violates Rule 2)
