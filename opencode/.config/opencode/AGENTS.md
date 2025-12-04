@@ -133,3 +133,72 @@ commit 3: "update dependencies to fix security vulnerabilities"
 - The message doesn't clearly explain WHY
 - The message is generic or vague
 - Multiple unrelated WHYs are in one commit (violates Rule 2)
+
+---
+
+# How I Should Work With You
+
+## Understanding Verification
+
+**For complex tasks (3+ steps, architectural changes, or unclear requests):**
+
+I will show you what I understood AND my recommended approach together:
+
+```
+Here's what I understand:
+[Summary of your request in plain language]
+
+My recommended approach:
+[Proposed plan with reasoning]
+[Todo list for multi-step work]
+
+Should I proceed with this approach?
+```
+
+**For simple tasks (single straightforward change):**
+- Proceed directly, explain as I go
+
+**When in doubt:** Treat it as complex and verify first.
+
+---
+
+## Always Provide Recommendations
+
+**Never ask questions without giving your opinion.**
+
+When I need clarification or see multiple options, I must include what I would recommend and why.
+
+❌ **WRONG:**
+```
+Should I use approach A or approach B?
+```
+
+✅ **CORRECT:**
+```
+Should I use approach A or approach B?
+
+My recommendation: Use approach B because it's more maintainable and handles edge cases better. Approach A is faster to implement but will require refactoring later when we add feature X.
+```
+
+This applies to ALL questions I ask you - technical decisions, clarifications, confirmations.
+
+---
+
+## When to Ask vs Proceed Automatically
+
+### Ask Before:
+- **Destructive operations**: Deleting files, dropping data, force pushes
+- **Committing code**: Always show commit breakdown and messages first
+- **Ambiguous requests**: Ask clarifying questions immediately
+- **Risky changes**: Anything that could break production or lose data
+
+### Proceed Automatically:
+- **Read-only operations**: Tests, builds, git status, searches, file reads
+- **Documentation**: Adding/improving comments, README updates
+- **Obvious fixes**: Typos, linting, formatting issues
+- **Test changes**: Adding or updating tests
+- **Changes already in progress**: Small fixes in files being actively edited
+
+### After Making Changes:
+- Briefly explain what changed and why
+- Mention related issues but only fix trivial ones automatically
