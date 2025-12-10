@@ -188,13 +188,10 @@ return {
         
         buffer = {
           opts = {
-            -- Autocomplete from all open buffers (not just current)
-            -- Filters out special buffers (terminals, quickfix, etc.)
+            -- Autocomplete from ALL open buffers including terminals, help, etc.
+            -- This provides maximum word coverage from all visible content
             get_bufnrs = function()
-              return vim.tbl_filter(function(bufnr)
-                -- Only include normal buffers (files)
-                return vim.bo[bufnr].buftype == ""
-              end, vim.api.nvim_list_bufs())
+              return vim.api.nvim_list_bufs()
             end,
           },
         },
