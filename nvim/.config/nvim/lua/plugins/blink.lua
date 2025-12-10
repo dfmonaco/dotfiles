@@ -77,6 +77,36 @@ return {
 
     -- Use Rust fuzzy matcher (falls back to Lua if Rust unavailable)
     fuzzy = { implementation = "prefer_rust_with_warning" },
+
+    -- Command-line completion with fuzzy matching
+    -- Provides typo-resistant completions for :commands, file paths, options, etc.
+    cmdline = {
+      enabled = true,
+      -- Use same keymaps as insert mode for consistency
+      -- <Tab> = accept, <C-n>/<C-p> = navigate, <C-e> = cancel
+      keymap = {
+        preset = "default",
+        -- Override Tab to match insert mode behavior exactly
+        ["<Tab>"] = { "select_and_accept" },
+      },
+      sources = { "cmdline", "buffer" }, -- Command completion + buffer text
+      
+      completion = {
+        -- Auto-show completions as you type
+        menu = { auto_show = true },
+        
+        -- Selection behavior (same as insert mode)
+        list = {
+          selection = {
+            preselect = true,    -- Auto-select first item
+            auto_insert = true,  -- Insert selection automatically
+          },
+        },
+        
+        -- Show preview of selected item inline (like fish shell)
+        ghost_text = { enabled = true },
+      },
+    },
   },
   opts_extend = { "sources.default" },
 }

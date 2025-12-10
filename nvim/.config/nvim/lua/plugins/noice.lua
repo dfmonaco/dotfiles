@@ -110,8 +110,10 @@ return {
     -- ============================================================
     -- POPUPMENU - Completion menu configuration
     -- ============================================================
+    -- DISABLED: Using blink.cmp for command-line completions instead
+    -- blink.cmp provides fuzzy matching and typo-resistant completions
     popupmenu = {
-      enabled = true, -- Enable the Noice popupmenu UI
+      enabled = false, -- Disabled in favor of blink.cmp cmdline mode
 
       -- Backend for showing regular cmdline completions
       -- Options: "nui" (Noice's UI) or "cmp" (nvim-cmp)
