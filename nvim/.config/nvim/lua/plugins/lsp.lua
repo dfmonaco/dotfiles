@@ -19,7 +19,14 @@ return {
     -- Diagnostic configuration
     vim.diagnostic.config({
       virtual_text = true,
-      signs = true,
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = "✘",
+          [vim.diagnostic.severity.WARN] = "▲",
+          [vim.diagnostic.severity.HINT] = "⚡",
+          [vim.diagnostic.severity.INFO] = "●",
+        },
+      },
       underline = true,
       update_in_insert = false,
       severity_sort = true,
@@ -28,13 +35,6 @@ return {
         source = true,
       },
     })
-
-    -- Diagnostic signs
-    local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-    end
 
     -- LSP keymaps on attach
     vim.api.nvim_create_autocmd("LspAttach", {
@@ -79,10 +79,59 @@ return {
       },
     })
 
+    -- Customize ruby_lsp with hybrid approach (per-project + global fallback)
+    -- We need to handle this manually because cmd needs to be determined at runtime
+    vim.lsp.config("ruby_lsp", {
+      cmd_env = {
+        -- This ensures rbenv shims are in PATH
+        PATH = vim.env.PATH,
+      },
+    })
+
     -- Enable language servers (nvim-lspconfig provides the configs)
-    local servers = { "lua_ls", "ts_ls", "pyright", "ruby_lsp", "bashls" }
+    local servers = { "lua_ls", "ts_ls", "pyright", "bashls" }
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
+
+    -- Ruby LSP: Manual start with hybrid command detection
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "ruby",
+      callback = function(args)
+        -- Determine ruby-lsp command based on Gemfile.lock presence
+        local cmd
+        local gemfile_lock = vim.fn.filereadable("Gemfile.lock") == 1
+        
+        if gemfile_lock then
+          -- Check if ruby-lsp is in Gemfile.lock
+          local lockfile = vim.fn.readfile("Gemfile.lock")
+          local has_ruby_lsp = false
+          for _, line in ipairs(lockfile) do
+            if line:match("^%s*ruby%-lsp") then
+              has_ruby_lsp = true
+              break
+            end
+          end
+          
+          if has_ruby_lsp then
+            cmd = { "bundle", "exec", "ruby-lsp" }
+          else
+            cmd = { "ruby-lsp" }
+          end
+        else
+          cmd = { "ruby-lsp" }
+        end
+
+        -- Find root directory
+        local root_dir = vim.fs.root(args.buf, { "Gemfile", ".git" })
+
+        -- Start LSP client
+        vim.lsp.start({
+          name = "ruby_lsp",
+          cmd = cmd,
+          root_dir = root_dir,
+        })
+      end,
+    })
   end,
 }
