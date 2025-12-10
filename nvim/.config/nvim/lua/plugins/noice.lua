@@ -314,7 +314,7 @@ return {
       inc_rename = false,
 
       -- Add border to LSP hover docs and signature help
-      lsp_doc_border = false,
+      lsp_doc_border = true,
     },
 
     -- ============================================================
@@ -327,38 +327,14 @@ return {
     -- VIEWS - View configurations (see Noice docs for details)
     -- ============================================================
     -- Override or define custom views here
-    -- Example:
-    -- views = {
-    --   cmdline_popup = {
-    --     position = {
-    --       row = 5,
-    --       col = "50%",
-    --     },
-    --     size = {
-    --       width = 60,
-    --       height = "auto",
-    --     },
-    --   },
-    --   popupmenu = {
-    --     relative = "editor",
-    --     position = {
-    --       row = 8,
-    --       col = "50%",
-    --     },
-    --     size = {
-    --       width = 60,
-    --       height = 10,
-    --     },
-    --     border = {
-    --       style = "rounded",
-    --       padding = { 0, 1 },
-    --     },
-    --     win_options = {
-    --       winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
-    --     },
-    --   },
-    -- },
-    views = {},
+    views = {
+      -- LSP hover documentation and signature help with rounded borders
+      hover = {
+        border = {
+          style = "rounded",
+        },
+      },
+    },
 
     -- ============================================================
     -- ROUTES - Message routing configuration
