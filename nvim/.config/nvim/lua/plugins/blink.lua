@@ -6,6 +6,16 @@ return {
   "saghen/blink.cmp",
   version = "1.*", -- Use release tag for pre-built binaries
   
+  dependencies = {
+    -- Dictionary completion: comprehensive English word suggestions
+    {
+      "Kaiser-Yang/blink-cmp-dictionary",
+      dependencies = { "nvim-lua/plenary.nvim" },
+    },
+    -- Spell checker: corrections for misspelled words
+    "ribru17/blink-cmp-spell",
+  },
+  
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
@@ -54,12 +64,52 @@ return {
       enabled = false,
     },
 
-    -- Sources: LSP, path, snippets, buffer (from all open buffers)
+    -- Sources: LSP, path, dictionary, spell checker, buffer (from all open buffers)
     sources = {
-      default = { "lsp", "path", "buffer" },
+      -- Priority order: LSP > path > dictionary > spell > buffer
+      default = { "lsp", "path", "dictionary", "spell", "buffer" },
       
       -- Provider-specific configuration
       providers = {
+        -- Dictionary: comprehensive English word completion (370k+ words)
+        dictionary = {
+          module = "blink-cmp-dictionary",
+          name = "Dict",
+          -- Minimum 2 characters to trigger (prevents spam on single letters)
+          min_keyword_length = 2,
+          -- Limit results for better performance
+          max_items = 10,
+          opts = {
+            -- Path to dictionary file (370k+ English words)
+            dictionary_files = { vim.fn.expand("~/.config/nvim/dictionary/english.txt") },
+            -- Smart capitalization: matches your typing style
+            -- "Word" if you type "W", "WORD" if you type "WO", "word" otherwise
+            capitalize_first = nil, -- Auto-detect from input
+            capitalize_whole_word = nil, -- Auto-detect from input
+          },
+        },
+        
+        -- Spell checker: corrections for misspelled words
+        spell = {
+          module = "blink-cmp-spell",
+          name = "Spell",
+          -- Only show spell suggestions in specific contexts
+          enabled = function()
+            -- Enable in markdown, text files, and comments
+            local ft = vim.bo.filetype
+            if ft == "markdown" or ft == "text" then
+              return true
+            end
+            -- Also enable in code comments (when spell is enabled)
+            return vim.opt.spell:get()
+          end,
+          opts = {
+            max_entries = 5,
+            preselect_current_word = true,
+            keep_all_entries = false,
+          },
+        },
+        
         buffer = {
           opts = {
             -- Autocomplete from all open buffers (not just current)
