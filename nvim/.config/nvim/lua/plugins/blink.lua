@@ -16,6 +16,37 @@ return {
     "ribru17/blink-cmp-spell",
   },
   
+  -- Setup function to configure highlight groups with Catppuccin colors
+  config = function()
+    -- Get Catppuccin color palette (works with all flavors: mocha, latte, frappe, macchiato)
+    local colors = require('catppuccin.palettes').get_palette()
+    
+    -- Define custom highlight groups for source identification
+    -- Each source gets a unique color for quick visual recognition
+    vim.api.nvim_set_hl(0, 'BlinkCmpSourceLSP', { 
+      fg = colors.blue,      -- Blue for LSP (code intelligence)
+      bold = true 
+    })
+    vim.api.nvim_set_hl(0, 'BlinkCmpSourceDict', { 
+      fg = colors.green,     -- Green for Dictionary (comprehensive words)
+      bold = true 
+    })
+    vim.api.nvim_set_hl(0, 'BlinkCmpSourceSpell', { 
+      fg = colors.yellow,    -- Yellow for Spell (corrections/warnings)
+      bold = true 
+    })
+    vim.api.nvim_set_hl(0, 'BlinkCmpSourcePath', { 
+      fg = colors.teal,      -- Cyan/Teal for Path (file system)
+      bold = true 
+    })
+    vim.api.nvim_set_hl(0, 'BlinkCmpSourceBuffer', { 
+      fg = colors.overlay0   -- Gray for Buffer (lower priority, not bold)
+    })
+    
+    -- Setup blink.cmp with configuration
+    require('blink.cmp').setup(require('blink.cmp').get_config())
+  end,
+  
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
@@ -34,7 +65,69 @@ return {
     completion = {
       menu = {
         border = "rounded", -- Rounded border (matches documentation window)
+        
+        -- Menu drawing configuration: controls how completion items are displayed
+        draw = {
+          -- Column layout: [kind_icon] [label + description] [source_icon + name]
+          -- This creates a three-column layout for better visual organization
+          columns = { 
+            { 'kind_icon' },                           -- Left: Type icon (function, variable, etc.)
+            { 'label', 'label_description', gap = 1 }, -- Middle: The actual completion text
+            { 'source_icon' }                          -- Right: Source identifier (NEW!)
+          },
+          
+          -- Component definitions
+          components = {
+            -- Custom component: source_icon
+            -- Displays an icon + short name for each completion source
+            -- This helps you instantly identify where each suggestion comes from
+            source_icon = {
+              width = { max = 8 },  -- Max width: "󰓆 Dict" = 7 chars + padding
+              
+              -- Text function: returns the icon + name for each source
+              text = function(ctx)
+                -- Icon mapping for each source
+                local icons = {
+                  lsp = '󰘧',        -- Lightbulb icon for LSP
+                  dictionary = '󰓆', -- Book icon for Dictionary
+                  spell = '',      -- Spell check icon
+                  path = '󰉋',       -- Folder icon for Path
+                  buffer = '󰈙',     -- File icon for Buffer
+                }
+                
+                -- Short name mapping for compact display
+                local names = {
+                  lsp = 'LSP',
+                  dictionary = 'Dict',
+                  spell = 'Spell',
+                  path = 'Path',
+                  buffer = 'Buf',
+                }
+                
+                -- Get icon and name, with fallback for unknown sources
+                local icon = icons[ctx.source_id] or ''
+                local name = names[ctx.source_id] or ctx.source_name
+                
+                return icon .. ' ' .. name
+              end,
+              
+              -- Highlight function: applies color-coding to each source
+              -- Uses the custom highlight groups defined in config function
+              highlight = function(ctx)
+                local hl_map = {
+                  lsp = 'BlinkCmpSourceLSP',        -- Blue
+                  dictionary = 'BlinkCmpSourceDict', -- Green
+                  spell = 'BlinkCmpSourceSpell',     -- Yellow
+                  path = 'BlinkCmpSourcePath',       -- Cyan/Teal
+                  buffer = 'BlinkCmpSourceBuffer',   -- Gray
+                }
+                return hl_map[ctx.source_id] or 'BlinkCmpSource'
+              end,
+            },
+          },
+        },
       },
+      
       documentation = {
         auto_show = true,        -- Show documentation automatically after delay
         auto_show_delay_ms = 1000, -- 1 second delay (only shows when pausing on item)
