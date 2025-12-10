@@ -50,12 +50,43 @@ return {
       },
       -- Right side
       lualine_x = {
+        -- LSP servers with language icons
+        {
+          function()
+            local buf_clients = vim.lsp.get_clients({ bufnr = 0 })
+            if #buf_clients == 0 then
+              return ""
+            end
+
+            local lsp_icons = {
+              lua_ls = "",
+              ruby_lsp = "",
+              pyright = "",
+              ts_ls = "",
+              bashls = "",
+            }
+
+            local icons = {}
+            for _, client in ipairs(buf_clients) do
+              local icon = lsp_icons[client.name]
+              if icon then
+                table.insert(icons, icon)
+              end
+            end
+
+            if #icons > 0 then
+              return table.concat(icons, " ")
+            end
+            return ""
+          end,
+          color = { fg = "#7aa2f7" },
+        },
         -- Prompt buffer icon indicator
         {
           function()
             local status = require('nvim-opencode').statusline.get_status()
             if status.prompt_buffer then
-              return status.prompt_icon  -- Returns 💬
+              return status.prompt_icon
             end
             return ''
           end,
