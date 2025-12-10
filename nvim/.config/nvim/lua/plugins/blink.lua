@@ -92,7 +92,7 @@ return {
                 -- Icon mapping for each source
                 local icons = {
                   lsp = '󰘧',        -- Lightbulb icon for LSP
-                  spell = '',      -- Spell check icon
+                  spell = '󰓆',      -- Book icon for Spell corrections
                   path = '󰉋',       -- Folder icon for Path
                   buffer = '󰈙',     -- File icon for Buffer
                 }
