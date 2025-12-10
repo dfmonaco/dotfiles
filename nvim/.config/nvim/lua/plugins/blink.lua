@@ -23,18 +23,35 @@ return {
     -- Completion menu and documentation appearance
     completion = {
       menu = {
-        border = "single", -- Add border to completion menu
+        border = "rounded", -- Rounded border (matches documentation window)
       },
       documentation = {
-        auto_show = false,       -- Show documentation only when manually triggered
-        window = { border = "single" }, -- Add border to documentation window
+        auto_show = true,        -- Show documentation automatically after delay
+        auto_show_delay_ms = 1000, -- 1 second delay (only shows when pausing on item)
+        update_delay_ms = 50,    -- Quick updates when switching items
+        window = {
+          border = "rounded",
+        },
+      },
+      
+      -- Auto-brackets: automatically insert brackets for functions/methods
+      -- Uses LSP semantic tokens to intelligently determine when brackets are needed
+      -- Works alongside nvim-autopairs (autopairs handles manual typing, this handles completions)
+      accept = {
+        auto_brackets = {
+          enabled = true,
+        },
+      },
+      
+      -- Ghost text: inline preview of selected completion (consistent with cmdline)
+      ghost_text = {
+        enabled = true,
       },
     },
 
-    -- Signature help with border
+    -- Signature help: disabled to avoid window clutter
     signature = {
-      enabled = true,
-      window = { border = "single" },
+      enabled = false,
     },
 
     -- Sources: LSP, path, snippets, buffer (from all open buffers)
