@@ -98,10 +98,11 @@ Before diving into solution discussion, do a quick scan to understand project co
 - Project structure and technology stack
 - Similar existing features or components
 - Relevant patterns (state management, API patterns, validation, error handling)
-- Testing setup and coverage approach
 - Integration points where solution might connect
 
 **Purpose:** Inform your analysis of user's ideas and generate context-aware recommendations.
+
+*Note: Save deep analysis (specific files, data models, test coverage) for Phase 2.*
 
 ### Step 1.3: Restate Understanding
 
