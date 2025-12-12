@@ -672,37 +672,45 @@ solution alternatives evaluated, and implementation-ready guidance.
 - PRD document saved to `./docs/tasks/[FOLDER_ID]/prd-[feature-name].md`
 - tasks.json updated with new task entry (status: pending, priority assigned)
 - PRD and metadata committed to feature branch
-- Ready for implementation via `/feature-implement` command
+- Ready for implementation
 
 ## Success Criteria
 
+### Phase 1: Problem Discovery & Solution Exploration
 - [ ] Problem thoroughly understood and documented
 - [ ] User's initial ideas analyzed with codebase context
+- [ ] Light codebase exploration completed before solution discussion
 - [ ] Multiple solution options explored and evaluated
-- [ ] Solution approach agreed upon with clear reasoning
-- [ ] Light codebase exploration completed before solution discussion (Phase 1)
-- [ ] Deep codebase exploration completed before architecture proposals (Phase 2)
 - [ ] All questions asked with agent's recommended answers
-- [ ] 2-3 architecture options proposed with detailed context
+- [ ] Solution approach agreed upon with clear reasoning
+- [ ] Decision checkpoint explicitly confirmed before proceeding to Phase 2
+
+### Phase 2: Architecture Design & Planning
+- [ ] Deep codebase exploration completed before architecture proposals
+- [ ] Architecture options proposed with detailed context (2-3 or fewer if one clear approach)
 - [ ] Each architecture option discussed with user
-- [ ] Architecture approach finalized with explicit agreement
-- [ ] Feature branch created with consistent naming
-- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
-- [ ] PRD contains all required sections (N/A if not applicable)
-- [ ] Solution Discovery Journey section captures Phase 1 exploration
-- [ ] All Functional Requirements use FR-N numbering format
-- [ ] All Functional Requirements are atomic and testable
 - [ ] Codebase Analysis documents relevant patterns and integration points
 - [ ] Architecture Options include specific files, patterns, and implementation structure
 - [ ] Key Design Decisions provide implementation guidance
-- [ ] Edge cases and error states documented in requirements
+- [ ] Architecture approach finalized with explicit agreement
+- [ ] Decision checkpoint explicitly confirmed before proceeding to Phase 3
+
+### Phase 3: PRD Generation & Setup
+- [ ] PRD contains all required sections (N/A if not applicable)
+- [ ] Solution Discovery Journey section captures Phase 1 exploration
+- [ ] Feature branch created with consistent naming
+- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
 - [ ] PRD saved to correct location with unique folder ID
 - [ ] tasks.json created (if needed) and updated with new task entry
 - [ ] Task entry includes: id, type, status, priority, created timestamp, branch, description
 - [ ] PRD and tasks.json committed to the feature branch
 - [ ] Branch name matches feature name (not folder ID prefix)
 - [ ] User has confirmed the PRD is complete and accurate
-- [ ] Both decision checkpoints (Phase 1 and Phase 2) explicitly confirmed before proceeding
+
+### Quality Standards
+- [ ] All Functional Requirements use FR-N numbering format
+- [ ] All Functional Requirements are atomic and testable
+- [ ] Edge cases and error states documented in requirements
 
 ## Examples
 
