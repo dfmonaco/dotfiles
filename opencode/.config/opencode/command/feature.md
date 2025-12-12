@@ -541,15 +541,32 @@ Present the complete PRD to the user for final review and approval.
 
 ### Step 3.3: Git Branch Setup
 
-Create the feature branch:
+Create the feature branch from the default branch:
 
 ```bash
-git checkout main  # or develop, depending on project
-git pull origin main
+# Identify the default branch using cascading detection
+DEFAULT_BRANCH=$(
+  git symbolic-ref refs/remotes/origin/HEAD --short 2>/dev/null | cut -d'/' -f2 || \
+  gh repo view --json defaultBranchRef --jq '.defaultBranchRef.name' 2>/dev/null || \
+  git config --get init.defaultBranch || \
+  echo "main"
+)
+
+# Switch to default branch and update
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH" 2>/dev/null || true
+
+# Create feature branch
 git checkout -b feature/[feature-name]
 ```
 
 **Branch naming:** Use kebab-case matching the feature/solution name (e.g., `feature/user-profile-editing`)
+
+**Default branch detection:**
+1. Checks remote HEAD symbolic ref (most common)
+2. Falls back to GitHub CLI for GitHub repos
+3. Falls back to user's git config preference
+4. Ultimate fallback to `main`
 
 ### Step 3.4: Generate Task Folder ID
 
