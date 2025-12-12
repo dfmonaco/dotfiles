@@ -214,14 +214,15 @@ Now that we know WHAT to build, thoroughly explore HOW to build it:
 - Similar components and their implementation approaches
 - Test patterns and coverage expectations
 - Error handling patterns
-- Configuration and environment setup
 - Security considerations
 
 **Document findings** - these will inform architecture proposals.
 
+*Note: Configuration, environment, and deployment considerations are documented in PRD Technical Notes if relevant.*
+
 ### Step 2.2: Propose Architecture Options
 
-Based on deep exploration, propose 2-3 architecture options with detailed context.
+Based on deep exploration, propose 2-3 architecture options with detailed context (or fewer if there's clearly one optimal approach with minor variations).
 
 **For each option, provide:**
 - Approach name and high-level description
@@ -292,11 +293,18 @@ Based on deep exploration, propose 2-3 architecture options with detailed contex
 ### Step 2.3: Discuss Architecture
 
 Walk through each option with the user:
+
+**For each architecture option:**
 - Explain the approach in detail
 - Show specific integration points and how they work
+- Walk through the implementation structure (files, patterns)
 - Discuss tradeoffs in context of the problem
 - Answer questions and address concerns
-- Refine based on feedback
+
+**Collaborative refinement:**
+- Adjust based on user feedback
+- Identify which aspects are flexible vs. fixed
+- Confirm understanding of implementation complexity
 
 ### Step 2.4: Finalize Architecture
 
