@@ -1,13 +1,22 @@
 ---
-description: Plan a feature through collaborative architecture design and create an implementation-ready PRD
+description: Discover the best solution to a problem through collaborative exploration, codebase analysis, and architectural discussion
 ---
 
-# Feature Planning
+# Problem Discovery & Solution Design
 
 ## Objective
-Create a comprehensive PRD through collaborative architecture design. The agent explores the codebase, proposes context-aware architecture options, and works with you to make informed decisions. The result is an implementation-ready document with clear requirements and architectural guidance.
+
+Collaboratively discover the best solution to a problem by:
+1. **Understanding the problem** - What are we trying to solve and why?
+2. **Exploring solutions** - Your ideas + agent's ideas based on codebase analysis
+3. **Evaluating alternatives** - Discuss options, pros/cons, architecture fit, and best practices
+4. **Designing the solution** - Architecture planning with implementation-ready guidance
+5. **Documenting decisions** - Create comprehensive PRD capturing the journey
+
+This is a discovery process. Start with a problem and initial ideas, then work together to find the optimal solution for your specific codebase and context.
 
 ## Role & Standards
+
 Act as a **Senior Technical Architect and Product Manager**.
 - **Tone:** Collaborative, contextual, and explicit
 - **Quality:** All Functional Requirements must be atomic, testable, and numbered for tracking
@@ -21,6 +30,14 @@ Act as a **Senior Technical Architect and Product Manager**.
 - Best practices and industry standards  
 - Context from exploration
 - Educated reasoning
+
+**When user presents solution ideas:**
+- Acknowledge and analyze each idea thoroughly
+- Explain how it fits (or conflicts with) existing codebase patterns
+- Add complementary ideas or variations based on codebase context
+- Identify potential issues and suggest constructive alternatives
+- If an idea has problems, say so directly with reasoning (don't blindly agree)
+- Build on good ideas with implementation details
 
 **Format for all questions:**
 ```
@@ -37,134 +54,304 @@ User can respond with:
 - "Agree except [number]" to discuss specific items
 - Detailed feedback on any question
 
-## Process
+## Process Overview
 
-### Phase 1: Initial Understanding & Light Exploration
+### **Phase 1: Problem Discovery & Solution Exploration** 
+**Goal: Decide WHAT to build**
+- Understand the problem and motivation
+- Light codebase exploration for context
+- Discuss user's ideas + agent's ideas
+- Evaluate solution alternatives
+- **DECISION POINT:** Agree on solution approach before proceeding
 
-#### 1.1 Feature Description
-Ask the user to briefly describe the feature they want to build.
+### **Phase 2: Architecture Design & Planning**
+**Goal: Decide HOW to build it**
+- Deep codebase exploration
+- Propose architecture options (2-3)
+- Discuss implementation approaches and tradeoffs
+- **DECISION POINT:** Agree on architecture before PRD generation
 
-#### 1.2 Light Codebase Exploration
-Before asking detailed questions, do a quick scan to understand the project context:
+### **Phase 3: PRD Generation & Setup**
+**Goal: Document and prepare for implementation**
+- Generate comprehensive PRD documenting the journey
+- Create feature branch and task structure
+- Commit documentation to feature branch
+
+---
+
+## Phase 1: Problem Discovery & Solution Exploration
+
+**Objective:** Understand the problem deeply and discover the best solution approach through collaborative exploration.
+
+### Step 1.1: Problem Understanding
+
+Ask the user to describe:
+1. **The problem they're trying to solve** - What's not working or what's needed?
+2. **Why it matters** - Who's affected? What's the impact?
+3. **Their initial ideas** - What solutions are they considering?
+
+### Step 1.2: Light Codebase Exploration
+
+Before diving into solution discussion, do a quick scan to understand project context:
 
 **Explore:**
 - Project structure and technology stack
-- Existing similar features or components
-- State management approach
-- API/routing patterns
-- Testing setup
+- Similar existing features or components
+- Relevant patterns (state management, API patterns, validation, error handling)
+- Testing setup and coverage approach
+- Integration points where solution might connect
 
-**Purpose:** Inform your questions and recommendations with actual codebase context.
+**Purpose:** Inform your analysis of user's ideas and generate context-aware recommendations.
 
-### Phase 2: Requirements Gathering
+### Step 1.3: Restate Understanding
 
-#### 2.1 Restate Understanding
-Summarize what you understood from the feature description.
+Summarize back to the user:
+- The problem as you understand it
+- Why it's important (impact, users affected)
+- Their proposed solution ideas
+- Relevant context you found in the codebase
 
-#### 2.2 Clarifying Questions with Recommended Answers
-Ask questions covering these areas, **always with your recommended answer**:
+**Wait for confirmation** before proceeding.
 
-**Context & Problem**
-- Why is this feature needed? What problem does it solve?
-- Who are the target users?
-- What's the expected impact?
+### Step 1.4: Solution Exploration & Discussion
 
-**Scope & Boundaries**
-- What's explicitly in scope for this iteration?
-- What's explicitly out of scope?
-- Are there existing features this integrates with?
+Now explore solution options together. For each of the user's ideas AND your own ideas:
 
-**User Experience**
-- What are the key user flows?
-- What interactive states are needed (loading, error, empty, success)?
-- Any accessibility requirements?
+**Analyze each solution option:**
+- How it solves the stated problem
+- How it fits (or conflicts with) existing codebase patterns
+- Pros and cons in this specific context
+- Complexity and effort estimate
+- Edge cases and potential issues
 
-**Technical Constraints**
-- Performance requirements or constraints?
-- Browser/platform requirements?
-- Security considerations?
-- Data persistence needs?
+**Present as structured options:**
 
-**Example Format:**
 ```markdown
-### Questions & Recommended Answers
+### Solution Options
 
-#### 1. Validation approach: Client-side, server-side, or both?
-- **My recommendation:** Both client and server-side validation
-- **Why:** Client-side for immediate UX feedback, server-side for security
-- **Context:** Your existing forms use this pattern (src/forms/LoginForm.js)
-- **Best practice:** Never trust client-side validation alone for security
-- **Trade-offs:** More code to maintain vs better UX and security
-- **Do you agree?**
+#### Option 1: [User's Idea Name]
+**Your proposed approach:** [Describe their idea]
 
-#### 2. State management: Extend Redux store or use Context API?
-- **My recommendation:** Extend existing Redux store
-- **Why:** Consistency with existing user state management
-- **Context:** Your app uses Redux for user state (src/store/user/)
-- **Trade-offs:** Context API would be lighter but introduces inconsistency
-- **Do you agree?**
+**My analysis:**
+- **How it solves the problem:** [Direct connection to problem statement]
+- **Fit with codebase:** [How it aligns or conflicts with existing patterns]
+- **Pros:**
+  - [Pro 1 with context]
+  - [Pro 2 with context]
+- **Cons:**
+  - [Con 1 with context]
+  - [Con 2 with context]
+- **Effort estimate:** [Small/Medium/Large with reasoning]
+- **Potential issues:** [Edge cases, technical challenges]
 
-[User can respond: "Agree" or provide specific feedback]
+**My recommendation:** [Should we pursue this? Modifications needed?]
+
+#### Option 2: [Agent's Alternative Idea]
+**Proposed approach:** [Describe your idea]
+
+**Why I suggest this:**
+- **How it solves the problem:** [Direct connection]
+- **Codebase context:** [What patterns this leverages]
+- **Pros:**
+  - [Pro 1 with context]
+  - [Pro 2 with context]
+- **Cons:**
+  - [Con 1 with context]
+  - [Con 2 with context]
+- **Effort estimate:** [Small/Medium/Large with reasoning]
+
+#### Option 3: [Hybrid or Another Alternative]
+[Same structure]
+
+---
+
+**My overall recommendation:** [Which option and why]
+- **Best fit because:** [Reasoning from problem, codebase, best practices]
+- **Trade-offs accepted:** [What we're trading for this choice]
+- **Alternative choice:** [When to consider other options]
+
+**What do you think? Should we go with this approach, or discuss further?**
 ```
 
-### Phase 3: Deep Codebase Exploration
+### Step 1.5: Refine and Decide
 
-Once requirements are clear, perform thorough exploration:
+Based on discussion, refine the chosen solution:
+- Address concerns raised
+- Clarify scope boundaries (what's in, what's out)
+- Define success criteria
+- Identify key user flows
+- Document assumptions
+
+**DECISION CHECKPOINT:** Get explicit agreement:
+```
+Agreed solution approach: [Name/description]
+Key aspects:
+- [Aspect 1]
+- [Aspect 2]
+- [Aspect 3]
+
+Ready to proceed to architecture design? (yes/no)
+```
+
+**Only proceed to Phase 2 after explicit agreement.**
+
+---
+
+## Phase 2: Architecture Design & Planning
+
+**Objective:** Design the technical architecture for implementing the agreed solution.
+
+### Step 2.1: Deep Codebase Exploration
+
+Now that we know WHAT to build, thoroughly explore HOW to build it:
 
 **Analyze in detail:**
 - Relevant existing patterns and their implementation
 - Integration points and extension mechanisms
-- Data models and schemas
+- Data models and schemas that need changes or additions
 - API endpoints and contracts
-- Similar components and their approaches
-- Test patterns and coverage
+- Similar components and their implementation approaches
+- Test patterns and coverage expectations
 - Error handling patterns
 - Configuration and environment setup
+- Security considerations
 
-**Document findings** to inform architecture proposals.
+**Document findings** - these will inform architecture proposals.
 
-### Phase 4: Architecture Discussion
+### Step 2.2: Propose Architecture Options
 
-#### 4.1 Propose Architecture Options
 Based on deep exploration, propose 2-3 architecture options with detailed context.
 
 **For each option, provide:**
 - Approach name and high-level description
-- How it fits with existing architecture
+- How it fits with existing architecture (patterns, structure, philosophy)
 - **Specific files and integration points** (e.g., "Modify src/middleware/auth.js line 45")
 - **Concrete implementation structure** (new files, modified files, patterns to use)
 - Pros and cons with context from codebase
 - Alignment with best practices
 - Effort estimate and complexity
+- When to choose this option
 
 **Rank options** from most recommended to least recommended with clear reasoning.
 
-#### 4.2 Discuss Each Option One-by-One
-Walk through each architecture option with the user:
+**Example format:**
+```markdown
+### Architecture Options
+
+#### Option 1: [Approach Name] (RECOMMENDED)
+
+**Overview**
+[1-2 sentence description]
+
+**How It Fits Existing Architecture**
+[Explain integration with current patterns from codebase analysis]
+
+**Implementation Structure**
+- **New files:**
+  - `path/to/new/file.js` - [Purpose and what it contains]
+  - `path/to/another/file.js` - [Purpose and what it contains]
+- **Modified files:**
+  - `path/to/existing/file.js` (line ~XX) - [What changes and why]
+  - `path/to/another/existing.js` - [What changes and why]
+- **Patterns to use:**
+  - [Pattern name from codebase] for [purpose]
+  - [Another pattern] for [purpose]
+
+**Pros**
+- [Pro 1 with context from codebase]
+- [Pro 2 with context]
+
+**Cons**
+- [Con 1 with context]
+- [Con 2 with context]
+
+**Effort Estimate**
+[Small/Medium/Large] - [Brief reasoning based on files and complexity]
+
+**When to Use This Option**
+[Scenarios where this is the right choice]
+
+---
+
+#### Option 2: [Alternative Approach] (ALTERNATIVE)
+[Same structure]
+
+#### Option 3: [Another Approach] (FALLBACK)
+[Same structure]
+
+---
+
+**My recommendation:** Option [N] - [Name]
+**Why:** [Reasoning considering problem, codebase fit, effort, and best practices]
+**When to reconsider:** [Scenarios where alternative might be better]
+
+**What do you think? Should we proceed with this architecture?**
+```
+
+### Step 2.3: Discuss Architecture
+
+Walk through each option with the user:
 - Explain the approach in detail
-- Show how it fits the existing codebase
-- Discuss trade-offs
-- Get feedback
+- Show specific integration points and how they work
+- Discuss tradeoffs in context of the problem
+- Answer questions and address concerns
+- Refine based on feedback
 
-#### 4.3 Finalize Architecture Choice
-Based on discussion, confirm which architecture approach(es) to include in the PRD.
+### Step 2.4: Finalize Architecture
 
-If multiple viable options emerge, rank them in order of preference with guidance on when to choose each.
+Based on discussion, confirm the architecture approach:
 
-### Phase 5: Generate PRD
+**Document key design decisions:**
+```markdown
+### Key Design Decisions
 
-Create the PRD with this **exact structure**. All sections must always be present.
+**[Decision Area 1]** (e.g., Validation Timing)
+- **Decision:** [What we decided]
+- **Why:** [Reasoning from context and requirements]
+- **Alternative considered:** [Other option and why not chosen]
+- **Implementation note:** [Specific guidance for implementation]
 
-#### Required Sections
+**[Decision Area 2]** (e.g., Error Handling Strategy)
+- **Decision:** [What we decided]
+- **Why:** [Reasoning]
+- **Flexibility:** [Where implementation can adapt based on feedback]
+
+[Continue for other key decisions]
+```
+
+**DECISION CHECKPOINT:** Get explicit agreement:
+```
+Agreed architecture: [Approach name]
+Key decisions:
+- [Decision 1]
+- [Decision 2]
+- [Decision 3]
+
+Ready to generate PRD? (yes/no)
+```
+
+**Only proceed to Phase 3 after explicit agreement.**
+
+---
+
+## Phase 3: PRD Generation & Setup
+
+**Objective:** Document the entire journey and prepare for implementation.
+
+### Step 3.1: Generate PRD
+
+Create a comprehensive PRD with this **exact structure**. All sections must always be present.
+
+#### PRD Structure
 
 **1. Feature Overview**
-- Feature name
-- Problem statement (why this matters)
-- Solution summary (what we're building)
-- Target users
+- Feature name (derived from agreed solution)
+- Problem statement (the problem we explored in Phase 1)
+- Solution summary (the approach we agreed on)
+- Target users (who benefits)
 
 **2. Goals & Success Metrics**
-- Primary goals (2-3 max)
+- Primary goals (2-3 max, from Phase 1 discussion)
 - Measurable success criteria
 - Expected impact
 
@@ -223,17 +410,43 @@ If applicable, include:
 
 **If none applicable:** State "Not applicable - backend-only feature" or similar
 
-**7. Architectural Approach**
+**7. Solution Discovery Journey**
 
-This section documents the architecture decision and provides implementation guidance.
+Document how we arrived at this solution:
 
-**7.1 Codebase Analysis**
-Document what you discovered during exploration:
+```markdown
+### Problem Explored
+[The original problem statement from Phase 1]
+
+### Solution Options Considered
+
+#### Option 1: [Name] (CHOSEN)
+- **Approach:** [Brief description]
+- **Why chosen:** [Key reasons from Phase 1 discussion]
+- **Trade-offs accepted:** [What we're giving up for this choice]
+
+#### Option 2: [Name] (Not chosen)
+- **Approach:** [Brief description]
+- **Why not chosen:** [Key reasons]
+
+[Additional options if explored]
+
+### Key Decisions Made
+- [Decision 1 and reasoning]
+- [Decision 2 and reasoning]
+```
+
+**8. Architectural Approach**
+
+This section documents the architecture decision from Phase 2.
+
+**8.1 Codebase Analysis**
+Document what you discovered during deep exploration:
 
 ```markdown
 ### Codebase Analysis
 
-**[Relevant System Name]** (e.g., Authentication System, State Management, etc.)
+**[Relevant System Name]** (e.g., Authentication System, State Management)
 - Current implementation: [Description]
 - Location: [File paths]
 - Pattern used: [Pattern name and description]
@@ -251,111 +464,21 @@ Document what you discovered during exploration:
 - Standard: [The established approach]
 ```
 
-**Example:**
-```markdown
-### Codebase Analysis
+**8.2 Architecture Options**
 
-**Authentication System**
-- Uses Passport.js middleware chain (src/middleware/auth/)
-- Current flow: request → authenticate (auth.js:23) → authorize (auth.js:45) → route handler
-- Extension point: After auth.js line 45, before route handlers are called
+List all options discussed in Phase 2, ranked from most to least recommended.
 
-**State Management**
-- Redux store for user state (src/store/user/)
-- Async actions use redux-thunk pattern
-- Pattern: action creator → thunk → API call → dispatch → reducer
-- User updates follow: updateUserRequest → updateUserSuccess/Failure pattern
+For each option, use the same detailed structure from Step 2.2:
+- Overview
+- How it fits existing architecture
+- Implementation structure (new files, modified files, patterns)
+- Pros and cons
+- Effort estimate
+- When to use this option
 
-**Validation Patterns**
-- Server-side: express-validator middleware (src/middleware/validators/)
-- Client-side: Formik + Yup schemas (src/validation/schemas/)
-- Standard: Both layers validate, server is source of truth for data integrity
-```
+**8.3 Key Design Decisions for Implementation**
 
-**7.2 Architecture Options**
-
-List all options discussed, ranked from most to least recommended.
-
-For each option:
-
-```markdown
-#### Option [N]: [Approach Name] ([RECOMMENDED/ALTERNATIVE/FALLBACK])
-
-**Overview**
-[1-2 sentence description of the approach]
-
-**How It Fits Existing Architecture**
-[Explain how this integrates with current patterns from Codebase Analysis]
-
-**Implementation Structure**
-- **New files:**
-  - `path/to/new/file.js` - [Purpose]
-  - `path/to/another/file.js` - [Purpose]
-- **Modified files:**
-  - `path/to/existing/file.js` (line ~XX) - [What changes]
-  - `path/to/another/existing.js` - [What changes]
-- **Patterns to use:**
-  - [Pattern name from codebase] for [purpose]
-  - [Another pattern] for [purpose]
-
-**Pros**
-- [Pro 1 with context]
-- [Pro 2 with context]
-
-**Cons**
-- [Con 1 with context]
-- [Con 2 with context]
-
-**Effort Estimate**
-[Small/Medium/Large] - [Brief reasoning]
-
-**When to Use This Option**
-[Scenarios where this is the right choice]
-```
-
-**Example:**
-```markdown
-#### Option 1: Middleware Approach (RECOMMENDED)
-
-**Overview**
-Add new middleware to the existing Passport.js authentication chain for profile validation.
-
-**How It Fits Existing Architecture**
-Extends the current middleware pattern (src/middleware/auth/) by inserting validation after authentication but before route handlers, following the established request pipeline pattern.
-
-**Implementation Structure**
-- **New files:**
-  - `src/middleware/profileValidator.js` - Validation middleware following express-validator pattern
-  - `src/validation/schemas/profileSchema.js` - Yup schema for client-side validation
-  - `src/middleware/__tests__/profileValidator.test.js` - Unit tests
-- **Modified files:**
-  - `src/routes/profile.js` (line 15) - Add profileValidator middleware to PUT /profile route
-  - `src/middleware/index.js` - Export new middleware
-- **Patterns to use:**
-  - express-validator pattern (matches existing validators/)
-  - Async middleware error handling (matches auth.js pattern)
-  - Redux thunk pattern for client state updates (matches user store)
-
-**Pros**
-- Isolated and testable
-- Follows existing middleware chain pattern
-- Easy to enable/disable or reuse for other routes
-- Consistent with current architecture philosophy
-
-**Cons**
-- Adds one more layer of abstraction
-- Slight performance overhead (negligible in practice)
-
-**Effort Estimate**
-Medium - 3-4 files to create, 2 files to modify, tests to write
-
-**When to Use This Option**
-Default choice - use unless middleware hooks prove insufficient during implementation
-```
-
-**7.3 Key Design Decisions for Implementation**
-
-List important decisions that implementation will need to make, with your recommendations:
+List important decisions that guide implementation:
 
 ```markdown
 ### Key Design Decisions
@@ -372,30 +495,7 @@ List important decisions that implementation will need to make, with your recomm
 - **Flexibility:** [Where implementation can adapt based on feedback]
 ```
 
-**Example:**
-```markdown
-### Key Design Decisions
-
-**1. Validation Timing**
-- **Recommendation:** Validate on blur and on submit
-- **Why:** Blur gives immediate feedback, submit prevents navigation with errors
-- **Alternative:** Validate on every keystroke - use only for critical fields (like username availability)
-- **Implementation note:** Follow pattern in src/forms/LoginForm.js lines 45-67
-
-**2. Error Message Display**
-- **Recommendation:** Inline errors for field-specific issues, toast for network/server errors
-- **Why:** Inline keeps context visible, toast for system-level issues
-- **Alternative:** Modal for all errors - only if errors need detailed explanation
-- **Flexibility:** Can adjust based on actual error scenarios encountered during testing
-
-**3. Optimistic Updates**
-- **Recommendation:** Show change immediately, rollback on error
-- **Why:** Better perceived performance, users expect instant feedback for profile edits
-- **Alternative:** Wait for server confirmation - use if data consistency is critical
-- **Implementation note:** Redux store should keep previous value for rollback
-```
-
-**8. Technical Notes**
+**9. Technical Notes**
 
 If applicable, document:
 - Data model changes or new schemas
@@ -407,19 +507,32 @@ If applicable, document:
 
 **If none:** State "Not applicable - no additional technical notes"
 
-**9. Open Questions**
+**10. Open Questions**
 
 Document any items requiring future decision or clarification:
-- Known unknowns
+- Known unknowns discovered during exploration
 - Dependencies on other teams or systems
 - Items deferred to later iterations
-- Assumptions that need validation
+- Assumptions that need validation during implementation
 
 **If none:** State "No open questions - ready for implementation"
 
-### Phase 6: Git Branch Setup
+### Step 3.2: Review PRD
 
-Before saving the PRD, set up the feature branch:
+Before saving, review the PRD:
+1. All sections present (use N/A if not applicable)
+2. Problem-to-solution journey is clear
+3. All Functional Requirements are numbered (FR-N) and testable
+4. Architecture decisions are clear and actionable
+5. Implementation guidance is specific and detailed
+
+Present the complete PRD to the user for final review and approval.
+
+**Wait for approval** before proceeding to save.
+
+### Step 3.3: Git Branch Setup
+
+Create the feature branch:
 
 ```bash
 git checkout main  # or develop, depending on project
@@ -427,11 +540,9 @@ git pull origin main
 git checkout -b feature/[feature-name]
 ```
 
-**Branch naming:** Use kebab-case matching the feature name (e.g., `feature/user-profile-editing`)
+**Branch naming:** Use kebab-case matching the feature/solution name (e.g., `feature/user-profile-editing`)
 
-**Important:** The branch name should match the PRD filename for seamless integration with `/feature-implement`.
-
-### Phase 7: Generate Task Folder ID
+### Step 3.4: Generate Task Folder ID
 
 Generate a unique folder ID using the date-counter convention:
 
@@ -454,7 +565,7 @@ FOLDER_ID="${TODAY}-${COUNTER}-[feature-name]"
 - Existing tasks today: 1 (20250122-001-user-auth)
 - New folder ID: `20250122-002-user-profile-editing`
 
-### Phase 8: Update tasks.json
+### Step 3.5: Update tasks.json
 
 Create or update `./docs/tasks/tasks.json` to track this task:
 
@@ -495,23 +606,19 @@ Consider:
 - `status` starts as "pending" for new tasks
 - Assign priority automatically based on best judgment
 
-### Phase 9: Review & Save
+### Step 3.6: Save PRD
 
-1. Review the PRD against the **Role & Standards**
-2. Ensure all sections are present (N/A if not applicable)
-3. Verify all Functional Requirements are numbered and testable
-4. Confirm architecture decisions are clear and actionable
-5. Save the file:
-   - **Path:** `./docs/tasks/[FOLDER_ID]/prd-[feature-name].md`
-   - **Format:** `YYYYMMDD-NNN-[feature-name]/prd-[feature-name].md`
-   - Create directory if needed
+Save the PRD file:
+- **Path:** `./docs/tasks/[FOLDER_ID]/prd-[feature-name].md`
+- **Format:** `YYYYMMDD-NNN-[feature-name]/prd-[feature-name].md`
+- Create directory if needed
 
 **Example:**
 - Branch: `feature/user-profile-editing`
 - Folder ID: `20250122-002-user-profile-editing`
 - PRD Path: `./docs/tasks/20250122-002-user-profile-editing/prd-user-profile-editing.md`
 
-### Phase 10: Commit PRD and Metadata
+### Step 3.7: Commit PRD and Metadata
 
 Commit the PRD and updated tasks.json to the feature branch:
 
@@ -519,14 +626,18 @@ Commit the PRD and updated tasks.json to the feature branch:
 git add docs/tasks/[FOLDER_ID]/ docs/tasks/tasks.json
 git commit -m "docs: add PRD for [feature-name]
 
-Define feature requirements and architectural approach through
-collaborative design. Includes codebase analysis, architecture
-options discussion, and implementation-ready guidance.
+Document problem discovery, solution exploration, and architectural
+design through collaborative process. Includes codebase analysis,
+solution alternatives evaluated, and implementation-ready guidance.
 
-- [N] functional requirements
+- Problem: [brief problem statement]
+- Solution: [brief solution approach]
+- [N] functional requirements defined
 - [N] architecture options analyzed
 - [Recommended approach] selected"
 ```
+
+---
 
 ## Output
 
@@ -539,14 +650,20 @@ options discussion, and implementation-ready guidance.
 
 ## Success Criteria
 
-- [ ] Feature branch created with consistent naming
-- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
-- [ ] Light exploration completed before requirements gathering
-- [ ] Deep exploration completed before architecture proposals
+- [ ] Problem thoroughly understood and documented
+- [ ] User's initial ideas analyzed with codebase context
+- [ ] Multiple solution options explored and evaluated
+- [ ] Solution approach agreed upon with clear reasoning
+- [ ] Light codebase exploration completed before solution discussion (Phase 1)
+- [ ] Deep codebase exploration completed before architecture proposals (Phase 2)
 - [ ] All questions asked with agent's recommended answers
 - [ ] 2-3 architecture options proposed with detailed context
-- [ ] Each option discussed one-by-one with user
+- [ ] Each architecture option discussed with user
+- [ ] Architecture approach finalized with explicit agreement
+- [ ] Feature branch created with consistent naming
+- [ ] Unique task folder ID generated using YYYYMMDD-NNN format
 - [ ] PRD contains all required sections (N/A if not applicable)
+- [ ] Solution Discovery Journey section captures Phase 1 exploration
 - [ ] All Functional Requirements use FR-N numbering format
 - [ ] All Functional Requirements are atomic and testable
 - [ ] Codebase Analysis documents relevant patterns and integration points
@@ -557,10 +674,13 @@ options discussion, and implementation-ready guidance.
 - [ ] tasks.json created (if needed) and updated with new task entry
 - [ ] Task entry includes: id, type, status, priority, created timestamp, branch, description
 - [ ] PRD and tasks.json committed to the feature branch
-- [ ] Branch name matches task name (not folder ID prefix)
+- [ ] Branch name matches feature name (not folder ID prefix)
 - [ ] User has confirmed the PRD is complete and accurate
+- [ ] Both decision checkpoints (Phase 1 and Phase 2) explicitly confirmed before proceeding
 
-## Example: Question Format
+## Examples
+
+### Example: Question Format
 
 ❌ **WRONG - No recommendation:**
 ```
@@ -579,4 +699,29 @@ Should we use approach A or approach B?
   - Con: One more abstraction layer
 - **Alternative:** Approach B works if middleware proves insufficient during implementation
 - **Do you agree with approach A?**
+```
+
+### Example: Analyzing User's Idea
+
+```
+You proposed: "Add a settings panel where users can toggle features on/off"
+
+**My analysis:**
+- **How it solves the problem:** Gives users control over their experience and reduces clutter
+- **Fit with codebase:** Your app already has a UserPreferences model (src/models/UserPreferences.js) and settings UI pattern (src/components/Settings/)
+- **Pros:**
+  - Leverages existing settings infrastructure
+  - Familiar UX pattern for users
+  - Easy to extend with new toggles later
+- **Cons:**
+  - Settings panel is already crowded (15 items currently)
+  - Another setting adds cognitive load
+  - Requires backend changes to persist preferences
+- **Effort estimate:** Medium - need to add preference model field, API endpoint, and UI toggle
+
+**My recommendation:** Good approach, but I suggest we organize settings into categories first (your Settings component is getting unwieldy). We could add a "Features" category and put this toggle there. This solves the immediate need and improves the overall settings experience.
+
+**Alternative idea:** Instead of a settings toggle, what about an inline control directly in the feature's context? For example, if this is about notifications, put the toggle in the notifications panel itself. This reduces the settings burden and makes the control more discoverable.
+
+**What do you think?** Settings panel, inline control, or discuss further?
 ```
