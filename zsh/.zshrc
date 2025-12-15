@@ -22,6 +22,13 @@ setopt prompt_subst
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
 autoload bashcompinit && bashcompinit
 autoload -Uz compinit
+
+# asdf version manager
+export PATH="${ASDF_DATA_DIR:-$HOME/.asdf}/shims:$PATH"
+
+# asdf completions
+fpath=(${ASDF_DATA_DIR:-$HOME/.asdf}/completions $fpath)
+
 compinit
 
 source ~/.zplug/init.zsh
