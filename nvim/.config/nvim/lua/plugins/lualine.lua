@@ -59,11 +59,12 @@ return {
             end
 
             local lsp_icons = {
-              lua_ls = "",
-              ruby_lsp = "",
-              pyright = "",
-              ts_ls = "",
-              bashls = "",
+              lua_ls = "󰢱",     -- Lua icon
+              ruby_lsp = "󰴭",   -- Ruby icon
+              pyright = "󰌠",    -- Python icon
+              ts_ls = "󰛦",      -- TypeScript/JavaScript icon
+              bashls = "",     -- Bash icon
+              cssls = "󰌜",      -- CSS3 icon
             }
 
             local icons = {}
