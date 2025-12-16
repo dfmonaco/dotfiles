@@ -6,12 +6,14 @@
 -- vim.lsp.config (built into Nvim 0.11+) automatically discovers them.
 --
 -- Install language servers manually:
+--   Strategy: Prefer system packages (pacman), fallback to language-specific managers
+--
 --   lua:        sudo pacman -S lua-language-server
---   typescript: npm install -g typescript-language-server
+--   css:        sudo pacman -S vscode-langservers-extracted (includes json/yaml/html/css)
+--   typescript: npm install -g typescript-language-server typescript
 --   python:     pip install pyright
 --   ruby:       gem install ruby-lsp
 --   bash:       npm install -g bash-language-server
---   json/yaml:  npm install -g vscode-langservers-extracted
 
 return {
   "neovim/nvim-lspconfig",
@@ -89,7 +91,7 @@ return {
     })
 
     -- Enable language servers (nvim-lspconfig provides the configs)
-    local servers = { "lua_ls", "ts_ls", "pyright", "bashls" }
+    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls" }
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
