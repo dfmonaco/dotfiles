@@ -9,6 +9,8 @@ return {
   dependencies = {
     -- Spell checker: corrections for misspelled words
     "ribru17/blink-cmp-spell",
+    -- Color highlighting: shows colored icons for CSS color completions
+    "brenoprata10/nvim-highlight-colors",
   },
   
   -- Init function: runs BEFORE plugin loads (perfect for setting up highlight groups)
@@ -81,6 +83,40 @@ return {
           
           -- Component definitions
           components = {
+            -- Custom component: kind_icon with color support
+            -- Integrates with nvim-highlight-colors to show actual color swatches
+            kind_icon = {
+              text = function(ctx)
+                -- Default kind icon
+                local icon = ctx.kind_icon
+                
+                -- If LSP source, check for color derived from documentation
+                if ctx.item.source_name == "LSP" then
+                  local color_item = require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+                  if color_item and color_item.abbr ~= "" then
+                    icon = color_item.abbr
+                  end
+                end
+                
+                return icon .. ctx.icon_gap
+              end,
+              
+              highlight = function(ctx)
+                -- Default highlight group
+                local highlight = "BlinkCmpKind" .. ctx.kind
+                
+                -- If LSP source, check for color derived from documentation
+                if ctx.item.source_name == "LSP" then
+                  local color_item = require("nvim-highlight-colors").format(ctx.item.documentation, { kind = ctx.kind })
+                  if color_item and color_item.abbr_hl_group then
+                    highlight = color_item.abbr_hl_group
+                  end
+                end
+                
+                return highlight
+              end,
+            },
+            
             -- Custom component: source_icon
             -- Displays an icon + short name for each completion source
             -- This helps you instantly identify where each suggestion comes from
