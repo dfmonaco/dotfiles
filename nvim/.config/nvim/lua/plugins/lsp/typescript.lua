@@ -1,0 +1,12 @@
+-- TypeScript/JavaScript Language Server Configuration
+-- Install: npm install -g typescript-language-server typescript
+--
+-- Provides LSP for:
+-- - TypeScript (.ts, .tsx)
+-- - JavaScript (.js, .jsx)
+--
+-- Note: For Svelte projects, also enable svelte LSP for .svelte files
+-- Note: Uses ts_ls (modern name, formerly tsserver)
+
+-- No custom configuration needed - using defaults
+-- Enabled via init.lua with: vim.lsp.enable("ts_ls")

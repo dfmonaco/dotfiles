@@ -1,0 +1,14 @@
+-- CSS/HTML/JSON Language Server Configuration
+-- Install: sudo pacman -S vscode-langservers-extracted
+--
+-- This package provides multiple language servers:
+-- - cssls:   CSS language server
+-- - html:    HTML language server
+-- - jsonls:  JSON language server
+-- - eslint:  ESLint language server
+--
+-- Currently enabled: cssls (CSS/SCSS/LESS)
+-- Future: Can also enable html, jsonls, eslint if needed
+
+-- No custom configuration needed - using defaults
+-- Enabled via init.lua with: vim.lsp.enable("cssls")

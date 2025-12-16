@@ -1,0 +1,14 @@
+-- Python Language Server Configuration
+-- Install: pip install pyright
+--
+-- Provides LSP for Python with:
+-- - Type checking
+-- - Code completion
+-- - Go to definition
+-- - Refactoring support
+--
+-- Note: Using global pyright installation
+-- Future enhancement: Add virtual environment detection if needed
+
+-- No custom configuration needed - using defaults
+-- Enabled via init.lua with: vim.lsp.enable("pyright")

@@ -1,0 +1,11 @@
+-- Bash Language Server Configuration
+-- Install: npm install -g bash-language-server
+--
+-- Provides LSP for shell scripts:
+-- - Bash (.sh, .bash)
+-- - Shell completion
+-- - Syntax checking
+-- - Hover documentation
+
+-- No custom configuration needed - using defaults
+-- Enabled via init.lua with: vim.lsp.enable("bashls")
