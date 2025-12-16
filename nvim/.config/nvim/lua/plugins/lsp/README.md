@@ -4,89 +4,91 @@ This directory contains language-specific LSP configurations for Neovim.
 
 ## Installation Priority Tiers
 
-We follow a consistent priority order for language server installation:
+**IMPORTANT:** ALL language servers should follow this consistent priority order:
 
-### Tier 1: System Packages (pacman) - PREFERRED
-**When to use:** Language servers that don't need project-specific versions
+### Tier 1: System Packages (pacman) - ALWAYS CHECK FIRST ✅
+**Rule:** ALWAYS check if a language server is available via pacman before using other methods.
 
 **Benefits:**
 - System-managed updates via pacman
 - No version conflicts
 - Works system-wide
 - Well-maintained Arch packages
+- Consistent installation method
 
-**Languages using this tier:**
-- Lua (lua-language-server)
-- CSS/HTML/JSON (vscode-langservers-extracted)
-- Python (pyright)
-- Bash (bash-language-server)
-- TypeScript (typescript-language-server)
-- Svelte (svelte-language-server)
+**All language servers available via pacman:**
+- Lua: `sudo pacman -S lua-language-server`
+- Python: `sudo pacman -S pyright`
+- TypeScript: `sudo pacman -S typescript-language-server`
+- Bash: `sudo pacman -S bash-language-server`
+- Svelte: `sudo pacman -S svelte-language-server`
+- Ruby: `sudo pacman -S ruby-lsp` ⭐
+- CSS/HTML/JSON: `sudo pacman -S vscode-langservers-extracted`
 
-### Tier 2: asdf-managed Language Tools
-**When to use:** Languages that need version management
+**Check availability:**
+```bash
+yay -Si <package-name>  # Check if available in repos
+```
 
-**Benefits:**
-- Per-project version control via .tool-versions
-- Isolated from system packages
-- Team consistency
+### Tier 2: Global Language Manager Installation
+**When to use:** If system package unavailable OR for language runtime management
 
-**Languages using this tier:**
-- Ruby (asdf for Ruby version, gem for ruby-lsp)
-  ```bash
-  asdf install ruby 3.2.9
-  asdf set ruby 3.2.9 --home  # Sets in ~/.tool-versions
-  gem install ruby-lsp
-  ```
-- Node.js (asdf for Node version, npm for packages)
+**Examples:**
+- Ruby version: `asdf install ruby 3.2.9` (runtime, not LSP)
+- Node version: `asdf install nodejs 24.12.0` (runtime, not LSP)
+- TypeScript compiler: `npm install -g typescript` (compiler, not LSP server)
+- Fallback LSP: `gem install ruby-lsp` (only if pacman unavailable)
 
-### Tier 3: Per-Project Installation
-**When to use:** Project-specific requirements
+### Tier 3: Per-Project Installation (Overrides)
+**When to use:** Project-specific requirements that differ from system
 
 **Benefits:**
 - Exact dependency matching
 - Team consistency via lock files
-- Isolated from global environment
+- Project isolation
+
+**Detection logic (Ruby example):**
+1. Check for project-specific installation (Gemfile.lock) → `bundle exec ruby-lsp`
+2. Fallback to system installation → `ruby-lsp`
 
 **Examples:**
-- Ruby projects with ruby-lsp in Gemfile → `bundle exec ruby-lsp`
-- Node projects with LSP in package.json → `npx typescript-language-server`
-- Python projects with LSP in venv → `.venv/bin/pyright`
+- Ruby: `bundle exec ruby-lsp` (if ruby-lsp in Gemfile.lock)
+- Node: `npx typescript-language-server` (if in package.json)
+- Python: `.venv/bin/pyright` (if in virtualenv)
 
-### Tier 4: Global Language Manager
-**When to use:** Fallback for standalone files outside projects
+## Command Detection Strategy
 
-**Examples:**
-- `gem install ruby-lsp` (outside Ruby projects)
-- `npm install -g` (for standalone JS files)
+**Default:** All language servers use system-installed binaries (simple, no detection needed)
 
-## Command Detection
-
-Most language servers use simple hardcoded commands since they're system-installed.
-
-**Exception:** Ruby uses smart detection:
+**Per-Project Override Detection (Ruby):**
+Ruby implements smart detection to support project-specific versions:
 1. Check for Gemfile.lock + ruby-lsp entry → `bundle exec ruby-lsp`
-2. Otherwise → `ruby-lsp` (global)
+2. Otherwise → `ruby-lsp` (system binary from pacman)
 
-Future enhancements may add similar detection for Python (venv) and Node (npx).
+**Future enhancements:** Similar detection could be added for:
+- Python: Check for venv → `.venv/bin/pyright` else `/usr/bin/pyright`
+- Node: Check for package.json → `npx typescript-language-server` else `/usr/bin/typescript-language-server`
 
 ## Verification
 
 After installation, verify each server:
 
 ```bash
-# Check system installations
-which lua-language-server      # /usr/bin/lua-language-server
-which pyright                   # /usr/bin/pyright
+# Check ALL system installations (should all show /usr/bin/*)
+which lua-language-server        # /usr/bin/lua-language-server
+which pyright                    # /usr/bin/pyright
 which typescript-language-server # /usr/bin/typescript-language-server
-which bash-language-server      # /usr/bin/bash-language-server
-which svelteserver              # /usr/bin/svelteserver
+which bash-language-server       # /usr/bin/bash-language-server
+which svelteserver               # /usr/bin/svelteserver
 which vscode-css-language-server # /usr/bin/vscode-css-language-server
+which ruby-lsp                   # /usr/bin/ruby-lsp ⭐
 
-# Check asdf installations
-which ruby-lsp                  # ~/.asdf/shims/ruby-lsp
-asdf current ruby               # Should show version 3.2.9
-asdf current nodejs             # Should show version 24.12.0
+# Check language runtimes (managed by asdf)
+asdf current ruby                # Should show version 3.2.9
+asdf current nodejs              # Should show version 24.12.0
+
+# Verify pacman packages
+pacman -Q | grep -E 'lua-language-server|pyright|typescript-language-server|bash-language-server|svelte-language-server|ruby-lsp|vscode-langservers'
 ```
 
 ## Adding New Languages
