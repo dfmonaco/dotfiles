@@ -1,13 +1,21 @@
 -- Svelte Language Server Configuration
--- Install: npm install -g svelte-language-server
+-- Installation (Priority Order):
+--   1. System (Recommended): sudo pacman -S svelte-language-server
+--
+-- Installed via: pacman
+-- Command used: svelteserver --stdio
+-- Strategy: System-only (Svelte LSP version rarely affects functionality)
 --
 -- Provides:
 -- - HTML/CSS completions with Emmet support
 -- - TypeScript integration for script blocks
 -- - Svelte-specific formatting and diagnostics
 --
--- Note: Requires svelte.config.js or package.json in project root
--- Note: Also enable TypeScript LSP (ts_ls) for best results in Svelte projects
+-- Requirements:
+-- - svelte.config.js or package.json in project root
+-- - TypeScript LSP (ts_ls) enabled for best results in script blocks
+--
+-- Note: Manual start required because not included in nvim-lspconfig by default
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "svelte",

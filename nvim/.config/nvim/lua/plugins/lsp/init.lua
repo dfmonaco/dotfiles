@@ -5,6 +5,11 @@
 -- nvim-lspconfig provides server configs from its lsp/ directory.
 -- vim.lsp.config (built into Nvim 0.11+) automatically discovers them.
 --
+-- Installation Strategy:
+--   See lua/plugins/lsp/README.md for detailed installation strategy
+--   TL;DR: Prefer system packages (pacman), use asdf for version management,
+--          per-project when needed, global language tools as fallback
+--
 -- Language-specific configurations are in separate files:
 --   lua/plugins/lsp/lua.lua        - Lua language server
 --   lua/plugins/lsp/ruby.lua       - Ruby language server (hybrid detection)

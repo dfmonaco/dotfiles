@@ -1,5 +1,11 @@
 -- TypeScript/JavaScript Language Server Configuration
--- Install: npm install -g typescript-language-server typescript
+-- Installation (Priority Order):
+--   1. System (Recommended): sudo pacman -S typescript-language-server
+--   2. TypeScript compiler: npm install -g typescript (via asdf nodejs)
+--
+-- Installed via: pacman (LSP server) + asdf npm (TypeScript compiler)
+-- Command used: typescript-language-server --stdio
+-- Strategy: Hybrid (system LSP server, asdf-managed TypeScript compiler)
 --
 -- Provides LSP for:
 -- - TypeScript (.ts, .tsx)
@@ -7,6 +13,10 @@
 --
 -- Note: For Svelte projects, also enable svelte LSP for .svelte files
 -- Note: Uses ts_ls (modern name, formerly tsserver)
+--
+-- Why hybrid approach:
+-- - LSP server rarely needs updates (pacman is fine)
+-- - TypeScript compiler may need per-project versions (asdf flexibility)
 
 -- No custom configuration needed - using defaults
 -- Enabled via init.lua with: vim.lsp.enable("ts_ls")

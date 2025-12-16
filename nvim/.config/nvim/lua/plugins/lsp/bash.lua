@@ -1,5 +1,10 @@
 -- Bash Language Server Configuration
--- Install: npm install -g bash-language-server
+-- Installation (Priority Order):
+--   1. System (Recommended): sudo pacman -S bash-language-server
+--
+-- Installed via: pacman
+-- Command used: bash-language-server start
+-- Strategy: System-only (no project-specific versions needed)
 --
 -- Provides LSP for shell scripts:
 -- - Bash (.sh, .bash)

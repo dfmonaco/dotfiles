@@ -1,17 +1,25 @@
 -- Ruby Language Server Configuration
--- Install:
---   Global:  gem install ruby-lsp
---   Project: Add 'ruby-lsp' to Gemfile
+-- Installation (Priority Order):
+--   1. asdf Ruby (Recommended):
+--      asdf install ruby 3.2.9
+--      asdf set ruby 3.2.9 --home
+--      gem install ruby-lsp
+--   2. Per-project: Add 'ruby-lsp' to Gemfile
 --
--- Strategy: Hybrid approach (per-project + global fallback)
--- - If Gemfile.lock exists AND contains ruby-lsp: use 'bundle exec ruby-lsp'
--- - Otherwise: use global 'ruby-lsp' command
+-- Installed via: asdf + gem (global) or bundler (per-project)
+-- Command used: Dynamic (bundle exec ruby-lsp OR ruby-lsp)
+-- Strategy: Hybrid with runtime detection (per-project + global fallback)
+--
+-- Detection logic:
+--   1. If Gemfile.lock exists AND contains ruby-lsp → bundle exec ruby-lsp
+--   2. Otherwise → ruby-lsp (global gem via asdf)
 --
 -- This ensures:
 -- - Project gems match the project's Ruby version and dependencies
 -- - Global fallback works for Ruby files outside projects
+-- - asdf manages Ruby versions consistently
 
--- Configure ruby_lsp with PATH environment (for rbenv shims)
+-- Configure ruby_lsp with PATH environment (for asdf shims)
 vim.lsp.config("ruby_lsp", {
   cmd_env = {
     PATH = vim.env.PATH,

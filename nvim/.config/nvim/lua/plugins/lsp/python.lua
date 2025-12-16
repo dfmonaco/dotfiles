@@ -1,5 +1,11 @@
 -- Python Language Server Configuration
--- Install: pip install pyright
+-- Installation (Priority Order):
+--   1. System (Recommended): sudo pacman -S pyright
+--   2. Per-project (Future): pip install pyright (in virtualenv)
+--
+-- Installed via: pacman
+-- Command used: pyright-langserver --stdio
+-- Strategy: System with future venv detection
 --
 -- Provides LSP for Python with:
 -- - Type checking
@@ -7,8 +13,10 @@
 -- - Go to definition
 -- - Refactoring support
 --
--- Note: Using global pyright installation
--- Future enhancement: Add virtual environment detection if needed
+-- Future enhancement: Add virtual environment detection
+--   - Check for .venv/bin/pyright
+--   - Check for poetry.lock → poetry run pyright
+--   - Fallback to system pyright
 
 -- No custom configuration needed - using defaults
 -- Enabled via init.lua with: vim.lsp.enable("pyright")

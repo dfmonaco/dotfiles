@@ -1,5 +1,10 @@
 -- Lua Language Server Configuration
--- Install: sudo pacman -S lua-language-server
+-- Installation (Priority Order):
+--   1. System (Recommended): sudo pacman -S lua-language-server
+--
+-- Installed via: pacman
+-- Command used: lua-language-server
+-- Strategy: System-only (no project-specific versions needed)
 --
 -- Custom settings for Neovim development:
 -- - Uses LuaJIT runtime (Neovim's Lua interpreter)
