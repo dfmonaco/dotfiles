@@ -24,6 +24,7 @@ return {
           "query", -- Tree-sitter query language
           "regex",
           "ruby",
+          "svelte", -- Added for Svelte file support
           "typescript",
           "vim",
           "vimdoc",
@@ -69,6 +70,7 @@ return {
           "lua",
           "python",
           "ruby",
+          "svelte", -- Added Svelte to folding support
         },
         callback = function()
           vim.wo[0][0].foldmethod = "expr"
