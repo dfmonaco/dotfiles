@@ -5,65 +5,77 @@ return {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate", -- Automatically update parsers after install/update
     event = { "BufReadPost", "BufNewFile" }, -- Load on buffer read
-    opts = {
-      -- A list of parser names, or "all" (parsers MUST always be installed)
-      ensure_installed = {
-        "bash",
-        "c",
-        "css",
-        "html",
-        "javascript",
-        "json",
-        "lua",
-        "markdown",
-        "markdown_inline",
-        "python",
-        "query", -- Tree-sitter query language
-        "regex",
-        "ruby",
-        "typescript",
-        "vim",
-        "vimdoc",
-        "yaml",
-      },
 
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
+    config = function()
+      -- Setup nvim-treesitter using the configs module (current stable API)
+      require("nvim-treesitter.configs").setup({
+        -- A list of parser names that should always be installed
+        ensure_installed = {
+          "bash",
+          "c",
+          "css",
+          "html",
+          "javascript",
+          "json", -- JSON parser (works for tsconfig.json even with comments)
+          "lua",
+          "markdown",
+          "markdown_inline",
+          "python",
+          "query", -- Tree-sitter query language
+          "regex",
+          "ruby",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "yaml",
+        },
 
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
+        -- Install parsers synchronously (only applied to ensure_installed)
+        sync_install = false,
 
-      highlight = {
-        enable = true, -- Enable Tree-sitter based highlighting
+        -- Automatically install missing parsers when entering buffer
+        -- Disabled to avoid problematic auto-downloads of jsonc
+        auto_install = false,
 
-        -- NOTE: these are the names of the parsers and not the filetype
-        -- List of languages that will be disabled
-        -- disable = { "c", "rust" },
+        -- Highlighting configuration
+        highlight = {
+          enable = true, -- Enable Tree-sitter based highlighting
 
-        -- Or use a function for more flexibility, e.g. to disable slow treesitter highlight for large files
-        disable = function(lang, buf)
-          local max_filesize = 100 * 1024 -- 100 KB
-          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
-          if ok and stats and stats.size > max_filesize then
-            return true
-          end
+          -- Disable for large files (performance optimization)
+          disable = function(lang, buf)
+            local max_filesize = 100 * 1024 -- 100 KB
+            local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+            if ok and stats and stats.size > max_filesize then
+              return true
+            end
+          end,
+
+          -- Set to false to use only treesitter highlighting
+          -- Set to true or list of languages to use both treesitter and vim regex
+          additional_vim_regex_highlighting = false,
+        },
+
+        -- Indentation based on treesitter (experimental, disabled by default)
+        indent = {
+          enable = false,
+        },
+      })
+
+      -- Enable treesitter-based folding (optional, per-filetype)
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = {
+          "javascript",
+          "typescript",
+          "lua",
+          "python",
+          "ruby",
+        },
+        callback = function()
+          vim.wo[0][0].foldmethod = "expr"
+          vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+          vim.wo[0][0].foldenable = false -- Don't fold by default
         end,
-
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = true,
-      },
-
-      -- Indentation based on treesitter for the = operator (experimental)
-      indent = {
-        enable = false, -- Disabled by default as it's experimental
-      },
-    },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+      })
     end,
   },
 }
