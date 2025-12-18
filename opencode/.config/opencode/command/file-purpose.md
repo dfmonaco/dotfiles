@@ -49,9 +49,6 @@ Scope:
 Consumers:
 - System-level entities that rely on this file existing.
 
-Notes:
-- Permanent constraints that are unlikely to ever change.
-
 ## Forbidden content
 
 - Temporary or implementation-bound facts
@@ -83,6 +80,3 @@ Scope:
 
 Consumers:
   <system-level users>
-
-Notes:
-  - <permanent constraint>
