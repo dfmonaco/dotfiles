@@ -18,7 +18,6 @@ Accept natural language file selection and confirm before applying changes.
 ## Rules
 
 - Insert the header at the top of each file.
-- Replace any existing file-level header entirely.
 - Do not modify any code.
 
 ## Header principles (must be enforced)
