@@ -14,6 +14,27 @@ Optional `$ARGUMENTS`:
 - Empty: Analyze changes and create one or more commits with generated messages
 - Message text: Use provided message for a single commit
 
+## Scope of changes (staged vs unstaged)
+
+When deciding what to include in commits:
+
+1. **If there are staged changes** (non-empty index):
+   - **Operate only on staged changes**:
+     - Analyze, group, and commit **only the staged files**.
+     - **Do not stage or modify any unstaged files.**
+   - `$ARGUMENTS` behavior:
+     - Empty: Analyze staged changes and create one or more atomic commits.
+     - Message text: Use the provided message for a single commit containing all staged changes.
+
+2. **If there are no staged changes**:
+   - If there are unstaged changes:
+     - Behave exactly as the original command:
+       - Analyze all working tree changes (modified / added / deleted / untracked).
+       - Stage them as needed.
+       - Create one or more atomic commits as described below.
+   - If there are no changes at all:
+     - Do not create a commit; report that there is nothing to commit.
+
 ---
 
 # 🚨 CRITICAL RULES
