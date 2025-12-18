@@ -13,7 +13,7 @@ Ask the user:
 
 > Which files should I apply the file-purpose header to?
 
-Accept natural language file selection and confirm before applying changes.
+Accept natural language file selection. Once files are confirmed, proceed autonomously through drafting, validation, and application without requesting further permission.
 
 ## Rules
 
@@ -53,18 +53,30 @@ Consumers:
 - Temporary or implementation-bound facts
 - External references
 
-## Self-check rules
+## Self-check rules (MANDATORY - always perform)
+
+For EVERY drafted header, you MUST validate each line against these checks:
 
 - If a line could become false after a refactor, it does not belong.
 - If a line describes behavior, rewrite it as identity or remove it.
 - If a line fits better in another section, move it or remove it.
 
+Show your self-check validation results before applying changes.
+
 ## Execution model (mandatory)
 
+For each file:
+
 1. Draft the file-purpose header.
-2. Validate each section against the section principles.
-3. Revise until all checks pass.
-4. Only then apply the header to the file.
+2. **ALWAYS validate** each section against:
+   - Section principles (lines 31-38)
+   - Self-check rules (above)
+   - Forbidden content rules (lines 52-54)
+3. Show validation results and revise until all checks pass.
+4. **Automatically apply** the header without asking for permission.
+5. Proceed to next file.
+
+Work autonomously through all files once the file list is confirmed.
 
 ## Header format (do not modify)
 
