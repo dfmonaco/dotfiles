@@ -1,5 +1,8 @@
 ---
 description: Commit modified files to git
+agent: build
+model: github-copilot/gpt-4.1
+subtask: true
 ---
 
 # Git Commit
