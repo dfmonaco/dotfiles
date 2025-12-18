@@ -15,6 +15,14 @@ Optional `$ARGUMENTS`:
 
 # 🚨 CRITICAL RULES
 
+## Rule 0: Execute Commits Directly
+
+**When invoked, execute commits immediately without asking for permission or review.**
+
+Once this command is called, follow all rules below and create the commits directly. The user has already given permission by invoking this command.
+
+---
+
 ## Rule 1: Atomic Commits (One WHY = One Commit)
 
 **Every commit must serve a single purpose. Different WHYs = different commits.**
@@ -29,8 +37,7 @@ Optional `$ARGUMENTS`:
 
 **Before committing:**
 1. Group changes by their WHY
-2. Show proposed commit breakdown with files
-3. Wait for approval
+2. Create commits directly following all rules (no approval needed)
 
 ❌ WRONG: `"add validation and fix README typo and update deps"`  
 ✅ CORRECT: 3 separate commits
