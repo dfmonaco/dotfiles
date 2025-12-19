@@ -18,6 +18,7 @@
 --   lua/plugins/lsp/python.lua     - Python language server
 --   lua/plugins/lsp/bash.lua       - Bash language server
 --   lua/plugins/lsp/css.lua        - CSS/HTML/JSON language servers
+--   lua/plugins/lsp/eslint.lua     - ESLint language server (conditional)
 
 return {
   "neovim/nvim-lspconfig",
@@ -68,6 +69,32 @@ return {
         map("<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
         map("[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
         map("]d", vim.diagnostic.goto_next, "Next Diagnostic")
+
+        -- Inlay hints (Neovim 0.10+)
+        -- Enable by default if the LSP supports it
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        if client and client:supports_method("textDocument/inlayHint") then
+          vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
+        end
+
+        -- Toggle inlay hints
+        map("<leader>ci", function()
+          local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf })
+          vim.lsp.inlay_hint.enable(not enabled, { bufnr = event.buf })
+          vim.notify("Inlay hints " .. (enabled and "disabled" or "enabled"), vim.log.levels.INFO)
+        end, "Toggle Inlay Hints")
+
+        -- ESLint fix all (only when ESLint is attached)
+        if client and client.name == "eslint" then
+          map("<leader>ce", function()
+            vim.lsp.buf.code_action({
+              apply = true,
+              filter = function(action)
+                return action.title:match("Fix all") or action.title:match("fix all")
+              end,
+            })
+          end, "ESLint Fix All")
+        end
       end,
     })
 
@@ -79,6 +106,7 @@ return {
     require("plugins.lsp.python")
     require("plugins.lsp.bash")
     require("plugins.lsp.css")
+    require("plugins.lsp.eslint")
 
     -- Enable simple language servers (no custom config needed)
     local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls" }

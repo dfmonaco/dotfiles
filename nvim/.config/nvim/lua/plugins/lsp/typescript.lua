@@ -18,6 +18,8 @@
 --
 -- Note: For Svelte projects, also enable svelte LSP for .svelte files
 -- Note: Uses ts_ls (modern name, formerly tsserver)
+-- Note: Formatting is handled by Prettier via conform.nvim, not by this LSP.
+--       Install Prettier with: sudo pacman -S prettier
 
 -- No custom configuration needed - using defaults
 -- Enabled via init.lua with: vim.lsp.enable("ts_ls")

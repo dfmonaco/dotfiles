@@ -8,14 +8,17 @@
 --
 -- Provides:
 -- - HTML/CSS completions with Emmet support
--- - TypeScript integration for script blocks
--- - Svelte-specific formatting and diagnostics
+-- - TypeScript integration for script blocks (enhanced for Svelte 5)
+-- - Svelte-specific diagnostics
+-- - Inlay hints for type information
 --
 -- Requirements:
 -- - svelte.config.js or package.json in project root
 -- - TypeScript LSP (ts_ls) enabled for best results in script blocks
 --
 -- Note: Manual start required because not included in nvim-lspconfig by default
+-- Note: Formatting is handled by Prettier via conform.nvim.
+--       Install Prettier with: sudo pacman -S prettier
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "svelte",
@@ -55,6 +58,19 @@ vim.api.nvim_create_autocmd("FileType", {
               completions = { enable = true },
               codeActions = { enable = true },
               rename = { enable = true },
+              -- Enhanced features for better DX
+              selectionRange = { enable = true },
+              signatureHelp = { enable = true },
+              semanticTokens = { enable = true },
+              -- Inlay hints (Svelte 5 / TypeScript 4.4+)
+              inlayHints = {
+                parameterNames = { enabled = "all" },
+                parameterTypes = { enabled = true },
+                variableTypes = { enabled = true },
+                propertyDeclarationTypes = { enabled = true },
+                functionLikeReturnTypes = { enabled = true },
+                enumMemberValues = { enabled = true },
+              },
             },
             svelte = {
               compilerWarnings = {},

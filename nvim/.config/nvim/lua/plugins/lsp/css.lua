@@ -10,10 +10,13 @@
 -- - cssls:   CSS language server
 -- - html:    HTML language server (available but not enabled)
 -- - jsonls:  JSON language server (available but not enabled)
--- - eslint:  ESLint language server (available but not enabled)
+-- - eslint:  ESLint language server (configured separately in eslint.lua)
 --
 -- Currently enabled: cssls (CSS/SCSS/LESS)
 -- To enable others: Add to init.lua servers list and create respective config files
+--
+-- Note: Formatting is handled by Prettier via conform.nvim, not by this LSP.
+--       Install Prettier with: sudo pacman -S prettier
 
 -- No custom configuration needed - using defaults
 -- Enabled via init.lua with: vim.lsp.enable("cssls")
