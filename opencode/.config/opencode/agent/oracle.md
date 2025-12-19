@@ -1,6 +1,6 @@
 ---
 description: Safe planning and analysis agent with no code edits; can create markdown reports.
-mode: all
+mode: subagent
 model: github-copilot/gpt-5.1
 temperature: 0.1
 tools:
