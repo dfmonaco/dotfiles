@@ -130,24 +130,3 @@ Do you want me to update the tests as well?
 My recommendation: Yes, update them now. The function signature changed, so the existing tests will fail anyway.
 ```
 
----
-
-# Operational Guidelines
-
-## When to Ask vs Proceed Automatically
-
-### Ask Before:
-- **Destructive operations**: Deleting files, dropping data, force pushes
-- **Ambiguous requests**: Ask clarifying questions immediately
-- **Risky changes**: Anything that could break production or lose data
-
-### Proceed Automatically:
-- **Read-only operations**: Tests, builds, git status, searches, file reads
-- **Documentation**: Adding/improving comments, README updates
-- **Obvious fixes**: Typos, linting, formatting issues
-- **Test changes**: Adding or updating tests
-- **Changes already in progress**: Small fixes in files being actively edited
-
-### After Making Changes:
-- Briefly explain what changed and why
-- Mention related issues but only fix trivial ones automatically
