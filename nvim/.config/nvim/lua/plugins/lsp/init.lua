@@ -70,12 +70,9 @@ return {
         map("[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
         map("]d", vim.diagnostic.goto_next, "Next Diagnostic")
 
-        -- Inlay hints (Neovim 0.10+)
-        -- Enable by default if the LSP supports it
+        -- Inlay hints disabled by default
+        -- Toggle with <leader>ci when needed
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client:supports_method("textDocument/inlayHint") then
-          vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
-        end
 
         -- Toggle inlay hints
         map("<leader>ci", function()
