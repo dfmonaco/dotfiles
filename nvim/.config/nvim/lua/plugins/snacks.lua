@@ -22,6 +22,10 @@ return {
       sources = {
         explorer = {
           hidden = true, -- Show hidden files by default
+          layout = {
+            preview = "main", -- Show preview in main editor window
+            hidden = {}, -- Don't hide any windows (shows preview by default)
+          },
         },
       },
     },
