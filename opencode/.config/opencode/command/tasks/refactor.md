@@ -70,7 +70,16 @@ COUNTER=$(printf "%03d" $((EXISTING + 1)))
 FOLDER_ID="${TODAY}-${COUNTER}-[refactor-name]"
 ```
 
-### 6. Update tasks.json
+### 6. Ensure tasks.json Exists
+```bash
+mkdir -p ./docs/tasks
+if [ ! -f ./docs/tasks/tasks.json ]; then
+  echo '{"tasks": []}' > ./docs/tasks/tasks.json
+  git add ./docs/tasks/tasks.json
+fi
+```
+
+### 7. Update tasks.json
 Add entry:
 ```json
 {
@@ -84,7 +93,11 @@ Add entry:
 }
 ```
 
-### 7. Save & Commit
+### 8. Save & Commit
+```bash
+mkdir -p "./docs/tasks/${FOLDER_ID}"
+```
+
 Save to: `./docs/tasks/[FOLDER_ID]/refactor-[refactor-name].md`
 
 ```bash

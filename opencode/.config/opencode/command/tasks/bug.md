@@ -46,7 +46,7 @@ Generate the document with these sections:
 
 **5. Proposed Solution** - Approach, files to modify, risks
 
-**6. Fix Requirements** - Numbered (FR-1, FR-2...), specific and testable
+**6. Fix Requirements** - Numbered (BF-1, BF-2...), specific and testable
 
 **7. Testing Strategy** - Unit tests, regression tests, manual verification
 
@@ -77,7 +77,16 @@ COUNTER=$(printf "%03d" $((EXISTING + 1)))
 FOLDER_ID="${TODAY}-${COUNTER}-[bug-name]"
 ```
 
-### 6. Update tasks.json
+### 6. Ensure tasks.json Exists
+```bash
+mkdir -p ./docs/tasks
+if [ ! -f ./docs/tasks/tasks.json ]; then
+  echo '{"tasks": []}' > ./docs/tasks/tasks.json
+  git add ./docs/tasks/tasks.json
+fi
+```
+
+### 7. Update tasks.json
 Add entry:
 ```json
 {
@@ -91,7 +100,11 @@ Add entry:
 }
 ```
 
-### 7. Save & Commit
+### 8. Save & Commit
+```bash
+mkdir -p "./docs/tasks/${FOLDER_ID}"
+```
+
 Save to: `./docs/tasks/[FOLDER_ID]/bug-[bug-name].md`
 
 ```bash
