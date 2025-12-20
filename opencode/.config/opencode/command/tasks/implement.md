@@ -17,6 +17,12 @@ Implement a task from its document using one of two modes:
 
 ---
 
+## Prerequisites
+- `jq` — Required for JSON manipulation
+- `gh` — GitHub CLI for PR creation (Phase 5)
+
+---
+
 ## Mode Selection
 
 ### Invocation
@@ -53,7 +59,7 @@ If not found: ask user for the document path.
 
 ### 1.2 Analyze Task Document
 Read the task document and identify:
-- Requirements to implement (FR-1, FR-2, RR-1, etc.)
+- Requirements to implement (FR-1, BF-1, RR-1, etc.)
 - Files to create/modify
 - Tests to write
 - Dependencies or setup needed
