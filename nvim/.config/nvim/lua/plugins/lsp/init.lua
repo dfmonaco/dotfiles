@@ -108,7 +108,7 @@ return {
     require("plugins.lsp.eslint")
 
     -- Enable simple language servers (no custom config needed)
-    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls", "tailwindcss" }
+    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls", "tailwindcss", "eslint" }
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
