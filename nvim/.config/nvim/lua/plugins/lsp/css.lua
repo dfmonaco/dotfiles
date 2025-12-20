@@ -18,5 +18,27 @@
 -- Note: Formatting is handled by Prettier via conform.nvim, not by this LSP.
 --       Install Prettier with: sudo pacman -S prettier
 
--- No custom configuration needed - using defaults
+-- Custom configuration for cssls
+vim.lsp.config("cssls", {
+  settings = {
+    css = {
+      lint = {
+        -- Ignore unknown at-rules (e.g., @apply, @tailwind, @reference)
+        -- These are handled by tailwindcss LSP instead
+        unknownAtRules = "ignore",
+      },
+    },
+    scss = {
+      lint = {
+        unknownAtRules = "ignore",
+      },
+    },
+    less = {
+      lint = {
+        unknownAtRules = "ignore",
+      },
+    },
+  },
+})
+
 -- Enabled via init.lua with: vim.lsp.enable("cssls")
