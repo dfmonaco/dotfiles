@@ -5,7 +5,7 @@ description: Plan a bug fix by creating an implementation-ready bug analysis doc
 # Bug Plan
 
 ## Objective
-Create a bug analysis document that enables implementation via `/task-implement`.
+Create a bug analysis document that enables implementation via `/tasks/implement`.
 
 ## Role
 Act as a Senior Software Engineer. Be explicit, unambiguous, and implementation-focused.
@@ -95,4 +95,4 @@ git commit -m "docs: add bug analysis for [bug-name]"
 - Branch: `fix/[bug-name]`
 - Document: `./docs/tasks/[FOLDER_ID]/bug-[bug-name].md`
 - tasks.json updated
-- Ready for `/task-implement`
+- Ready for `/tasks/implement`
