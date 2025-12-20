@@ -43,8 +43,6 @@ keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move to right window" })
 keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
 
 -- Window resizing (Arrow keys)
-keymap.set({ "n", "v" }, "<Up>", "<cmd>resize +2<CR>", { desc = "Increase window height" })
-keymap.set({ "n", "v" }, "<Down>", "<cmd>resize -2<CR>", { desc = "Decrease window height" })
 keymap.set({ "n", "v" }, "<Left>", "<cmd>vertical resize 1<CR>", { desc = "Minimize window width" })
 keymap.set({ "n", "v" }, "<Right>", "<C-w>=", { desc = "Equalize all windows" })
 
