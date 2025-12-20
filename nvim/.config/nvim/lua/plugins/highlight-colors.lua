@@ -18,7 +18,7 @@ return {
     enable_hsl_without_function = true, -- --foreground: 0 69% 69%;
     enable_var_usage = true,     -- var(--testing-color)
     enable_named_colors = true,  -- green, blue, red, etc.
-    enable_tailwind = false,     -- Disabled (using CSS LSP instead)
+    enable_tailwind = true,      -- Tailwind class color previews (requires tailwindcss LSP)
 
     -- Exclude file types to prevent distractions and performance issues
     exclude_filetypes = {

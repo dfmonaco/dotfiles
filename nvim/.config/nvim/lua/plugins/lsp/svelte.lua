@@ -19,6 +19,8 @@
 -- Note: Manual start required because not included in nvim-lspconfig by default
 -- Note: Formatting is handled by Prettier via conform.nvim.
 --       Install Prettier with: sudo pacman -S prettier
+-- Note: CSS diagnostics disabled to avoid false "Unknown at rule @apply/@reference"
+--       errors with Tailwind CSS. Tailwind LSP handles these directives properly.
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = "svelte",
@@ -50,6 +52,9 @@ vim.api.nvim_create_autocmd("FileType", {
                 enable = true,
                 emmet = true,
               },
+              -- Disable CSS diagnostics to avoid "Unknown at rule @apply/@reference"
+              -- Tailwind CSS LSP handles these directives properly
+              diagnostics = { enable = false },
             },
             typescript = {
               enable = true,

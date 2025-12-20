@@ -18,6 +18,7 @@
 --   lua/plugins/lsp/python.lua     - Python language server
 --   lua/plugins/lsp/bash.lua       - Bash language server
 --   lua/plugins/lsp/css.lua        - CSS/HTML/JSON language servers
+--   lua/plugins/lsp/tailwind.lua   - Tailwind CSS language server
 --   lua/plugins/lsp/eslint.lua     - ESLint language server (conditional)
 
 return {
@@ -103,10 +104,11 @@ return {
     require("plugins.lsp.python")
     require("plugins.lsp.bash")
     require("plugins.lsp.css")
+    require("plugins.lsp.tailwind")
     require("plugins.lsp.eslint")
 
     -- Enable simple language servers (no custom config needed)
-    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls" }
+    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls", "tailwindcss" }
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
