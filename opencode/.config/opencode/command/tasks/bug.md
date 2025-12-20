@@ -7,6 +7,14 @@ description: Plan a bug fix by creating an implementation-ready bug analysis doc
 ## Objective
 Create a bug analysis document that enables implementation via `/tasks/implement`.
 
+## Philosophy
+This document defines **what** is broken and **why** it matters — never **how** to fix it.
+
+- Keep requirements outcome-focused and testable
+- Do NOT prescribe implementations, libraries, patterns, or specific code approaches
+- Technical context (files, suspected causes) informs the implementor but does not bind them
+- Implementation decisions are made at implementation time, with real feedback loops
+
 ## Role
 Act as a Senior Software Engineer. Be explicit, unambiguous, and implementation-focused.
 
@@ -42,9 +50,9 @@ Generate the document with these sections:
 4. [Actual result]
 ```
 
-**4. Root Cause** - Hypothesis, relevant code locations (files:lines), technical explanation
+**4. Suspected Root Cause (hypothesis)** - Likely cause, approximate code locations (files), technical context
 
-**5. Proposed Solution** - Approach, files to modify, risks
+**5. Suggested Approach** - High-level approach, likely affected areas, risks
 
 **6. Fix Requirements** - Numbered (BF-1, BF-2...), specific and testable
 

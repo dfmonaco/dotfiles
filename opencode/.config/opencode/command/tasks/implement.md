@@ -76,6 +76,15 @@ git add docs/tasks/tasks.json && git commit -m "chore: mark task as in_progress"
 
 ## Phase 2: Planning
 
+### 2.0 Implementation Autonomy
+The task document defines requirements and constraints — not implementation details.
+You have full autonomy to:
+- Choose approaches, libraries, and patterns
+- Deviate from any technical suggestions in the task document
+- Adapt the plan based on what you discover during implementation
+
+If the task document contains implementation details, treat them as suggestions, not instructions.
+
 ### 2.1 Create Implementation Plan
 Design a step-by-step plan where **each step is an atomic unit** that:
 - Implements a logical piece of functionality

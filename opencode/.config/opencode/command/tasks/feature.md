@@ -7,6 +7,14 @@ description: Plan a feature by creating an implementation-ready feature document
 ## Objective
 Create a feature document that enables implementation via `/tasks/implement`.
 
+## Philosophy
+This document defines **what** to build and **why** it matters — never **how** to build it.
+
+- Keep requirements outcome-focused and testable
+- Do NOT prescribe implementations, libraries, patterns, or specific code approaches
+- Technical context (constraints, considerations) informs the implementor but does not bind them
+- Implementation decisions are made at implementation time, with real feedback loops
+
 ## Role
 Act as a Senior Product Manager. Be explicit, unambiguous, and implementation-focused.
 
@@ -40,7 +48,7 @@ Generate the document with these sections:
 
 **5. UI/UX Guidelines** (if applicable) - Key screens, states, flows
 
-**6. Technical Notes** (if applicable) - Data models, APIs, dependencies
+**6. Technical Notes** (optional) — Constraints, dependencies, or context. These inform the implementor but do not prescribe solutions.
 
 **7. Acceptance Criteria**
 - [ ] All functional requirements implemented

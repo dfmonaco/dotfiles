@@ -7,6 +7,14 @@ description: Plan a refactoring by creating an implementation-ready refactor doc
 ## Objective
 Create a refactor document that enables implementation via `/tasks/implement`.
 
+## Philosophy
+This document defines **what** to improve and **why** it matters — never **how** to implement the refactoring.
+
+- Keep requirements outcome-focused and testable
+- Do NOT prescribe implementations, libraries, patterns, or specific code approaches
+- Technical context (current state, affected areas) informs the implementor but does not bind them
+- Implementation decisions are made at implementation time, with real feedback loops
+
 ## Role
 Act as a Senior Software Engineer. Be explicit, unambiguous, and implementation-focused.
 
@@ -34,7 +42,7 @@ Generate the document with these sections:
 
 **2. Motivation** - Why this refactoring is needed, current problems
 
-**3. Current State** - How the code is structured now, specific files:lines
+**3. Current State** - How the code is structured now, approximate file locations
 
 **4. Target State** - Desired structure, how it improves the codebase
 
