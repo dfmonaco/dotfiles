@@ -24,7 +24,7 @@ BRANCH=$(git branch --show-current)
 ```
 
 Find task in tasks.json matching branch, then locate document:
-- `type: "feature"` → `./docs/tasks/[id]/prd-[name].md`
+- `type: "feature"` → `./docs/tasks/[id]/feature-[name].md`
 - `type: "bug"` → `./docs/tasks/[id]/bug-[name].md`
 - `type: "refactor"` → `./docs/tasks/[id]/refactor-[name].md`
 

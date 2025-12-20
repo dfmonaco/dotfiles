@@ -57,7 +57,15 @@ Generate the document with these sections:
 
 ### 4. Git Branch Setup
 ```bash
-git checkout main && git pull origin main
+# Detect default branch
+DEFAULT_BRANCH=$(
+  git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || \
+  git config --get init.defaultBranch 2>/dev/null || \
+  echo "main"
+)
+
+git checkout "$DEFAULT_BRANCH"
+git pull origin "$DEFAULT_BRANCH" 2>/dev/null || true
 git checkout -b fix/[bug-name]
 ```
 
