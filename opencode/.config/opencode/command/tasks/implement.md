@@ -34,10 +34,10 @@ Implement a task from its document using one of two modes:
 ```
 Which implementation mode would you like to use?
 
-**auto** — I'll implement the entire task autonomously, only pausing for final manual testing.
-**guide** — I'll present a step-by-step plan, implement each step one at a time, and wait for your approval before committing.
+1. **auto** — I'll implement the entire task autonomously, only pausing for final manual testing.
+2. **guide** — I'll present a step-by-step plan, implement each step one at a time, and wait for your approval before committing.
 
-Reply with `auto` or `guide`.
+Reply with `1`, `2`, `auto`, or `guide`.
 ```
 
 ---
@@ -187,6 +187,11 @@ Implementing now...
 ```
 ## Step [N] Complete: [Step Title]
 
+**Rationale — Why These Changes Were Needed:**
+[CRITICAL: This section is mandatory. Explain the motivation behind this step.
+Connect to requirements from the task document. What problem does this solve?
+What capability does it enable? The reviewer must understand the purpose before approving.]
+
 **Files changed:**
 - `path/to/file1.ts` — [brief description of change]
 - `path/to/file2.ts` — [brief description of change]
@@ -196,10 +201,6 @@ Implementing now...
 
 **Proposed commit:**
 `feat(scope): add [description]`
-
----
-
-**Context:** [1-2 sentences explaining what was done and why]
 
 ---
 
@@ -307,9 +308,29 @@ For each comment requiring changes:
 
 ---
 
+## Phase 7: Merge (Both Modes)
+
+After all PR review comments are addressed, ask for explicit confirmation:
+
+```
+All review feedback has been addressed.
+
+Reply `merge` to merge the PR and delete the remote branch.
+```
+
+**After user confirms:**
+```bash
+gh pr merge --merge --delete-branch
+```
+
+Confirm merge completion to user.
+
+---
+
 ## Output
 - Task implemented per document
 - All tests passing
 - Conventional commits (atomic in guided mode)
 - tasks.json updated (pending → in_progress → done)
-- Pull request created
+- Pull request created and merged
+- Remote branch deleted
