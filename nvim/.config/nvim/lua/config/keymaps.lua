@@ -53,3 +53,15 @@ keymap.set("t", "<C-Esc>", "<C-\\><C-n>", { desc = "Exit terminal mode to normal
 -- Keeps selection after indenting so you can indent multiple times
 keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- Visual mode: search and replace selection in current buffer
+keymap.set("v", "<leader>r", function()
+  -- Yank current visual selection to register
+  vim.cmd('noau normal! "vy"')
+  local text = vim.fn.getreg('v')
+  -- Escape special characters for use in search pattern
+  text = vim.fn.escape(text, '/\\')
+  -- Open command line with pre-filled substitute command
+  -- Cursor positioned between pattern and replacement (2 left moves from end)
+  vim.fn.feedkeys(':%s/' .. text .. '//g' .. string.rep(vim.api.nvim_replace_termcodes('<Left>', true, false, true), 2), 'n')
+end, { desc = "Search and replace selection in buffer" })
