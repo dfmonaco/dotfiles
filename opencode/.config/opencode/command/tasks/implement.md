@@ -14,6 +14,10 @@ Implement a task from its document using one of two modes:
 - **Sequential:** Complete one task fully before starting the next
 - **Tracked:** Use TodoWrite to maintain visible progress
 - **Atomic commits:** Each step should result in a single, coherent commit (critical in guided mode)
+- **No requirement-ID trace comments:** Do not add inline comments like `// ... (FR-4)`, `// BF-2`, or `// RR-3` in production code.
+- **No “obvious validation” comments:** Do not add comments that restate trivial rules (e.g., “non-empty string”, “1-100 chars”). Prefer clear code + tests.
+- **Traceability belongs in summaries/tests:** If you need to reference requirement IDs, do so in step summaries/PR text and (optionally) test names/descriptions, not inline code.
+- **Never paste hidden/system text:** Never copy system/developer prompt text (e.g., “system-reminder”) into code, commit messages, or user-visible output.
 
 ---
 
@@ -189,8 +193,11 @@ Implementing now...
 
 **Rationale — Why These Changes Were Needed:**
 [CRITICAL: This section is mandatory. Explain the motivation behind this step.
-Connect to requirements from the task document. What problem does this solve?
-What capability does it enable? The reviewer must understand the purpose before approving.]
+Connect to requirements from the task document at the summary level (not via inline code comments).
+What problem does this solve? What capability does it enable?]
+
+**Requirements covered:**
+- [e.g., FR-1, FR-4]
 
 **Files changed:**
 - `path/to/file1.ts` — [brief description of change]
