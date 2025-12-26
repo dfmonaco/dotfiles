@@ -58,6 +58,7 @@ Find task in tasks.json matching branch, then locate document:
 - `type: "feature"` → `./docs/tasks/[id]/feature-[name].md`
 - `type: "bug"` → `./docs/tasks/[id]/bug-[name].md`
 - `type: "refactor"` → `./docs/tasks/[id]/refactor-[name].md`
+- `type: "code_review"` → `./docs/tasks/[id]/code-review-[name].md`
 
 If not found: ask user for the document path.
 
