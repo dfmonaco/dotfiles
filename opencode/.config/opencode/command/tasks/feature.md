@@ -5,7 +5,7 @@ description: Plan a feature by creating an implementation-ready feature document
 # Feature Plan
 
 ## Objective
-Create a feature document that enables implementation via `/tasks/implement`.
+Create a feature document that enables implementation via `/tasks/implement` using an interface-driven, outside-in approach.
 
 ## Philosophy
 This document defines **what** to build and **why** it matters — never **how** to build it.
@@ -42,16 +42,28 @@ Generate the document with these sections:
 
 **2. User Stories** - As a [role], I want [action], so that [benefit]
 
-**3. Functional Requirements** - Numbered (FR-1, FR-2...), specific and testable
+**3. Primary Interface & Flows (mandatory)**
+- Primary interface: `ui | cli | api | config | job | library`
+- Entry point(s) and user/consumer flow (steps + expected outcomes)
+- State matrix (mandatory): idle/ready, loading/in-progress, success, empty/no-op, validation/invalid input, not found, conflict, transient failure (retry), permanent failure
+- UI copy / CLI examples / API examples as applicable (what the user sees)
 
-**4. Non-Functional Requirements** (if applicable) - Performance, security, constraints
+**4. Functional Requirements** - Numbered (FR-1, FR-2...), specific and testable
 
-**5. UI/UX Guidelines** (if applicable) - Key screens, states, flows
+**5. Contract Implied by the Interface (mandatory if data/actions are involved)**
+- Endpoints/interfaces required by the interface
+- Request/response shapes
+- Validation rules
+- Error semantics (codes/types/messages) as implied by interface states
 
-**6. Technical Notes** (optional) — Constraints, dependencies, or context. These inform the implementor but do not prescribe solutions.
+**6. Non-Functional Requirements** (if applicable) - Performance, security, constraints
 
-**7. Acceptance Criteria**
+**7. Technical Notes** (optional) — Constraints, dependencies, or context. These inform the implementor but do not prescribe solutions.
+
+**8. Acceptance Criteria**
 - [ ] All functional requirements implemented
+- [ ] Primary interface works end-to-end
+- [ ] All interface states supported (success, failure, empty/no-op, loading/in-progress, validation)
 - [ ] All tests pass
 - [ ] Manual testing approved
 

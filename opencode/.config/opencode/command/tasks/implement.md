@@ -10,6 +10,13 @@ Implement a task from its document using one of two modes:
 - **Guided (`guide`):** Step-by-step implementation with user approval and atomic commits after each step
 
 ## Core Principles
+- **Interface-driven, outside-in (mandatory):** Start from the primary consumer interface and implement inward layer-by-layer.
+  - If a UI exists, the interface is the UI (screens/components/forms/buttons).
+  - If no UI exists, the interface is one of: CLI, API, config, job/worker, or library API.
+  - Define user/consumer actions, supported states, and outcomes first (including loading/in-progress, success, empty/no-op, and failure modes).
+  - Derive the contract from the interface (request/response shapes, validation rules, error semantics, and any observability required by the interface).
+  - Implement backend layers strictly as required by the interface + contract; avoid speculative or unused logic.
+  - Progress inward: Interface -> Contract -> application/service logic -> domain -> persistence/infrastructure.
 - **Test-driven:** Write/update tests alongside implementation
 - **Sequential:** Complete one task fully before starting the next
 - **Tracked:** Use TodoWrite to maintain visible progress
@@ -69,6 +76,24 @@ Read the task document and identify:
 - Tests to write
 - Dependencies or setup needed
 
+Additionally, extract or define the **Primary Interface** and its **Flow/State Matrix**:
+
+- **Primary Interface:** `ui | cli | api | config | job | library`
+- **User/consumer flow:** entry point(s), actions, expected outcomes
+- **State matrix (mandatory):**
+  - `idle/ready` (if applicable)
+  - `loading/in-progress` (if applicable)
+  - `success`
+  - `empty/no-op` (if applicable)
+  - `validation/invalid input`
+  - `not found` (if applicable)
+  - `conflict` (if applicable)
+  - `transient failure (retry)`
+  - `permanent failure` (non-retryable)
+
+If the task document does not specify the primary interface and flow, ask the user before implementing contracts/backends.
+My recommendation: default to the most user-visible interface (`ui > cli > api > config > job > library`).
+
 ### 1.3 Update Task Status
 ```bash
 jq --arg branch "$(git branch --show-current)" \
@@ -97,6 +122,12 @@ Design a step-by-step plan where **each step is an atomic unit** that:
 - Can be committed independently without breaking the build
 - Is coherent and reviewable on its own
 
+Order steps **outside-in**:
+1. **Interface first:** implement the UI/CLI/API/config surface with all states (wire to mocks/stubs if needed).
+2. **Derive the contract:** define required endpoints/interfaces, request/response shapes, validation, and error semantics implied by the interface.
+3. **Implement support layers inward:** handlers/adapters -> services -> domain rules -> persistence/infrastructure (only what the interface exercises).
+4. **End-to-end wiring:** connect the interface to the real contract, remove/retire mocks, verify the full flow.
+
 **Step grouping guidelines:**
 - Group by logical unit, not by file (e.g., "Add User model + tests" not "Add User model" then "Add User tests")
 - Each step should pass all tests after completion
@@ -104,10 +135,10 @@ Design a step-by-step plan where **each step is an atomic unit** that:
 
 **Example plan structure:**
 ```
-Step 1: Add data models for [feature]
-Step 2: Implement [service/logic] with unit tests
-Step 3: Add API endpoints with integration tests
-Step 4: Update documentation
+Step 1: Implement the primary interface flow + all states (with mocks/stubs)
+Step 2: Define the contract implied by the interface (validation + error semantics)
+Step 3: Implement backend layers to satisfy contract (with tests)
+Step 4: Wire interface to real contract + end-to-end verification
 ```
 
 ### 2.2 Present Plan
@@ -197,6 +228,13 @@ Implementing now...
 Connect to requirements from the task document at the summary level (not via inline code comments).
 What problem does this solve? What capability does it enable?]
 
+**Interface impact:**
+- Primary interface: `[ui|cli|api|config|job|library]`
+- User/consumer actions supported:
+  - [...]
+- States covered (loading/success/empty/error/etc.):
+  - [...]
+
 **Requirements covered:**
 - [e.g., FR-1, FR-4]
 
@@ -237,6 +275,9 @@ Verify before requesting manual testing:
 - All TodoWrite tasks completed
 - All tests pass
 - All requirements from task document satisfied
+- Primary interface works end-to-end against implemented layers (no stubbed behavior remaining unless explicitly intended)
+- All interface states are supported and reachable (success/failure/empty/no-op/loading/in-progress/validation/etc.)
+- Error semantics map cleanly to interface behavior (messages, retries, exit codes, status codes, etc.)
 
 ### 4.2 Request Manual Testing
 Summarize all changes and provide testing instructions:
