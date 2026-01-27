@@ -8,7 +8,10 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
-    bigfile = { enabled = true },
+    bigfile = {
+      enabled = true,
+      size = 2 * 1024 * 1024, -- Increase to 2MB (from default 1.5MB) to prevent svelte files from being marked as bigfile
+    },
     dashboard = { enabled = false },
     explorer = { enabled = true },
     indent = { enabled = true },
@@ -26,6 +29,13 @@ return {
             preview = "main", -- Show preview in main editor window
             hidden = {}, -- Don't hide any windows (shows preview by default)
           },
+        },
+      },
+      previewers = {
+        file = {
+          max_size = 2 * 1024 * 1024, -- Increase to 2MB (from default 1MB) for larger svelte files
+          max_line_length = 1000, -- Increase line length for minified/long lines
+          ft = nil, -- Auto-detect filetype (including svelte)
         },
       },
     },
@@ -119,6 +129,10 @@ return {
     { "[[",         function() Snacks.words.jump(-vim.v.count1) end, desc = "Prev Reference", mode = { "n", "t" } },
   },
   init = function()
+    -- Apply fix for svelte (and other filetypes) preview syntax highlighting
+    -- This must run early, before snacks picker is used
+    require("config.svelte-preview-fix").setup()
+
     vim.api.nvim_create_autocmd("User", {
       pattern = "VeryLazy",
       callback = function()
