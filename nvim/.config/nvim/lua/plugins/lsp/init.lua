@@ -30,6 +30,7 @@
 --     gD          Go to Declaration (Snacks picker)
 --     gai         Incoming Calls (Snacks picker)
 --     gao         Outgoing Calls (Snacks picker)
+--     gb          Jump Back (to previous location in jumplist)
 --
 --   Documentation (vim defaults):
 --     K           Hover Documentation
@@ -101,6 +102,10 @@ return {
         map("]d", function()
           vim.diagnostic.jump({ count = 1 })
         end, "Next Diagnostic")
+
+        -- Jump back in jumplist (after navigation like gd/gr/etc)
+        -- Note: Vim's built-in <C-o> (back) and <C-i> (forward) also work
+        map("gb", "<C-o>", "Jump Back (to previous location)")
 
         -- ============================================================
         -- CODE NAMESPACE (<leader>c)
