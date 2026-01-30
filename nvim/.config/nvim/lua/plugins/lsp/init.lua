@@ -20,6 +20,35 @@
 --   lua/plugins/lsp/css.lua        - CSS/HTML/JSON language servers
 --   lua/plugins/lsp/tailwind.lua   - Tailwind CSS language server
 --   lua/plugins/lsp/eslint.lua     - ESLint language server (conditional)
+--
+-- Keymap Quick Reference (Hybrid Scheme with Snacks.nvim):
+--   Navigation (using Snacks.nvim pickers - defined in plugins/snacks.lua):
+--     gd          Go to Definition (Snacks picker)
+--     gr          Go to References (Snacks picker)
+--     gI          Go to Implementation (Snacks picker)
+--     gy          Go to Type Definition (Snacks picker)
+--     gD          Go to Declaration (Snacks picker)
+--     gai         Incoming Calls (Snacks picker)
+--     gao         Outgoing Calls (Snacks picker)
+--
+--   Documentation (vim defaults):
+--     K           Hover Documentation
+--     [d / ]d     Previous/Next Diagnostic
+--
+--   Code namespace (<leader>c - Quick access without picker):
+--     <leader>cs  Signature Help
+--     <leader>ca  Code Action
+--     <leader>cn  Rename Symbol
+--     <leader>cf  Format Buffer
+--     <leader>cw  Workspace Symbols (Snacks picker) [also: <leader>sS]
+--     <leader>co  Document Outline (Snacks picker) [also: <leader>ss]
+--     <leader>cx  Show Diagnostic Float
+--     <leader>cX  List All Diagnostics
+--     <leader>ch  Toggle Inlay Hints
+--     <leader>cl  Toggle Document Highlight
+--     <leader>cR  Restart LSP
+--     <leader>cI  LSP Info
+--     <leader>ce  ESLint Fix All (conditional)
 
 return {
   "neovim/nvim-lspconfig",
@@ -48,26 +77,24 @@ return {
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
       callback = function(event)
-        local map = function(keys, func, desc)
-          vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
+        local map = function(keys, func, desc, mode)
+          mode = mode or "n"
+          vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
         end
 
-        -- Navigation
-        map("gd", vim.lsp.buf.definition, "Go to Definition")
-        map("gr", vim.lsp.buf.references, "Go to References")
-        map("gi", vim.lsp.buf.implementation, "Go to Implementation")
-        map("gD", vim.lsp.buf.declaration, "Go to Declaration")
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
 
-        -- Documentation
+        -- ============================================================
+        -- FREQUENT ACTIONS (vim-style for speed)
+        -- ============================================================
+        -- Note: Navigation keymaps (gd, gr, gI, gy, gD, gai, gao) are
+        -- provided by snacks.nvim with fancy picker UI (see plugins/snacks.lua)
+        -- We don't override them here to keep the better UX
+
+        -- Documentation (vim convention)
         map("K", vim.lsp.buf.hover, "Hover Documentation")
-        map("<C-k>", vim.lsp.buf.signature_help, "Signature Help")
 
-        -- Code actions
-        map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
-        map("<leader>cr", vim.lsp.buf.rename, "Rename")
-
-        -- Diagnostics
-        map("<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
+        -- Diagnostics navigation (vim convention)
         map("[d", function()
           vim.diagnostic.jump({ count = -1 })
         end, "Previous Diagnostic")
@@ -75,16 +102,69 @@ return {
           vim.diagnostic.jump({ count = 1 })
         end, "Next Diagnostic")
 
-        -- Inlay hints disabled by default
-        -- Toggle with <leader>ci when needed
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        -- ============================================================
+        -- CODE NAMESPACE (<leader>c)
+        -- ============================================================
+        -- Quick access to LSP features without picker UI
+        -- Use these when you want immediate action without fuzzy search
 
-        -- Toggle inlay hints
-        map("<leader>ci", function()
+        -- Documentation
+        map("<leader>cs", vim.lsp.buf.signature_help, "Signature Help")
+
+        -- Actions
+        map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
+        map("<leader>ca", vim.lsp.buf.code_action, "Code Action", "v") -- Visual mode
+        map("<leader>cn", vim.lsp.buf.rename, "Rename Symbol")
+        map("<leader>cf", function()
+          vim.lsp.buf.format({ async = false })
+        end, "Format Buffer")
+
+        -- Workspace & Symbols (using Snacks pickers for better UX)
+        map("<leader>cw", function()
+          -- Use global Snacks (set by lazy.nvim) instead of require()
+          if _G.Snacks and _G.Snacks.picker then
+            _G.Snacks.picker.lsp_workspace_symbols()
+          else
+            vim.lsp.buf.workspace_symbol()
+          end
+        end, "Workspace Symbols")
+        map("<leader>co", function()
+          -- Use global Snacks (set by lazy.nvim) instead of require()
+          if _G.Snacks and _G.Snacks.picker then
+            _G.Snacks.picker.lsp_symbols()
+          else
+            vim.lsp.buf.document_symbol()
+          end
+        end, "Document Outline")
+
+        -- Call Hierarchy (removed - use gai/gao from snacks.lua instead)
+
+        -- Diagnostics
+        map("<leader>cx", vim.diagnostic.open_float, "Show Diagnostic")
+        map("<leader>cX", vim.diagnostic.setloclist, "List All Diagnostics")
+
+        -- Toggles
+        map("<leader>ch", function()
           local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf })
           vim.lsp.inlay_hint.enable(not enabled, { bufnr = event.buf })
           vim.notify("Inlay hints " .. (enabled and "disabled" or "enabled"), vim.log.levels.INFO)
         end, "Toggle Inlay Hints")
+
+        map("<leader>cl", function()
+          if vim.b[event.buf].document_highlight_enabled then
+            vim.lsp.buf.clear_references()
+            vim.b[event.buf].document_highlight_enabled = false
+            vim.notify("Document highlight disabled", vim.log.levels.INFO)
+          else
+            vim.lsp.buf.document_highlight()
+            vim.b[event.buf].document_highlight_enabled = true
+            vim.notify("Document highlight enabled", vim.log.levels.INFO)
+          end
+        end, "Toggle Document Highlight")
+
+        -- LSP Management
+        map("<leader>cR", "<cmd>LspRestart<cr>", "Restart LSP")
+        map("<leader>cI", "<cmd>LspInfo<cr>", "LSP Info")
 
         -- ESLint fix all (only when ESLint is attached)
         if client and client.name == "eslint" then
