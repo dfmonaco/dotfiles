@@ -68,8 +68,12 @@ return {
 
         -- Diagnostics
         map("<leader>cd", vim.diagnostic.open_float, "Line Diagnostics")
-        map("[d", vim.diagnostic.goto_prev, "Previous Diagnostic")
-        map("]d", vim.diagnostic.goto_next, "Next Diagnostic")
+        map("[d", function()
+          vim.diagnostic.jump({ count = -1 })
+        end, "Previous Diagnostic")
+        map("]d", function()
+          vim.diagnostic.jump({ count = 1 })
+        end, "Next Diagnostic")
 
         -- Inlay hints disabled by default
         -- Toggle with <leader>ci when needed
