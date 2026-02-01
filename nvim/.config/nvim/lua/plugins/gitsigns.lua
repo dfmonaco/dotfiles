@@ -65,52 +65,24 @@ return {
         vim.keymap.set(mode, l, r, opts)
       end
 
-      -- Navigation with auto-preview (using inline preview) - all hunks
+      -- Navigation - all hunks
       map('n', '<C-n>', function()
         if vim.wo.diff then
           vim.cmd.normal({ ']c', bang = true })
         else
-          -- First enable inline preview, then nav_hunk will maintain it
-          local Preview = require('gitsigns.actions.preview')
-          if not Preview.has_preview_inline(bufnr) then
-            gitsigns.preview_hunk_inline()
-          end
           gitsigns.nav_hunk('next', { target = 'all' })
         end
-      end, { desc = 'Next git hunk (all, with inline preview)' })
+      end, { desc = 'Next git hunk (all)' })
 
       map('n', '<C-p>', function()
         if vim.wo.diff then
           vim.cmd.normal({ '[c', bang = true })
         else
-          -- First enable inline preview, then nav_hunk will maintain it
-          local Preview = require('gitsigns.actions.preview')
-          if not Preview.has_preview_inline(bufnr) then
-            gitsigns.preview_hunk_inline()
-          end
           gitsigns.nav_hunk('prev', { target = 'all' })
         end
-      end, { desc = 'Previous git hunk (all, with inline preview)' })
+      end, { desc = 'Previous git hunk (all)' })
 
       map('n', '<C-h>', gitsigns.preview_hunk, { desc = 'Preview hunk (popup window)' })
-
-      -- Navigation for staged hunks
-      map('n', ']h', function()
-        gitsigns.nav_hunk('next', { target = 'staged' })
-      end, { desc = 'Next staged hunk' })
-
-      map('n', '[h', function()
-        gitsigns.nav_hunk('prev', { target = 'staged' })
-      end, { desc = 'Previous staged hunk' })
-
-      -- Navigation for all hunks (staged + unstaged)
-      map('n', ']H', function()
-        gitsigns.nav_hunk('next', { target = 'all' })
-      end, { desc = 'Next hunk (all)' })
-
-      map('n', '[H', function()
-        gitsigns.nav_hunk('prev', { target = 'all' })
-      end, { desc = 'Previous hunk (all)' })
 
       -- Actions
       map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'Stage hunk' })
