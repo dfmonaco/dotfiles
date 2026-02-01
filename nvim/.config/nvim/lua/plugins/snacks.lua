@@ -38,6 +38,17 @@ return {
           ft = nil, -- Auto-detect filetype (including svelte)
         },
       },
+      win = {
+        input = {
+          keys = {
+            -- Use C-j/C-k for preview scrolling (overrides default list navigation)
+            ["<c-j>"] = { "preview_scroll_down", mode = { "i", "n" } },
+            ["<c-k>"] = { "preview_scroll_up", mode = { "i", "n" } },
+            -- Keep C-n/C-p for list navigation
+            -- (C-n/C-p are still available as defaults)
+          },
+        },
+      },
     },
     quickfile = { enabled = true },
     scope = { enabled = true },
