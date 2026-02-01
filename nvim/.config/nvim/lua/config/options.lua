@@ -1,4 +1,11 @@
 -- Core Neovim options
+
+-- Leader key setup (MUST be set before plugins load)
+-- Disable space in normal mode to prevent conflicts before setting it as leader
+vim.keymap.set("n", "<Space>", "<Nop>", { silent = true })
+vim.g.mapleader = " " -- Set space as leader key
+vim.g.maplocalleader = "," -- Set local leader to comma (used for buffer-local keymaps)
+
 local opt = vim.opt
 
 -- Line numbers

@@ -1,11 +1,6 @@
 -- Key mappings
+-- Note: Leader key is set in options.lua (must load before plugins)
 local keymap = vim.keymap
-
--- Leader key setup
--- Disable space in normal mode to prevent conflicts before setting it as leader
-keymap.set("n", "<Space>", "<Nop>", { silent = true })
-vim.g.mapleader = " " -- Set space as leader key
-vim.g.maplocalleader = "," -- Set local leader to comma (used for buffer-local keymaps)
 
 -- General
 keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlight" })
