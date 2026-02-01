@@ -5,6 +5,44 @@
 return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" },
+
+  -- Global keymaps (always available, even without hunks)
+  keys = {
+    {
+      "<leader>hD",
+      function()
+        require('gitsigns').change_base('develop', true)
+        vim.g.gitsigns_base = 'develop'
+        require('snacks').notify.info("Changed base to: develop (global)")
+      end,
+      desc = "Change base to develop"
+    },
+    {
+      "<leader>h1",
+      function()
+        require('gitsigns').change_base('HEAD^', true)
+        vim.g.gitsigns_base = 'HEAD^'
+        require('snacks').notify.info("Changed base to: HEAD^ (global)")
+      end,
+      desc = "Change base to HEAD^"
+    },
+    {
+      "<leader>h0",
+      function()
+        require('gitsigns').reset_base(true)
+        vim.g.gitsigns_base = nil
+        require('snacks').notify.info("Reset base to index (global)")
+      end,
+      desc = "Reset base to index"
+    },
+    {
+      "<leader>hQ",
+      function()
+        require('gitsigns').setqflist('all')
+      end,
+      desc = "Quickfix list all hunks"
+    },
+  },
   opts = {
     signs                        = {
       add          = { text = '┃' },
@@ -107,12 +145,11 @@ return {
 
       map('n', '<leader>hd', gitsigns.diffthis, { desc = 'Diff this' })
 
-      map('n', '<leader>hD', function()
+      map('n', '<leader>hv', function()
         gitsigns.diffthis('~')
-      end, { desc = 'Diff this ~' })
+      end, { desc = 'Diff this ~ (split view)' })
 
-      map('n', '<leader>hQ', function() gitsigns.setqflist('all') end, { desc = 'Quickfix list all' })
-      map('n', '<leader>hq', gitsigns.setqflist, { desc = 'Quickfix list' })
+      map('n', '<leader>hq', gitsigns.setqflist, { desc = 'Quickfix list (buffer)' })
 
       -- Toggles
       map('n', '<leader>tb', gitsigns.toggle_current_line_blame, { desc = 'Toggle git blame' })
