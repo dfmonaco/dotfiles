@@ -19,7 +19,10 @@ vim.lsp.config("lua_ls", {
         checkThirdParty = false,
         library = { vim.env.VIMRUNTIME },
       },
-      diagnostics = { globals = { "vim" } },
+      diagnostics = { 
+        globals = { "vim" },
+        disable = { "trailing-space" },
+      },
     },
   },
 })
