@@ -85,7 +85,6 @@ return {
     --
     -- TRADITIONAL VIM CONTROLS:
     --   <C-y>     : Accept full suggestion
-    --   <C-e>     : Dismiss suggestion
     --   <C-\>     : Manually request suggestion
     --
     -- NOTE: <Tab> is handled by Blink.cmp for LSP/buffer completions
