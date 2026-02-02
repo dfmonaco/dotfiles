@@ -56,9 +56,12 @@ return {
   ---@type blink.cmp.Config
   opts = {
     -- Keymap preset with enhanced accept options
+    -- NOTE: <Tab> is handled by Copilot plugin for smart Blink + Copilot integration
+    -- See ./copilot.lua for the smart Tab implementation
     keymap = {
       preset = "default",
-      ["<Tab>"] = { "select_and_accept" }, -- Accept with Tab (or first if none selected)
+      -- Tab removed: handled by smart keymap in copilot.lua
+      -- Blink keeps default <C-n>, <C-p>, <C-e> from preset
     },
 
     appearance = {
