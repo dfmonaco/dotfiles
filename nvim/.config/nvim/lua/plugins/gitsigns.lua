@@ -6,41 +6,77 @@ return {
   "lewis6991/gitsigns.nvim",
   event = { "BufReadPre", "BufNewFile" },
 
+  -- Helper function for git modified files picker
+  config = function(_, opts)
+    -- Define the helper function
+    local function show_git_modified_files(base_ref, title_suffix)
+      local gitsigns = require('gitsigns')
+      local snacks = require('snacks')
+
+      -- Change gitsigns base
+      if base_ref == nil then
+        gitsigns.reset_base(true)
+        vim.g.gitsigns_base = nil
+      else
+        gitsigns.change_base(base_ref, true)
+        vim.g.gitsigns_base = base_ref
+      end
+
+      -- Get modified files from git
+      local cmd = base_ref and ('git diff --name-only ' .. base_ref) or 'git diff --name-only'
+      local files = vim.fn.systemlist(cmd)
+
+      -- Check for errors or empty results
+      if vim.v.shell_error ~= 0 then
+        snacks.notifier.error("Git command failed: " .. cmd)
+        return
+      end
+
+      if #files == 0 then
+        snacks.notifier.info("No modified files " .. title_suffix)
+        return
+      end
+
+      -- Convert to Snacks picker items
+      local items = {}
+      for _, file in ipairs(files) do
+        table.insert(items, {
+          file = file,
+          text = file,
+        })
+      end
+
+      -- Open Snacks picker
+      snacks.picker.pick({
+        source = "git_modified",
+        title = "Modified files " .. title_suffix,
+        items = items,
+      })
+    end
+
+    -- Store the function globally so keymaps can access it
+    _G._show_git_modified_files = show_git_modified_files
+
+    -- Apply gitsigns config
+    require('gitsigns').setup(opts)
+  end,
+
   -- Global keymaps (always available, even without hunks)
   keys = {
     {
-      "<leader>hD",
-      function()
-        require('gitsigns').change_base('develop', true)
-        vim.g.gitsigns_base = 'develop'
-        require('snacks').notify.info("Changed base to: develop (global)")
-      end,
-      desc = "Change base to develop"
+      "<leader>gD",
+      function() _G._show_git_modified_files('develop', 'vs develop') end,
+      desc = "Modified files vs develop"
     },
     {
-      "<leader>h1",
-      function()
-        require('gitsigns').change_base('HEAD^', true)
-        vim.g.gitsigns_base = 'HEAD^'
-        require('snacks').notify.info("Changed base to: HEAD^ (global)")
-      end,
-      desc = "Change base to HEAD^"
+      "<leader>g1",
+      function() _G._show_git_modified_files('HEAD^', 'vs HEAD^') end,
+      desc = "Modified files vs HEAD^"
     },
     {
-      "<leader>h0",
-      function()
-        require('gitsigns').reset_base(true)
-        vim.g.gitsigns_base = nil
-        require('snacks').notify.info("Reset base to index (global)")
-      end,
-      desc = "Reset base to index"
-    },
-    {
-      "<leader>hQ",
-      function()
-        require('gitsigns').setqflist('all')
-      end,
-      desc = "Quickfix list all hunks"
+      "<leader>g0",
+      function() _G._show_git_modified_files(nil, '(working tree)') end,
+      desc = "Modified files (working tree)"
     },
   },
   opts = {
