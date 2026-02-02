@@ -11,7 +11,7 @@ return {
     -- Define the helper function
     local function show_git_modified_files(base_ref, title_suffix)
       local gitsigns = require('gitsigns')
-      local snacks = require('snacks')
+      local Snacks = require('snacks')
 
       -- Change gitsigns base
       if base_ref == nil then
@@ -23,17 +23,51 @@ return {
       end
 
       -- Get modified files from git
-      local cmd = base_ref and ('git diff --name-only ' .. base_ref) or 'git diff --name-only'
-      local files = vim.fn.systemlist(cmd)
-
-      -- Check for errors or empty results
-      if vim.v.shell_error ~= 0 then
-        snacks.notifier.error("Git command failed: " .. cmd)
-        return
+      local files = {}
+      
+      if base_ref == nil then
+        -- For working tree: combine unstaged + staged + untracked
+        -- 1. Unstaged changes
+        local unstaged = vim.fn.systemlist('git diff --name-only')
+        if vim.v.shell_error == 0 then
+          vim.list_extend(files, unstaged)
+        end
+        
+        -- 2. Staged changes
+        local staged = vim.fn.systemlist('git diff --cached --name-only')
+        if vim.v.shell_error == 0 then
+          vim.list_extend(files, staged)
+        end
+        
+        -- 3. Untracked files
+        local untracked = vim.fn.systemlist('git ls-files --others --exclude-standard')
+        if vim.v.shell_error == 0 then
+          vim.list_extend(files, untracked)
+        end
+        
+        -- Remove duplicates (file can be in both unstaged and staged if partially staged)
+        local seen = {}
+        local unique_files = {}
+        for _, file in ipairs(files) do
+          if not seen[file] then
+            seen[file] = true
+            table.insert(unique_files, file)
+          end
+        end
+        files = unique_files
+      else
+        -- For other bases: just show diff
+        local cmd = 'git diff --name-only ' .. base_ref
+        files = vim.fn.systemlist(cmd)
+        
+        if vim.v.shell_error ~= 0 then
+          Snacks.notify.error("Git command failed: " .. cmd)
+          return
+        end
       end
 
       if #files == 0 then
-        snacks.notifier.info("No modified files " .. title_suffix)
+        Snacks.notify.info("No modified files " .. title_suffix)
         return
       end
 
@@ -47,7 +81,7 @@ return {
       end
 
       -- Open Snacks picker
-      snacks.picker.pick({
+      Snacks.picker.pick({
         source = "git_modified",
         title = "Modified files " .. title_suffix,
         items = items,
@@ -74,7 +108,7 @@ return {
       desc = "Modified files vs HEAD^"
     },
     {
-      "<leader>g0",
+      "<leader>gf",
       function() _G._show_git_modified_files(nil, '(working tree)') end,
       desc = "Modified files (working tree)"
     },
