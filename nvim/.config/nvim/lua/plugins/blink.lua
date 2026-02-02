@@ -55,10 +55,15 @@ return {
   ---@module 'blink.cmp'
   ---@type blink.cmp.Config
   opts = {
-    -- Keymap preset: standard Tab acceptance
+    -- Keymap: Tab + C-j/C-k navigation (arrow keys reserved for Copilot)
     keymap = {
       preset = "default",
       ["<Tab>"] = { "select_and_accept" },
+      ["<C-j>"] = { "select_next" },
+      ["<C-k>"] = { "select_prev" },
+      -- Disable arrow keys (used by Copilot instead)
+      ["<Up>"] = {},
+      ["<Down>"] = {},
     },
 
     appearance = {
