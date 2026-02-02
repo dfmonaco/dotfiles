@@ -64,17 +64,6 @@ return {
       desc = 'Copilot: Accept full suggestion'
     })
     
-    -- <C-e>: Dismiss suggestion
-    -- Traditional Vim: "e = end/escape"
-    vim.keymap.set('i', '<C-e>', function()
-      vim.fn['copilot#Dismiss']()
-      return ''
-    end, {
-      expr = true,
-      replace_keycodes = false,
-      desc = 'Copilot: Dismiss suggestion'
-    })
-    
     -- <C-\>: Manually trigger Copilot suggestion
     vim.keymap.set('i', '<C-\\>', function()
       vim.fn['copilot#Suggest']()
