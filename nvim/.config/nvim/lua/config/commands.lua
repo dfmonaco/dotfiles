@@ -2,10 +2,26 @@
 
 -- Command to open all git-modified files in buffers
 vim.api.nvim_create_user_command("OpenGitModified", function()
-	-- Get git status output
-	local handle = io.popen("git status --porcelain 2>/dev/null")
+	-- Get git root directory
+	local git_root_handle = io.popen("git rev-parse --show-toplevel 2>/dev/null")
+	if not git_root_handle then
+		vim.notify("Failed to get git root directory", vim.log.levels.ERROR)
+		return
+	end
+
+	local git_root = git_root_handle:read("*l")
+	git_root_handle:close()
+
+	if not git_root or git_root == "" then
+		vim.notify("Not in a git repository", vim.log.levels.ERROR)
+		return
+	end
+
+	-- Get all modified and untracked files
+	-- Using git ls-files to properly handle untracked files in directories
+	local handle = io.popen("git ls-files --modified --others --exclude-standard 2>/dev/null")
 	if not handle then
-		vim.notify("Failed to run git status", vim.log.levels.ERROR)
+		vim.notify("Failed to run git ls-files", vim.log.levels.ERROR)
 		return
 	end
 
@@ -20,26 +36,20 @@ vim.api.nvim_create_user_command("OpenGitModified", function()
 	local files = {}
 	local count = 0
 
-	-- Parse git status output
-	-- Format: XY filename
-	-- X = staged status, Y = unstaged status
+	-- Parse output (one file per line)
 	for line in result:gmatch("[^\r\n]+") do
-		-- Extract filename (skip first 3 characters which are status codes and space)
-		local filename = line:sub(4)
+		-- Trim whitespace
+		local filename = line:match("^%s*(.-)%s*$")
 
-		-- Handle renamed files (format: "old -> new")
-		if filename:match("->") then
-			filename = filename:match("-> (.+)$")
-		end
+		if filename ~= "" then
+			-- Build absolute path from git root
+			local file_path = git_root .. "/" .. filename
 
-		-- Remove quotes if present
-		filename = filename:gsub('^"', ""):gsub('"$', "")
-
-		-- Check if file exists (skip deleted files)
-		local file_path = vim.fn.fnamemodify(filename, ":p")
-		if vim.fn.filereadable(file_path) == 1 then
-			table.insert(files, file_path)
-			count = count + 1
+			-- Check if file exists and is readable
+			if vim.fn.filereadable(file_path) == 1 then
+				table.insert(files, file_path)
+				count = count + 1
+			end
 		end
 	end
 
