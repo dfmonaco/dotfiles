@@ -12,6 +12,9 @@ keymap.set("n", "<leader>q", "<cmd>q<CR>", { desc = "Quit (will prompt if unsave
 -- Git operations
 keymap.set("n", "<leader>go", "<cmd>OpenGitModified<CR>", { desc = "Open all git-modified files" })
 
+-- Config operations
+keymap.set("n", "<leader>R", "<cmd>Reload<CR>", { desc = "Reload Neovim configuration" })
+
 -- Buffer operations (organized under <leader>b*)
 keymap.set("n", "<Tab>", ":bn<CR>", { desc = "Go to next buffer" })
 keymap.set("n", "<S-Tab>", ":bp<CR>", { desc = "Go to previous buffer" })

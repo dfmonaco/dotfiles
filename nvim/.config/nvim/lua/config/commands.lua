@@ -57,3 +57,23 @@ vim.api.nvim_create_user_command("OpenGitModified", function()
 end, {
 	desc = "Open all git-modified files (staged, unstaged, untracked) in buffers",
 })
+
+-- Reload Neovim configuration
+vim.api.nvim_create_user_command("Reload", function()
+	-- Clear Lua module cache for config files
+	for name, _ in pairs(package.loaded) do
+		if name:match("^config") or name:match("^plugins") then
+			package.loaded[name] = nil
+		end
+	end
+
+	-- Re-source init.lua
+	dofile(vim.fn.stdpath("config") .. "/init.lua")
+
+	-- Reload Lazy plugins
+	vim.cmd("Lazy reload")
+
+	vim.notify("Configuration reloaded!", vim.log.levels.INFO)
+end, {
+	desc = "Reload Neovim configuration and plugins",
+})
