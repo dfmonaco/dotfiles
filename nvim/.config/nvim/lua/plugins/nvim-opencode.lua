@@ -2,7 +2,7 @@
 -- Local development plugin
 return {
   {
-    dir = "~/code/nvim-opencode",
+    dir = "~/code/nvim.op.old",
     dependencies = {
       "nvim-lua/plenary.nvim",
     },
