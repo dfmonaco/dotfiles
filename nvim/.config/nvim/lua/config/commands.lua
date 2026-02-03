@@ -70,17 +70,19 @@ end, {
 
 -- Reload Neovim configuration
 vim.api.nvim_create_user_command("Reload", function()
-	-- Clear Lua module cache for config files
+	-- Clear Lua module cache for config files (but not lazy itself)
 	for name, _ in pairs(package.loaded) do
-		if name:match("^config") or name:match("^plugins") then
+		if name:match("^config%.") or name:match("^plugins%.") then
 			package.loaded[name] = nil
 		end
 	end
 
-	-- Re-source init.lua
-	dofile(vim.fn.stdpath("config") .. "/init.lua")
+	-- Reload individual config modules (avoid re-sourcing init.lua which re-initializes lazy)
+	require("config.options")
+	require("config.keymaps")
+	require("config.commands")
 
-	-- Reload Lazy plugins
+	-- Reload Lazy plugins using the command (safer than direct API call)
 	vim.cmd("Lazy reload")
 
 	vim.notify("Configuration reloaded!", vim.log.levels.INFO)
