@@ -66,8 +66,8 @@ alias nvim-test='NVIM_APPNAME=nvim-test nvim'
 
 # ruby
 alias be='bundle exec'
-alias rails='bundle exec rails'
 alias t='bundle exec rspec --fail-fast'
+alias kr='pkill -f "puma" && rm -f tmp/pids/server.pid'                        
 
 # git
 alias gs='git status'
