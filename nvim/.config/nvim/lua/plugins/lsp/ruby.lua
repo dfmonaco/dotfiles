@@ -1,28 +1,30 @@
 -- Ruby Language Server Configuration
 -- Installation (Priority Order):
---   1. System (Recommended): sudo pacman -S ruby-lsp
---   2. Global via gem: gem install ruby-lsp
---   3. Per-project: Add 'ruby-lsp' to Gemfile
+--   1. asdf-managed Ruby gems (Recommended): gem install ruby-lsp
+--   2. Per-project: Add 'ruby-lsp' to Gemfile
+--   3. System fallback: sudo pacman -S ruby-lsp
 --
--- Installed via: pacman (system)
--- Command used: Dynamic (bundle exec ruby-lsp OR ruby-lsp)
--- Strategy: System with per-project override support
+-- Installed via: asdf Ruby (3.4.8, 3.2.9, 3.2.0) + system fallback
+-- Command used: Dynamic (bundle exec ruby-lsp OR ruby-lsp via asdf shim)
+-- Strategy: asdf with per-project override support
 --
 -- Detection logic:
 --   1. If Gemfile.lock exists AND contains ruby-lsp → bundle exec ruby-lsp
---   2. Otherwise → ruby-lsp (system binary)
+--   2. Otherwise → ruby-lsp (asdf shim, uses project's Ruby version)
 --
 -- This ensures:
---   - Consistent system-managed installation (pacman)
+--   - Works with any asdf-managed Ruby version automatically
 --   - Project-specific versions when needed (bundle exec)
---   - Works for standalone Ruby files (system fallback)
+--   - Works for standalone Ruby files (asdf global Ruby)
+--   - Proper integration with asdf PATH and shims
 --
--- Note: Ruby version still managed via asdf, but ruby-lsp installed system-wide
+-- Note: Ruby versions managed via asdf, ruby-lsp installed per Ruby version
 
--- Configure ruby_lsp with PATH environment
+-- Configure ruby_lsp with PATH environment that includes asdf shims
 vim.lsp.config("ruby_lsp", {
   cmd_env = {
-    PATH = vim.env.PATH,
+    -- Prepend asdf shims directory to PATH for proper Ruby version detection
+    PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
   },
 })
 
