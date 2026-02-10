@@ -5,7 +5,7 @@ SAVEHIST=1000000000
 # Set editor
 export VISUAL=nvim
 export EDITOR="$VISUAL"
-export BROWSER="/usr/bin/brave"
+export BROWSER="/usr/bin/vivaldi"
 
 # Emacs mode
 bindkey -e
