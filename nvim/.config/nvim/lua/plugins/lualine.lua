@@ -82,16 +82,6 @@ return {
           end,
           color = { fg = "#7aa2f7" },
         },
-        -- Prompt buffer icon indicator
-        {
-          function()
-            local status = require('nvim-opencode').statusline.get_status()
-            if status.prompt_buffer then
-              return status.prompt_icon
-            end
-            return ''
-          end,
-        },
         -- OpenCode statusline component
         {
           function()
