@@ -1,8 +1,10 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "github-copilot/claude-sonnet-4.5",
+  "model": "github-copilot/claude-sonnet-4.6",
   "small_model": "github-copilot/gpt-5-mini",
-  "plugin": ["@franlol/opencode-md-table-formatter@0.0.3"],
+  "plugin": [
+    "@franlol/opencode-md-table-formatter@0.0.3"
+  ],
   "mcp": {
     "context7": {
       "type": "remote",
@@ -12,6 +14,10 @@
       },
       "enabled": true
     }
+  },
+  "permission": {
+    "external_directory": {
+      "~/code/**": "allow"
+    },
   }
 }
-
