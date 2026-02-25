@@ -8,6 +8,9 @@ vim.g.maplocalleader = "," -- Set local leader to comma (used for buffer-local k
 
 local opt = vim.opt
 
+-- Short messages
+opt.shortmess:append("I")
+
 -- Line numbers
 opt.number = true -- Show absolute line numbers
 opt.relativenumber = true -- Show relative line numbers
