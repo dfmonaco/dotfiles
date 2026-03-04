@@ -19,7 +19,7 @@ This is NOT brainstorming - the "what and why" should already be decided. And th
 
 ## Input
 
-This skill works best with a feature brief from the brainstorming skill, but also accepts any clear description that covers: what to build, why, and what's in/out of scope.
+This skill works best with a feature brief from the brainstorming skill (found in `.plans/<feature-name>.brief.md`), but also accepts any clear description that covers: what to build, why, and what's in/out of scope.
 
 If the input is too vague to plan against, say so and suggest running the brainstorming skill first.
 
@@ -65,7 +65,7 @@ If there are meaningful design choices, present them to the user with your recom
 
 Goal: produce the handoff artifact.
 
-Write the implementation plan using the template below. Each task should be:
+Write the implementation plan using the template below. Save it to `.plans/<feature-name>.plan.md` (matching the brief's feature name if one exists). Each task should be:
 
 - **Self-contained enough** to be done in one focused session.
 - **Ordered** so that each task builds on the previous (no forward dependencies).

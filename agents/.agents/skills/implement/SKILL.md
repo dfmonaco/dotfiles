@@ -20,7 +20,7 @@ This is NOT planning - the technical decisions should already be made. If the pl
 
 ## Input
 
-This skill works best with an implementation plan from the planning skill. It also accepts any ordered list of code changes that specifies what files to touch and what to change.
+This skill works best with an implementation plan from the planning skill (found in `.plans/<feature-name>.plan.md`). It also accepts any ordered list of code changes that specifies what files to touch and what to change.
 
 If the input is just a vague idea or feature description, say so and suggest running the brainstorming or planning skills first.
 

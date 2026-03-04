@@ -52,6 +52,8 @@ Goal: produce the handoff artifact.
 
 When the user confirms the direction, generate the feature brief using the template below. Only include sections that are relevant - skip empty ones rather than filling them with placeholder text.
 
+Write the brief to `.plans/<feature-name>.brief.md` (kebab-case the feature name). Create the `.plans/` directory if it doesn't exist.
+
 ## Output: Feature Brief
 
 ```markdown
