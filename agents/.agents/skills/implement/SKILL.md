@@ -50,9 +50,9 @@ If a task is large, break it into sub-steps and work through them. But don't bre
 After all tasks are done:
 
 - Run the verification steps from the plan's Verification section.
-- If there are tests, run them. If there's a build, run it.
-- Report what passed and what didn't. Fix failures if straightforward; flag them to the user if not.
-- Give a brief summary of what was implemented and anything the user should review or test manually.
+- If the project has tests, run the full test suite. **All tests must pass before the implementation is considered done.** Fix failures caused by your changes. If a failure is pre-existing or unrelated, flag it to the user but don't let it block completion silently.
+- If there's a build step, run it and confirm it succeeds.
+- Report results: what was implemented, what passed, and anything the user should review or test manually.
 
 ## When Things Go Wrong
 

@@ -56,6 +56,7 @@ Based on what you found in research:
 - Decide where new code lives (new files vs extending existing ones).
 - Decide on the approach for each significant change (data structures, APIs, configuration, etc.).
 - Identify the order of changes - what depends on what.
+- Check if the project has testing infrastructure (test files, test framework, test scripts). If it does, the plan **must** include tasks to add or update tests for the changes being made. Follow the existing test patterns and framework. If the project has no tests, don't invent a test infrastructure - just note it.
 - Flag anything risky or uncertain that the implementer should know about.
 
 If there are meaningful design choices, present them to the user with your recommendation. For straightforward decisions, just make the call and explain briefly.
@@ -95,5 +96,5 @@ Write the implementation plan using the template below. Each task should be:
 ...
 
 ## Verification
-<How to confirm the feature works once implemented. Manual steps, commands to run, or behaviors to check.>
+<How to confirm the feature works once implemented. Manual steps, commands to run, or behaviors to check. If the project has tests, a green test suite is the final verification step.>
 ```
