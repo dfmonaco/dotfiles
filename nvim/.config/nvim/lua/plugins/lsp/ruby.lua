@@ -30,7 +30,7 @@ vim.lsp.config("ruby_lsp", {
 
 -- Manual start with FileType autocmd for runtime command detection
 vim.api.nvim_create_autocmd("FileType", {
-  pattern = "ruby",
+  pattern = { "ruby", "eruby", "eruby.html" },
   callback = function(args)
     -- Determine ruby-lsp command based on Gemfile.lock presence
     local cmd
