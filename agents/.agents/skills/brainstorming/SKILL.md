@@ -1,149 +1,85 @@
 ---
 name: brainstorming
-description: "Interview-driven feature brainstorming and early scoping. Use at the start of any new feature or significant behavior change (before planning/PRD or implementation) to clarify problem, users, constraints, success criteria, and non-goals; explore 2-3 approaches with tradeoffs; surface edge cases/risks/open questions; output a concise feature brief to hand off to the planning skill."
+description: "Interview-driven brainstorming for new features or significant changes. Use before planning/implementation to clarify the problem, explore approaches with tradeoffs, define MVP scope, and produce a feature brief that hands off to the planning skill."
 ---
 
 # Brainstorming
 
-Turn a vague idea into a testable, scoped feature concept by interviewing the user, exploring alternatives, and stress-testing the design with edge cases.
+Turn a vague idea into a scoped feature concept through conversation. The output is a feature brief that the planning skill uses as input.
 
-## Operating Rules
+This is NOT planning. Stay at the "what and why" level. Don't design APIs, schemas, or file structures - that's the planning skill's job.
 
-- Ask one question per turn until critical unknowns are resolved.
-- Prefer multiple-choice questions when it reduces user effort.
-- Always include a recommendation when presenting options or asking for a decision.
-- Do not jump into implementation details; stay at product/system design level.
-- Explicitly call out assumptions; label unknowns as `TBD`.
-- Ruthlessly cut scope (YAGNI) until an MVP is clear.
+## Rules
+
+- One question at a time. Prefer multiple-choice when it reduces effort.
+- Always include your recommendation when asking questions or presenting options.
+- Call out assumptions explicitly. Mark unknowns as `TBD`.
+- Cut scope aggressively. Default to the smallest useful version (YAGNI).
+- Stay conversational. This should feel like thinking out loud with a collaborator, not filling out a form.
 
 ## Workflow
 
-### 0) Establish Context (fast)
+### 1) Understand
 
-If working in an existing product/codebase, do a short pass to avoid designing against a fantasy:
+Goal: get clear on the problem and constraints.
 
-- Identify the product area and current behavior.
-- Identify adjacent systems this feature will touch.
-- State 2-4 bullets: "what exists today" and "what changes".
+If there's an existing codebase, do a quick scan first to ground the conversation in reality (what exists today, what would change).
 
-### 1) Interview: Define the Problem
+Then ask questions until you can confidently state:
 
-Goal: make the "why" and "who" crisp.
+- **The problem** - What's broken or missing, and why does it matter now?
+- **Who benefits** - Who hits this problem? (Often just "me" for a solo dev, and that's fine.)
+- **Done when** - How will we know this works? Concrete conditions, not metrics.
+- **Hard constraints** - Tech stack, compatibility requirements, time budget, anything non-negotiable.
 
-Ask one question at a time until you can state:
+Don't over-interview. If the user's initial description already covers some of these, acknowledge it and move on.
 
-- Problem statement (1-2 sentences)
-- Primary user (and secondary users if any)
-- Success criteria (observable, measurable)
+### 2) Explore
 
-Question areas:
+Goal: consider options before committing.
 
-- Users/personas
-- Current pain + why now
-- Desired outcome (what changes for the user)
-- Constraints (tech, time, policy/compliance, platforms)
+Propose 2-3 viable approaches. For each:
 
-### 2) Scope: MVP + Non-Goals
+- Core idea (1-2 sentences)
+- Key tradeoffs (complexity, risk, UX, maintenance)
+- What could go wrong (the big risks, not an exhaustive audit)
 
-Goal: prevent scope creep early.
+Recommend one and explain why. If one approach is obviously right, say so - don't invent alternatives just to fill a template.
 
-- Define the minimum shippable slice that delivers value.
-- Define explicit non-goals (what is NOT being built).
-- Identify dependencies and required integrations.
+### 3) Capture
 
-### 3) Explore 2-3 Approaches
+Goal: produce the handoff artifact.
 
-Propose 2-3 viable solution approaches. For each:
+When the user confirms the direction, generate the feature brief using the template below. Only include sections that are relevant - skip empty ones rather than filling them with placeholder text.
 
-- Core idea in 1-2 sentences
-- 3-6 tradeoffs (complexity, risk, cost, UX, operability)
-- Unknowns and how to validate
-
-Then recommend one approach and explain why.
-
-### 4) Edge Case + Risk Sweep
-
-Systematically look for failures and foot-guns. At minimum cover:
-
-- Permissions/roles
-- Data lifecycle (create/update/delete, audit, recovery)
-- Concurrency/races, idempotency, retries
-- Partial failure modes (and offline/poor network if relevant)
-- Performance/scalability assumptions
-- Security and abuse cases
-- Observability and supportability
-- Migration/rollout/backward compatibility
-
-### 5) Produce the Feature Brief (handoff artifact)
-
-When the user confirms the direction, produce a single Markdown brief using the template below.
-
-Do not write a PRD here; the goal is a clear, bounded concept to hand to the planning skill.
-
-## Output Template: Feature Brief
+## Output: Feature Brief
 
 ```markdown
-# <Feature name>
-
-## One-liner
-<What is it, in 1 sentence>
+# <Feature Name>
 
 ## Problem
-<Who is hurting and why now?>
+<What's broken or missing, who it affects, why it matters now. 2-3 sentences.>
 
-## Users
-- Primary: <persona>
-- Secondary: <persona> (optional)
-
-## Success Criteria
-- <measurable outcome>
-- <measurable outcome>
+## Done When
+- <concrete condition>
+- <concrete condition>
 
 ## Constraints
-- <tech/stack/platform>
-- <policy/compliance/security>
-- <timeline/budget>
+- <non-negotiable limitation>
 
-## Assumptions
-- <assumption>
-
-## Proposed Approach (Recommended)
-<1-2 paragraphs describing the approach>
+## Approach
+<1-2 paragraphs: what we're building and the key design decisions>
 
 ## Alternatives Considered
-- A: <approach> - <why not>
-- B: <approach> - <why not>
+- <approach> - <why not chosen>
 
-## MVP Scope
-- In:
-  - <capability>
-  - <capability>
-- Out:
-  - <non-goal>
-  - <non-goal>
+## Scope
+- **In:** <what's included in MVP>
+- **Out:** <what we're explicitly not doing>
 
-## User Flows
-- Happy path: <steps>
-- Edge paths:
-  - <edge path>
-  - <edge path>
+## Risks
+- <risk> - <mitigation or TBD>
 
-## Data + Permissions (High Level)
-- Data created/updated: <what>
-- Visibility/roles: <who can do what>
-
-## Risks + Edge Cases
-- <risk/edge case> - <mitigation or open question>
-- <risk/edge case> - <mitigation or open question>
-
-## Open Questions (for planning)
-- <question>
-- <question>
-
-## Example Trigger Phrases
-
-- "Let's brainstorm a new feature"
-- "I have an idea but it's vague"
-- "Help me think through edge cases"
-- "What are different ways to solve this?"
-- "Before we implement this, let's design it"
+## Open Questions
+- <anything unresolved that the planning skill needs to address>
+```
