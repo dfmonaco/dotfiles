@@ -27,7 +27,9 @@ If the input is too vague to plan against, say so and suggest running the brains
 
 ### 1) Research
 
-Goal: understand the codebase well enough to make real technical decisions.
+Goal: understand the codebase and relevant libraries well enough to make real technical decisions.
+
+**Codebase research (always):**
 
 - Read the feature brief (or user's description) to identify what areas of the codebase are involved.
 - Explore those areas: file structure, existing patterns, conventions, dependencies.
@@ -35,7 +37,15 @@ Goal: understand the codebase well enough to make real technical decisions.
 - Note existing patterns to follow (how similar things are already done).
 - Resolve the open questions from the feature brief where possible through codebase investigation.
 
-Don't boil the ocean. Focus on the parts of the codebase that the feature actually touches.
+**External research (when the feature involves libraries, APIs, or tools):**
+
+- Check current docs for any libraries or APIs the feature depends on. Use Context7 to look up accurate, up-to-date API signatures and usage patterns - don't rely on training data for this.
+- If the feature introduces a new dependency, verify it's the right choice: check for active maintenance, breaking changes in recent versions, and whether it fits the existing stack.
+- Use WebFetch for specific docs pages, changelogs, or migration guides when needed.
+
+Skip external research when the feature is purely internal (config changes, refactoring, etc.) and doesn't touch third-party code.
+
+Don't boil the ocean. Focus on the parts of the codebase and the specific libraries that the feature actually touches.
 
 ### 2) Design
 
@@ -68,8 +78,10 @@ Write the implementation plan using the template below. Each task should be:
 ## Context
 <Brief summary of what's being built and the key decisions made during planning. 2-4 sentences. Reference the feature brief if one exists.>
 
-## Codebase Notes
-<What you found during research that's relevant to the implementer. Existing patterns to follow, conventions to match, gotchas to watch out for. Bullet points.>
+## Research Notes
+<What you found during research that's relevant to the implementer. Bullet points.>
+- Codebase: existing patterns to follow, conventions to match, gotchas.
+- Libraries/APIs: version-specific usage notes, relevant API signatures, deprecations. (omit if no external deps)
 
 ## Tasks
 
