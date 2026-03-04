@@ -1,0 +1,4 @@
+# Compiled skill artifacts
+skills/dist/
+skills/**/__pycache__/
+skills/**/*.pyc

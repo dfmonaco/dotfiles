@@ -1,0 +1,52 @@
+{
+  "version": 3,
+  "skills": {
+    "skill-creator": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": ".agents/skills/skill-creator/SKILL.md",
+      "skillFolderHash": "a235030e055c7292a60525ead3c8b06fb2bcf831",
+      "installedAt": "2026-02-13T16:12:14.990Z",
+      "updatedAt": "2026-02-13T16:12:14.990Z"
+    },
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "c2f31172b6f256272305a5e6e7228b258446899f",
+      "installedAt": "2026-02-13T16:14:02.220Z",
+      "updatedAt": "2026-02-13T16:14:02.220Z"
+    },
+    "simplify": {
+      "source": "brianlovin/claude-config",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/brianlovin/claude-config.git",
+      "skillPath": "skills/simplify/SKILL.md",
+      "skillFolderHash": "83566973442dc05bcf5abbe83053e8a8e5f50b6b",
+      "installedAt": "2026-02-25T20:52:51.718Z",
+      "updatedAt": "2026-02-25T20:52:51.718Z"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "skillFolderHash": "56959a2ddd833553648e4a884c344acd52e89434",
+      "installedAt": "2026-02-25T20:52:54.256Z",
+      "updatedAt": "2026-02-25T20:52:54.256Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "codex",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-cli",
+    "opencode"
+  ]
+}
