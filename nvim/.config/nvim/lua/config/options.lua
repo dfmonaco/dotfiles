@@ -31,6 +31,7 @@ opt.incsearch = true -- Show search matches as you type
 opt.termguicolors = true -- Enable 24-bit RGB colors
 opt.signcolumn = "yes" -- Always show sign column (for git, diagnostics, etc.)
 opt.cursorline = true -- Highlight the line where the cursor is
+opt.colorcolumn = "120" -- Visual ruler at 120 columns (half a 1080p screen)
 opt.wrap = true -- Wrap long lines
 opt.scrolloff = 10 -- Keep 10 lines visible above/below cursor when scrolling
 opt.title = true -- Set terminal window title to current file
