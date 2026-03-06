@@ -120,9 +120,8 @@ return {
         map("<leader>ca", vim.lsp.buf.code_action, "Code Action")
         map("<leader>ca", vim.lsp.buf.code_action, "Code Action", "v") -- Visual mode
         map("<leader>cn", vim.lsp.buf.rename, "Rename Symbol")
-        map("<leader>cf", function()
-          vim.lsp.buf.format({ async = false })
-        end, "Format Buffer")
+        -- Note: <leader>cf is owned by conform.nvim (see plugins/conform.lua)
+        -- conform falls back to LSP format when no formatter is configured for the filetype
 
         -- Workspace & Symbols (using Snacks pickers for better UX)
         map("<leader>cw", function()
