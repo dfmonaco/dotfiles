@@ -10,7 +10,10 @@
 --   Python:     pip install isort black
 --   JS/TS/Web:  sudo pacman -S prettier
 --   SQL:        pip install sqlfluff
---   Ruby:       gem install rubocop (or via bundler)
+--   Ruby:       gem install syntax_tree rubocop (or via bundler)
+--              syntax_tree (stree) reformats code: wraps long lines, consistent style
+--              rubocop runs second for lint autocorrections
+--              Project config: .streerc (print width), .rubocop.yml (lint rules)
 --
 -- Usage:
 --   <leader>cf  - Format current buffer
@@ -42,7 +45,8 @@ return {
       html = { "prettier" },
       css = { "prettier" },
       sql = { "sqlfluff" },
-      ruby = { "rubocop" },
+      -- stree reformats (line wrapping, style), rubocop fixes lint issues after
+      ruby = { "syntax_tree", "rubocop" },
     },
     default_format_opts = {
       lsp_format = "fallback",
@@ -50,6 +54,18 @@ return {
     formatters = {
       sqlfluff = {
         require_cwd = false,
+      },
+      syntax_tree = {
+        -- stree needs the PATH to include asdf shims for the correct Ruby version
+        env = {
+          PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
+        },
+      },
+      rubocop = {
+        -- rubocop also needs asdf shims
+        env = {
+          PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
+        },
       },
     },
   },
