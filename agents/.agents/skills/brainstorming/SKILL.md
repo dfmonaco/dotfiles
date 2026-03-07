@@ -1,96 +1,157 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation."
+description: Use when starting creative work, defining a feature, scoping a behavior change, or clarifying ambiguous requirements before planning or implementation
 ---
 
-# Brainstorming Ideas Into Designs
+# Brainstorming
 
-## Overview
+Turn an idea into an approved, scoped direction before planning or implementation.
 
-Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
-
-Start by understanding the current project context, then ask questions one at a time to refine the idea. Once you understand what you're building, present the design and get user approval.
+This skill stays at the `what`, `why`, and MVP scope level. It does **not** do implementation planning. Do not design APIs, schemas, file layouts, or task breakdowns here unless the user explicitly asks for that depth.
 
 <HARD-GATE>
-Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY project regardless of perceived simplicity.
+Do not write code, scaffold, invoke implementation skills, or start planning until you have presented a direction and the user has approved it.
+
+For trivial requests where the user already stated a concrete direction, a terse inline confirmation counts as approval. Do not force an extra round trip when the safest path is obvious.
+
+For trivial, localized, low-risk changes, a 1-3 sentence inline mini-brief is enough. Do not force a design file or a separate planning step for those cases.
 </HARD-GATE>
 
-## Anti-Pattern: "This Is Too Simple To Need A Design"
+## Core Rules
 
-Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
+- Ground the conversation in reality. If there is an existing project, do a quick scan first.
+- Ask the highest-value question first. Prefer one question at a time.
+- Include your recommendation whenever you ask a question or present options.
+- Call out assumptions explicitly. Mark unresolved items as `TBD`.
+- Default to the smallest useful version. Cut scope aggressively.
+- Stay conversational. Do not turn this into a form or a ritual.
+- Do not invent multiple approaches when one option is obviously right.
 
-## Checklist
-
-You MUST create a task for each of these items and complete them in order:
-
-1. **Explore project context** — check files, docs, recent commits
-2. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
-3. **Propose 2-3 approaches** — with trade-offs and your recommendation
-4. **Present design** — in sections scaled to their complexity, get user approval after each section
-5. **Write design doc** — save to `docs/plans/YYYY-MM-DD-<topic>-design.md` and commit
-6. **Transition to implementation** — invoke writing-plans skill to create implementation plan
-
-## Process Flow
+## Workflow
 
 ```dot
-digraph brainstorming {
-    "Explore project context" [shape=box];
-    "Ask clarifying questions" [shape=box];
-    "Propose 2-3 approaches" [shape=box];
-    "Present design sections" [shape=box];
-    "User approves design?" [shape=diamond];
-    "Write design doc" [shape=box];
-    "Invoke writing-plans skill" [shape=doublecircle];
+digraph brainstorming_flow {
+    "Start" [shape=ellipse];
+    "Quick project scan" [shape=box];
+    "Trivial, low-risk, concrete?" [shape=diamond];
+    "Inline mini-brief" [shape=box];
+    "Clarify problem/scope" [shape=box];
+    "Real design choice?" [shape=diamond];
+    "Present recommended direction" [shape=box];
+    "User approves?" [shape=diamond];
+    "Write feature brief" [shape=box];
+    "Use writing-plans" [shape=doublecircle];
+    "Implement trivial change" [shape=doublecircle];
 
-    "Explore project context" -> "Ask clarifying questions";
-    "Ask clarifying questions" -> "Propose 2-3 approaches";
-    "Propose 2-3 approaches" -> "Present design sections";
-    "Present design sections" -> "User approves design?";
-    "User approves design?" -> "Present design sections" [label="no, revise"];
-    "User approves design?" -> "Write design doc" [label="yes"];
-    "Write design doc" -> "Invoke writing-plans skill";
+    "Start" -> "Quick project scan";
+    "Quick project scan" -> "Trivial, low-risk, concrete?";
+    "Trivial, low-risk, concrete?" -> "Inline mini-brief" [label="yes"];
+    "Trivial, low-risk, concrete?" -> "Clarify problem/scope" [label="no"];
+    "Clarify problem/scope" -> "Real design choice?";
+    "Real design choice?" -> "Present recommended direction" [label="yes"];
+    "Real design choice?" -> "Present recommended direction" [label="no"];
+    "Inline mini-brief" -> "User approves?";
+    "Present recommended direction" -> "User approves?";
+    "User approves?" -> "Clarify problem/scope" [label="no"];
+    "User approves?" -> "Implement trivial change" [label="yes, trivial"];
+    "User approves?" -> "Write feature brief" [label="yes, non-trivial"];
+    "Write feature brief" -> "Use writing-plans";
 }
 ```
 
-**The terminal state is invoking writing-plans.** Do NOT invoke frontend-design, mcp-builder, or any other implementation skill. The ONLY skill you invoke after brainstorming is writing-plans.
+### 1) Ground
 
-## The Process
+If a codebase exists, do a quick scan to understand what exists today and what would change.
 
-**Understanding the idea:**
-- Check out the current project state first (files, docs, recent commits)
-- Ask questions one at a time to refine the idea
-- Prefer multiple choice questions when possible, but open-ended is fine too
-- Only one question per message - if a topic needs more exploration, break it into multiple questions
-- Focus on understanding: purpose, constraints, success criteria
+### 2) Clarify
 
-**Exploring approaches:**
-- Propose 2-3 different approaches with trade-offs
-- Present options conversationally with your recommendation and reasoning
-- Lead with your recommended option and explain why
+Get clear on:
 
-**Presenting the design:**
-- Once you believe you understand what you're building, present the design
-- Scale each section to its complexity: a few sentences if straightforward, up to 200-300 words if nuanced
-- Ask after each section whether it looks right so far
-- Cover: architecture, components, data flow, error handling, testing
-- Be ready to go back and clarify if something doesn't make sense
+- **Problem** - what is missing or wrong, and why it matters now
+- **Who benefits** - user, operator, teammate, or just the human partner
+- **Done when** - concrete success conditions
+- **Constraints** - stack, compatibility, time, risk, or non-negotiables
+- **Scope** - what belongs in MVP and what does not
 
-## After the Design
+Do not over-interview. If the user already gave enough detail, summarize it and move on.
 
-**Documentation:**
-- Write the validated design to `docs/plans/YYYY-MM-DD-<topic>-design.md`
-- Use elements-of-style:writing-clearly-and-concisely skill if available
-- Commit the design document to git
+For large or fuzzy requests, summarize knowns, assumptions, unknowns, and the few decisions that materially affect scope. Ask only the highest-leverage question needed to move forward.
 
-**Implementation:**
-- Invoke the writing-plans skill to create a detailed implementation plan
-- Do NOT invoke any other skill. writing-plans is the next step.
+### 3) Explore
 
-## Key Principles
+If there is a real decision to make, propose 1-3 viable directions.
 
-- **One question at a time** - Don't overwhelm with multiple questions
-- **Multiple choice preferred** - Easier to answer than open-ended when possible
-- **YAGNI ruthlessly** - Remove unnecessary features from all designs
-- **Explore alternatives** - Always propose 2-3 approaches before settling
-- **Incremental validation** - Present design, get approval before moving on
-- **Be flexible** - Go back and clarify when something doesn't make sense
+For each direction, cover:
+
+- core idea
+- key tradeoffs
+- biggest risk
+
+Lead with your recommendation and explain why.
+
+### 4) Capture
+
+Once the user confirms the direction, capture it in one of two forms:
+
+- **Mini-brief** - for trivial, localized, low-risk work; keep it inline in the conversation
+- **Feature brief** - for non-trivial or multi-step work; save it to `docs/plans/YYYY-MM-DD-<feature-name>-brief.md`
+
+Use only the sections that matter. Skip empty sections instead of filling them with noise.
+
+## Exit Criteria
+
+Brainstorming is complete when all of these are true:
+
+- the problem is clear
+- `done when` is concrete
+- MVP scope is agreed
+- the recommended direction is accepted
+
+At that point, stop asking discovery questions. Either hand off to `writing-plans` or proceed with trivial implementation work.
+
+## Feature Brief Template
+
+```markdown
+# <Feature Name>
+
+## Problem
+<What is missing or broken, who it affects, and why it matters now.>
+
+## Done When
+- <concrete condition>
+- <concrete condition>
+
+## Constraints
+- <non-negotiable limitation>
+
+## Recommended Direction
+<What we are building at a high level and why this direction wins.>
+
+## Alternatives Considered
+- <option> - <why not chosen>
+
+## Scope
+- **In:** <MVP>
+- **Out:** <explicit non-goals>
+
+## Risks
+- <risk> - <mitigation or TBD>
+
+## Open Questions
+- <only unresolved items that planning must handle>
+```
+
+## Handoff
+
+If the work is multi-step, has meaningful uncertainty, or needs technical design, the next skill is `writing-plans`.
+
+If the work is trivial and the user approved the mini-brief, planning can be skipped and implementation may begin.
+
+## Anti-Patterns
+
+- Treating every tiny config tweak like a full design review
+- Asking low-value questions when the safest default is obvious
+- Mistaking brainstorming for planning
+- Presenting fake alternatives just to satisfy a template
+- Continuing to interview after the MVP is already clear
+- Starting implementation in the same step as unapproved brainstorming
