@@ -365,6 +365,23 @@ return {
         },
         opts = { skip = true },
       },
+
+      -- Route: Suppress ruby-lsp indexing progress (stays stuck at 0% forever)
+      -- ruby-lsp sends workDoneProgress begin/end tokens without percentage updates,
+      -- causing Noice to display a stale "0% indexing files" message indefinitely.
+      -- The `find` pattern matches the rendered format: "<client> <title>"
+      -- e.g. "ruby_lsp indexing files" or "ruby_lsp Ruby LSP: indexing files"
+      {
+        filter = {
+          event = "lsp",
+          kind = "progress",
+          cond = function(message)
+            local progress = message.opts and message.opts.progress
+            return progress ~= nil and (progress.client == "ruby_lsp")
+          end,
+        },
+        opts = { skip = true },
+      },
     },
 
     -- ============================================================
