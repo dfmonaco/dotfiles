@@ -21,7 +21,7 @@ Guide completion of development work by presenting clear options and handling ch
 
 ```bash
 # Run project's test suite
-npm test / cargo test / pytest / go test ./...
+rails test / rails test:system / npm test /...
 ```
 
 **If tests fail:**
@@ -189,12 +189,3 @@ git worktree remove <worktree-path>
 - Present exactly 4 options
 - Get typed confirmation for Option 4
 - Clean up worktree for Options 1 & 4 only
-
-## Integration
-
-**Called by:**
-- **subagent-driven-development** (Step 7) - After all tasks complete
-- **executing-plans** (Step 5) - After all batches complete
-
-**Pairs with:**
-- **using-git-worktrees** - Cleans up worktree created by that skill
