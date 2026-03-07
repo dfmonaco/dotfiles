@@ -90,6 +90,12 @@ When skills reference tools, all OpenCode native tools are available directly:
 
 **Skills location:** `~/.agents/skills/superpowers/`
 Use the `Skill` tool to load skills, e.g. `skill("superpowers/brainstorming")`.
+
+> **Note on skill name conflicts:** OpenCode also scans `~/.agents/skills/` for skills
+> at the top level and `~/.config/opencode/skills/`. If you have pre-existing skills
+> there with the same name as superpowers skills (e.g. `brainstorming`), the agent will
+> see duplicates and won't know which to use. Archive any conflicting skills outside
+> the scanned paths before proceeding. See the "Archiving Pre-Existing Skills" section.
 </EXTREMELY_IMPORTANT>
 ```
 
@@ -160,7 +166,7 @@ When skills reference tools, use these Antigravity equivalents:
 - Web search → `search_web`
 - User communication during tasks → `notify_user`
 
-**Skills location:** `~/.gemini/antigravity/skills/superpowers/`
+**Skills location:** `~/.gemini/antigravity/skills/`
 To load a skill: `view_file ~/.gemini/antigravity/skills/<skill-name>/SKILL.md`
 ```
 
@@ -192,20 +198,46 @@ anything placed inside `dotfiles/agents/.agents/skills/` is immediately visible 
 ## Step 4 — Wire Superpowers Skills for Antigravity
 
 Antigravity expects skills at `~/.gemini/antigravity/skills/<skill-name>/SKILL.md`.
-Since `~/.gemini/antigravity/` already exists as a live directory managed by
-Antigravity, create the skills subdirectory and symlink directly inside it:
+It does **not** recurse into subdirectories — skills must sit directly inside `skills/`,
+not inside a `skills/superpowers/` subfolder.
+
+Since `~/.gemini/antigravity/` is a live directory managed by Antigravity (it stores
+brain data, conversations, etc.), create individual symlinks per skill directly inside it:
 
 ```bash
 mkdir -p ~/.gemini/antigravity/skills
-ln -s /home/diego/code/superpowers/skills \
-  ~/.gemini/antigravity/skills/superpowers
+for skill in $(ls ~/code/superpowers/skills/); do
+  ln -s /home/diego/code/superpowers/skills/$skill \
+    ~/.gemini/antigravity/skills/$skill
+done
 ```
 
-> **Do NOT try to stow or symlink `~/.gemini/antigravity/` itself.** Antigravity
-> owns that directory and stores runtime data there (brain, conversations, etc.).
-> Only add things inside it.
+This creates one symlink per skill, e.g.:
 
-**Result:** `~/.gemini/antigravity/skills/superpowers/` → `~/code/superpowers/skills/`
+```
+~/.gemini/antigravity/skills/
+  brainstorming              -> ~/code/superpowers/skills/brainstorming
+  dispatching-parallel-agents -> ~/code/superpowers/skills/dispatching-parallel-agents
+  executing-plans            -> ~/code/superpowers/skills/executing-plans
+  ... (14 total)
+  my-custom-skill/           ← real directory, can be added freely alongside
+```
+
+> **Why not a single `superpowers/` symlink pointing at the whole skills dir?**
+> Antigravity only scans one level deep. A symlink at `skills/superpowers` makes skills
+> land at `skills/superpowers/<skill-name>/SKILL.md` — one level too deep to be found.
+
+> **Do NOT try to stow or symlink `~/.gemini/antigravity/` itself.** Antigravity
+> owns that directory. Only add things inside it.
+
+> **Adding a new skill when superpowers releases one:**
+> ```bash
+> ln -s ~/code/superpowers/skills/<new-skill> ~/.gemini/antigravity/skills/<new-skill>
+> ```
+> Unlike OpenCode (which picks up new skills automatically via the `superpowers/`
+> subfolder symlink), Antigravity requires a manual symlink per new skill.
+
+**Result:** `~/.gemini/antigravity/skills/<skill-name>/` → `~/code/superpowers/skills/<skill-name>/`
 
 ---
 
@@ -221,26 +253,62 @@ grep -l "EXTREMELY-IMPORTANT" ~/.config/opencode/AGENTS.md ~/.gemini/AGENTS.md
 ls ~/.agents/skills/superpowers | wc -l
 # expected: 14
 
-# 3. Antigravity sees 14 superpowers skills
-ls ~/.gemini/antigravity/skills/superpowers | wc -l
+# 3. Antigravity sees 14 superpowers skills (directly at skills/ root, not in a subfolder)
+ls ~/.gemini/antigravity/skills | wc -l
 # expected: 14
 
-# 4. Both symlinks point at the live repo
+# 4. OpenCode symlink points at the live repo
 readlink ~/.agents/skills/superpowers
 # expected: /home/diego/code/superpowers/skills
 
-readlink ~/.gemini/antigravity/skills/superpowers
-# expected: /home/diego/code/superpowers/skills
+# 5. Sample Antigravity symlinks point at the live repo
+readlink ~/.gemini/antigravity/skills/brainstorming
+# expected: /home/diego/code/superpowers/skills/brainstorming
 ```
+
+---
+
+## Archiving Pre-Existing Skills
+
+Before wiring superpowers, check whether you already have skills at the paths OpenCode
+and Antigravity scan. Any skill with the same name as a superpowers skill will cause
+the agent to see duplicates and behave unpredictably.
+
+OpenCode scans:
+- `~/.agents/skills/` (top-level entries)
+- `~/.config/opencode/skills/` (top-level entries)
+
+If either location has pre-existing skills, move them outside the scanned paths:
+
+```bash
+mkdir -p ~/dotfiles/agents/_archived_skills
+# move each pre-existing skill out, e.g.:
+mv ~/dotfiles/agents/.agents/skills/brainstorming ~/dotfiles/agents/_archived_skills/
+mv ~/dotfiles/agents/.agents/skills/planning      ~/dotfiles/agents/_archived_skills/
+# ... repeat for each
+
+# also check ~/.config/opencode/skills/
+mv ~/.config/opencode/skills/cartography ~/dotfiles/agents/_archived_skills/
+```
+
+> Store archived skills in `dotfiles/agents/_archived_skills/` — outside the
+> `dotfiles/agents/.agents/` stow package so they are never symlinked into `~/.agents`.
 
 ---
 
 ## Updating Superpowers in the Future
 
-Skills update automatically — the symlinks point at the live repo:
+Skills update automatically for OpenCode — the `superpowers/` subfolder symlink points
+at the live repo, so new skills appear the moment they land in the repo:
 
 ```bash
 cd ~/code/superpowers && git pull
+```
+
+For Antigravity, new skills require a manual symlink (one-time per new skill):
+
+```bash
+ln -s ~/code/superpowers/skills/<new-skill> ~/.gemini/antigravity/skills/<new-skill>
 ```
 
 **If `using-superpowers/SKILL.md` content changes materially:** the static copy
@@ -259,9 +327,10 @@ git -C ~/code/superpowers diff HEAD~1 HEAD -- skills/using-superpowers/SKILL.md
 |---|---|---|
 | `dotfiles/opencode/.config/opencode/AGENTS.md` | Append superpowers block | Lives in stow package; symlinked to `~/.config/opencode/AGENTS.md` |
 | `dotfiles/.gemini/AGENTS.md` | Replace entirely | Manually symlinked to `~/.gemini/AGENTS.md` (absolute symlink, not stow) |
-| `dotfiles/agents/.agents/skills/superpowers` | Create symlink → `~/code/superpowers/skills` | Lives in stow package; visible at `~/.agents/skills/superpowers/` |
+| `dotfiles/agents/.agents/skills/superpowers` | Create symlink → `~/code/superpowers/skills` | Lives in stow package; visible at `~/.agents/skills/superpowers/` — OpenCode auto-discovers new skills |
 | `~/.gemini/antigravity/skills/` | Create directory | Not in dotfiles — lives directly in Antigravity's runtime dir |
-| `~/.gemini/antigravity/skills/superpowers` | Create symlink → `~/code/superpowers/skills` | Not in dotfiles — lives directly in Antigravity's runtime dir |
+| `~/.gemini/antigravity/skills/<skill-name>` (×14) | Create individual symlinks → `~/code/superpowers/skills/<skill-name>` | One symlink per skill; new skills need a manual symlink added |
+| `dotfiles/agents/_archived_skills/` | Archive pre-existing skills | Outside stow package — safe, not visible to any agent |
 
 ---
 
@@ -271,24 +340,28 @@ git -C ~/code/superpowers diff HEAD~1 HEAD -- skills/using-superpowers/SKILL.md
 ~/code/superpowers/skills/          ← source of truth for all skills
   brainstorming/SKILL.md
   using-superpowers/SKILL.md
-  planning/SKILL.md
+  writing-plans/SKILL.md
   ... (14 skills total)
         │
-        ├──────────────────────────────────────────────────────────────┐
-        ▼                                                              ▼
-dotfiles/agents/.agents/skills/superpowers    ~/.gemini/antigravity/skills/superpowers
-(symlink)                                     (symlink, not in dotfiles)
-        │                                                              │
-        ▼ (via stow: ~/.agents → dotfiles/agents/.agents)             │
-~/.agents/skills/superpowers/                 ~/.gemini/antigravity/skills/superpowers/
-  (OpenCode reads this)                         (Antigravity reads this)
+        ├─────────────────────────────────────────────────────────────────────┐
+        │                                                                     │
+        ▼ (one symlink for the whole dir)                                     ▼ (14 individual symlinks)
+dotfiles/agents/.agents/skills/superpowers             ~/.gemini/antigravity/skills/brainstorming
+(symlink → ~/code/superpowers/skills)                  ~/.gemini/antigravity/skills/writing-plans
+        │                                              ... (one per skill, not in dotfiles)
+        ▼ (via stow: ~/.agents → dotfiles/agents/.agents)
+~/.agents/skills/superpowers/
+  (OpenCode reads this — new skills appear automatically on git pull)
+
+~/.agents/skills/_archived/        ← pre-existing skills, not visible to agents
+~/.config/opencode/skills/         ← empty (any pre-existing skills archived)
 
 
-dotfiles/opencode/.config/opencode/AGENTS.md  dotfiles/.gemini/AGENTS.md
-  (personal rules + superpowers bootstrap       (personal rules + superpowers bootstrap
-   + OpenCode tool mapping)                      + Antigravity tool mapping)
-        │                                                              │
-        ▼ (stow relative symlink)                                     ▼ (manual absolute symlink)
-~/.config/opencode/AGENTS.md                  ~/.gemini/AGENTS.md
-  (OpenCode reads on startup)                   (Antigravity reads on startup)
+dotfiles/opencode/.config/opencode/AGENTS.md   dotfiles/.gemini/AGENTS.md
+  (personal rules + superpowers bootstrap         (personal rules + superpowers bootstrap
+   + OpenCode tool mapping)                         + Antigravity tool mapping)
+        │                                                       │
+        ▼ (stow relative symlink)                              ▼ (manual absolute symlink)
+~/.config/opencode/AGENTS.md                   ~/.gemini/AGENTS.md
+  (OpenCode reads on startup)                    (Antigravity reads on startup)
 ```
