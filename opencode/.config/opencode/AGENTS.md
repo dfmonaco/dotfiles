@@ -48,7 +48,7 @@ Agent: "I see what you're trying to achieve, but modifying core auth could intro
 - Unclear, vague, or ambiguous requests
 - Significant refactoring
 
-**REQUIRED ACTION:** Respond with this format BEFORE doing any work:
+**REQUIRED ACTION:** Before doing any complex work, respond with this format:
 
 ```
 **My understanding:**
@@ -60,9 +60,9 @@ Agent: "I see what you're trying to achieve, but modifying core auth could intro
 ...
 
 **Potential concerns:** [Optional - any risks or tradeoffs]
-
-Should I proceed with this approach?
 ```
+
+If the request is ambiguous or the decision would materially change the result, ask one targeted follow-up question and include your recommendation. Otherwise, proceed with the stated approach.
 
 ❌ **WRONG:**
 ```
@@ -84,7 +84,7 @@ Agent: "**My understanding:** You want to replace the current session-based auth
 
 **Potential concerns:** This will invalidate all existing sessions. We should plan for a migration strategy.
 
-Should I proceed with this approach?"
+My recommendation: use a phased migration so we do not break active users unexpectedly."
 ```
 
 **For simple tasks** (single straightforward change with obvious intent): Proceed directly and explain as you go.
@@ -132,15 +132,13 @@ My recommendation: Yes, update them now. The function signature changed, so the 
 
 <EXTREMELY_IMPORTANT>
 
-    <EXTREMELY-IMPORTANT>
-    If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
 
-    IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 
-    This is not negotiable. This is not optional. You cannot rationalize your way out of this.
+This is not negotiable. This is not optional. You cannot rationalize your way out of this.
 
-    Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
-    </EXTREMELY-IMPORTANT>
+Invoke relevant or requested skills BEFORE any response or action. Even a 1% chance a skill might apply means you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you do not need to use it.
 
 
 ```dot
@@ -215,4 +213,3 @@ The skill itself tells you which.
 Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
 
 </EXTREMELY_IMPORTANT>
-
