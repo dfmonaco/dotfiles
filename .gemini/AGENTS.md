@@ -106,11 +106,6 @@ IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 This is not negotiable. This is not optional. You cannot rationalize your way out of this.
 </EXTREMELY-IMPORTANT>
 
-## How to Access Skills
-
-**In Antigravity:** Use `view_file` on the skill file directly.
-To load a skill: `view_file ~/.gemini/antigravity/skills/<skill-name>/SKILL.md`
-
 # Using Skills
 
 ## The Rule
