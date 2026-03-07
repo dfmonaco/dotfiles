@@ -129,29 +129,19 @@ Do you want me to update the tests as well?
 
 My recommendation: Yes, update them now. The function signature changed, so the existing tests will fail anyway.
 ```
+
 <EXTREMELY_IMPORTANT>
-You have superpowers.
 
-**IMPORTANT: The using-superpowers skill content is included below. It is ALREADY LOADED - you are currently following it. Do NOT use the skill tool to load "using-superpowers" again - that would be redundant.**
+    <EXTREMELY-IMPORTANT>
+    If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
 
+    IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+    This is not negotiable. This is not optional. You cannot rationalize your way out of this.
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+    Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
+    </EXTREMELY-IMPORTANT>
 
-This is not negotiable. This is not optional. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
-
-## How to Access Skills
-
-**In OpenCode:** Use the native `Skill` tool. When you invoke a skill, its content is loaded and presented to you—follow it directly. Never use the Read tool on skill files.
-
-# Using Skills
-
-## The Rule
-
-**Invoke relevant or requested skills BEFORE any response or action.** Even a 1% chance a skill might apply means that you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you don't need to use it.
 
 ```dot
 digraph skill_flow {
@@ -224,16 +214,5 @@ The skill itself tells you which.
 
 Instructions say WHAT, not HOW. "Add X" or "Fix Y" doesn't mean skip workflows.
 
-
-**Tool Mapping for OpenCode:**
-When skills reference tools, all OpenCode native tools are available directly:
-
-- `TodoWrite` → `TodoWrite` tool (same)
-- `Task` tool with subagents → `Task` tool (same)
-- `Skill` tool → `Skill` tool (same)
-- `Read`, `Write`, `Edit`, `Bash`, `Glob`, `Grep` → native tools (same)
-
-**Skills location:** `~/.agents/skills/superpowers/`
-Use the `Skill` tool to load skills, e.g. `skill("superpowers/brainstorming")`.
 </EXTREMELY_IMPORTANT>
 
