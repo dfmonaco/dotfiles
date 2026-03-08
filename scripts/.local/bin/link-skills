@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+SCRIPT_PATH=$(realpath "$0")
+SCRIPT_DIR=$(dirname "$SCRIPT_PATH")
+DOTFILES_ROOT=$(realpath "$SCRIPT_DIR/../../..")
+SOURCE_DIR="$DOTFILES_ROOT/agents/.agents/skills"
+
+if [[ ! -d "$SOURCE_DIR" ]]; then
+  printf 'Source skills directory not found: %s\n' "$SOURCE_DIR" >&2
+  exit 1
+fi
+
+printf 'Target project path: '
+read -r target_project
+
+if [[ -z "$target_project" ]]; then
+  printf 'No target project path provided.\n' >&2
+  exit 1
+fi
+
+TARGET_PROJECT=$(realpath -m "$target_project")
+TARGET_SKILLS_DIR="$TARGET_PROJECT/.agents/skills"
+
+mkdir -p "$TARGET_SKILLS_DIR"
+
+mapfile -t all_skills < <(find "$SOURCE_DIR" -mindepth 1 -maxdepth 1 -type d | sort)
+
+if [[ ${#all_skills[@]} -eq 0 ]]; then
+  printf 'No skills found in %s\n' "$SOURCE_DIR" >&2
+  exit 1
+fi
+
+printf 'Available skills:\n'
+for i in "${!all_skills[@]}"; do
+  printf '  %d) %s\n' "$((i + 1))" "$(basename "${all_skills[$i]}")"
+done
+
+printf '\nLink all skills or choose specific ones? [all/select]: '
+read -r mode
+
+case "$mode" in
+  all)
+    selected_skills=("${all_skills[@]}")
+    ;;
+  select)
+    printf 'Enter skill numbers separated by spaces: '
+    read -r -a selections
+    if [[ ${#selections[@]} -eq 0 ]]; then
+      printf 'No skills selected.\n' >&2
+      exit 1
+    fi
+
+    selected_skills=()
+    for selection in "${selections[@]}"; do
+      if [[ ! "$selection" =~ ^[0-9]+$ ]]; then
+        printf 'Invalid selection: %s\n' "$selection" >&2
+        exit 1
+      fi
+
+      index=$((selection - 1))
+      if (( index < 0 || index >= ${#all_skills[@]} )); then
+        printf 'Selection out of range: %s\n' "$selection" >&2
+        exit 1
+      fi
+
+      selected_skills+=("${all_skills[$index]}")
+    done
+    ;;
+  *)
+    printf 'Invalid option. Use "all" or "select".\n' >&2
+    exit 1
+    ;;
+esac
+
+linked=()
+skipped=()
+
+for skill_path in "${selected_skills[@]}"; do
+  skill_name=$(basename "$skill_path")
+  target_link="$TARGET_SKILLS_DIR/$skill_name"
+
+  if [[ -e "$target_link" || -L "$target_link" ]]; then
+    skipped+=("$skill_name")
+    continue
+  fi
+
+  ln -s "$skill_path" "$target_link"
+  linked+=("$skill_name")
+done
+
+printf '\nTarget skills directory: %s\n' "$TARGET_SKILLS_DIR"
+printf 'Linked: %s\n' "${linked[*]:-none}"
+printf 'Skipped existing: %s\n' "${skipped[*]:-none}"
