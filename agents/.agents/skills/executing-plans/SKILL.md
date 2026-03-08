@@ -147,6 +147,19 @@ Do not implement against memory when the contract may have drifted.
 - Quietly expanding scope with opportunistic refactors or improvements
 - Reporting completion before integrated verification is done
 
+## Handoff
+
+After plan execution:
+
+- if execution is blocked by missing requirements, stale assumptions, or a design gap, return to `writing-plans`
+- if the current task became a scope or product decision instead of an implementation decision, return to `brainstorming`
+- if implementation work remains, continue within `executing-plans`
+- if code changes are complete, use `verification-before-completion` before making any success claim
+- if a substantial checkpoint or final diff would benefit from another pass, use `requesting-code-review`
+- if review feedback arrives, switch to `receiving-code-review`
+- if the work is verified and the user needs a branch-level next step, use `finishing-a-development-branch`
+- if the user asked only for implementation and no branch action is needed, stop after reporting verified results
+
 ## Exit Criteria
 
 Execution is complete when:
