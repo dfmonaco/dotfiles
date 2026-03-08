@@ -138,6 +138,8 @@ IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
 
 This is not negotiable. This is not optional. You cannot rationalize your way out of this.
 
+Before starting ANY task, you MUST check `~/.agents/skills/` for relevant skills and workflows. You MUST treat global skills in `~/.agents/skills/` exactly the same as repository-local skills. This check is a mandatory step in your workflow every single time. It is not optional, it cannot be skipped, and failure to do it is a direct violation of these rules.
+
 Invoke relevant or requested skills BEFORE any response or action. Even a 1% chance a skill might apply means you should invoke the skill to check. If an invoked skill turns out to be wrong for the situation, you do not need to use it.
 
 
