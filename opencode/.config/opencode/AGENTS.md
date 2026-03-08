@@ -1,6 +1,6 @@
 # Global AI Agent Rules - Personal Preferences
 
-These rules apply to all OpenCode sessions across all projects.
+These rules apply to all sessions across all projects.
 
 ---
 
