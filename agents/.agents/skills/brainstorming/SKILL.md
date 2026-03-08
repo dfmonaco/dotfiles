@@ -9,6 +9,8 @@ Turn an idea into an approved, scoped direction before planning or implementatio
 
 This skill stays at the `what`, `why`, and MVP scope level. It does **not** do implementation planning. Do not design APIs, schemas, file layouts, or task breakdowns here unless the user explicitly asks for that depth.
 
+**Announce at start:** "I'm using the brainstorming skill to clarify scope and recommend a direction."
+
 <HARD-GATE>
 Do not write code, scaffold, invoke implementation skills, or start planning until you have presented a direction and the user has approved it.
 
@@ -16,6 +18,13 @@ For trivial requests where the user already stated a concrete direction, a terse
 
 For trivial, localized, low-risk changes, a 1-3 sentence inline mini-brief is enough. Do not force a design file or a separate planning step for those cases.
 </HARD-GATE>
+
+## When to Use
+
+- when the request is still fuzzy, open-ended, or has meaningful product or scope choices
+- when a feature, behavior change, or workflow needs an agreed direction before planning
+- when the safest implementation path depends on clarifying the problem, constraints, or MVP
+- do not use for trivial, localized changes where the direction is already obvious and low-risk
 
 ## Core Rules
 
@@ -146,6 +155,10 @@ At that point, stop asking discovery questions. Either hand off to `writing-plan
 If the work is multi-step, has meaningful uncertainty, or needs technical design, the next skill is `writing-plans`.
 
 If the work is trivial and the user approved the mini-brief, planning can be skipped and implementation may begin.
+
+If the next step is implementation rather than planning, start with `test-driven-development` for behavior changes or bug fixes when tests are practical. For pure configuration or low-risk documentation-style changes, implement directly and use `verification-before-completion` before claiming success.
+
+If the user only wanted help scoping the work, stop after the mini-brief or feature brief instead of forcing a handoff.
 
 ## Anti-Patterns
 

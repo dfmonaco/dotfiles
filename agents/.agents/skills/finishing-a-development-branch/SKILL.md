@@ -5,187 +5,126 @@ description: Use when implementation is complete, all tests pass, and you need t
 
 # Finishing a Development Branch
 
-## Overview
+Decide how to integrate, preserve, or discard verified work once implementation is complete.
 
-Guide completion of development work by presenting clear options and handling chosen workflow.
+This skill is for branch-level closeout. It assumes the work itself is already implemented and verified, or that you are about to confirm that state before presenting options.
 
-**Core principle:** Verify tests → Present options → Execute choice → Clean up.
+**Core principle:** Verify current state -> present structured options with a recommendation -> execute the chosen path safely.
 
-**Announce at start:** "I'm using the finishing-a-development-branch skill to complete this work."
+**Announce at start:** "I'm using the finishing-a-development-branch skill to decide the safest next step for this branch."
 
-## The Process
+## When to Use
 
-### Step 1: Verify Tests
+- after implementation is complete and the user needs a merge, PR, hold, or discard decision
+- after `executing-plans` or ad-hoc development when branch-level next steps are now the focus
+- when a feature branch or worktree needs explicit disposition
+- do not use before relevant verification is current
+- do not force this skill when the user only asked for local edits and no integration decision is needed
 
-**Before presenting options, verify tests pass:**
+## Core Rules
 
-```bash
-# Run project's test suite
-rails test / rails test:system / npm test /...
+- use `verification-before-completion` first, or confirm equally fresh evidence already exists
+- determine the real base branch and branch state from git instead of assuming `main`
+- present a short list of concrete options and include a recommendation
+- require explicit typed confirmation for destructive discard actions
+- never force-push, hard-reset, or amend unless the user explicitly asked
+- if the repo has no automated tests or build, say that clearly and use the best available verification evidence
+
+## Workflow
+
+### 1) Verify Readiness
+
+Before presenting options, confirm:
+
+- current branch name and worktree state
+- working tree status
+- latest verification evidence relevant to this change
+- whether the branch tracks a remote branch already
+
+If verification is stale, incomplete, or failing, stop and return to `verification-before-completion`, `test-driven-development`, or `executing-plans` as appropriate.
+
+### 2) Determine the Integration Context
+
+Identify:
+
+- likely base branch
+- whether the branch is already pushed
+- whether there is an open PR already
+- whether the current checkout is a linked worktree that needs special handling
+
+### 3) Present Structured Options
+
+Offer these branch-level options:
+
+1. merge locally into the base branch
+2. push and create or update a pull request
+3. keep the branch as-is for later
+4. discard the branch and its work
+
+Always include a recommendation, for example:
+
+```text
+My recommendation: 2. Push and create a pull request, because the work is verified and still benefits from a final review before merge.
 ```
 
-**If tests fail:**
-```
-Tests failing (<N> failures). Must fix before completing:
+If there is no safe recommendation yet because verification is stale or the branch is dirty in the wrong way, say that and resolve it before asking.
 
-[Show failures]
+### 4) Execute the Chosen Path
 
-Cannot proceed with merge/PR until tests pass.
-```
+**Option 1: Merge locally**
 
-Stop. Don't proceed to Step 2.
+- switch to the base branch
+- update it safely if appropriate for the repo
+- merge the feature branch
+- rerun the relevant verification on the merged result
+- delete the feature branch only after verification still passes
 
-**If tests pass:** Continue to Step 2.
+**Option 2: Push and create or update a PR**
 
-### Step 2: Determine Base Branch
+- push with upstream tracking if needed
+- create the PR with a concise summary and verification notes, or update the existing PR context
+- preserve the branch and worktree unless the user explicitly asks for cleanup
 
-```bash
-# Try common base branches
-git merge-base HEAD main 2>/dev/null || git merge-base HEAD master 2>/dev/null
-```
+**Option 3: Keep as-is**
 
-Or ask: "This branch split from main - is that correct?"
+- report the branch name, worktree path if relevant, and any useful resume context
+- do not clean up the branch or worktree
 
-### Step 3: Present Options
+**Option 4: Discard**
 
-Present exactly these 4 options:
+Before deleting anything, show exactly what will be removed and require the user to type `discard`.
 
-```
-Implementation complete. What would you like to do?
+### 5) Close Out Clearly
 
-1. Merge back to <base-branch> locally
-2. Push and create a Pull Request
-3. Keep the branch as-is (I'll handle it later)
-4. Discard this work
+Report the resulting state:
 
-Which option?
-```
+- branch status
+- remote/PR status if relevant
+- whether the worktree was kept or cleaned up
+- the most relevant next skill, if any
 
-**Don't add explanation** - keep options concise.
+## Handoff
 
-### Step 4: Execute Choice
+After branch finishing:
 
-#### Option 1: Merge Locally
+- if a PR was created and feedback arrives later, use `receiving-code-review`
+- if more code changes are still needed, return to `executing-plans` or the active implementation flow
+- if verification was missing or failed, return to `verification-before-completion` or `test-driven-development`
+- if the branch is intentionally being kept as-is, stop after reporting the preserved state
 
-```bash
-# Switch to base branch
-git checkout <base-branch>
+## Exit Criteria
 
-# Pull latest
-git pull
+Finishing the branch is complete when:
 
-# Merge feature branch
-git merge <feature-branch>
-
-# Verify tests on merged result
-<test command>
-
-# If tests pass
-git branch -d <feature-branch>
-```
-
-Then: Cleanup worktree (Step 5)
-
-#### Option 2: Push and Create PR
-
-```bash
-# Push branch
-git push -u origin <feature-branch>
-
-# Create PR
-gh pr create --title "<title>" --body "$(cat <<'EOF'
-## Summary
-<2-3 bullets of what changed>
-
-## Test Plan
-- [ ] <verification steps>
-EOF
-)"
-```
-
-Then: Cleanup worktree (Step 5)
-
-#### Option 3: Keep As-Is
-
-Report: "Keeping branch <name>. Worktree preserved at <path>."
-
-**Don't cleanup worktree.**
-
-#### Option 4: Discard
-
-**Confirm first:**
-```
-This will permanently delete:
-- Branch <name>
-- All commits: <commit-list>
-- Worktree at <path>
-
-Type 'discard' to confirm.
-```
-
-Wait for exact confirmation.
-
-If confirmed:
-```bash
-git checkout <base-branch>
-git branch -D <feature-branch>
-```
-
-Then: Cleanup worktree (Step 5)
-
-### Step 5: Cleanup Worktree
-
-**For Options 1, 2, 4:**
-
-Check if in worktree:
-```bash
-git worktree list | grep $(git branch --show-current)
-```
-
-If yes:
-```bash
-git worktree remove <worktree-path>
-```
-
-**For Option 3:** Keep worktree.
-
-## Quick Reference
-
-| Option | Merge | Push | Keep Worktree | Cleanup Branch |
-|--------|-------|------|---------------|----------------|
-| 1. Merge locally | ✓ | - | - | ✓ |
-| 2. Create PR | - | ✓ | ✓ | - |
-| 3. Keep as-is | - | - | ✓ | - |
-| 4. Discard | - | - | - | ✓ (force) |
+- the branch state and verification status were checked
+- the user chose an explicit path, or the work was safely paused pending clarification
+- any git actions taken match that choice
+- the resulting local/remote/worktree state was reported accurately
 
 ## Common Mistakes
 
-**Skipping test verification**
-- **Problem:** Merge broken code, create failing PR
-- **Fix:** Always verify tests before offering options
-
-**Open-ended questions**
-- **Problem:** "What should I do next?" → ambiguous
-- **Fix:** Present exactly 4 structured options
-
-**Automatic worktree cleanup**
-- **Problem:** Remove worktree when might need it (Option 2, 3)
-- **Fix:** Only cleanup for Options 1 and 4
-
-**No confirmation for discard**
-- **Problem:** Accidentally delete work
-- **Fix:** Require typed "discard" confirmation
-
-## Red Flags
-
-**Never:**
-- Proceed with failing tests
-- Merge without verifying tests on result
-- Delete work without confirmation
-- Force-push without explicit request
-
-**Always:**
-- Verify tests before offering options
-- Present exactly 4 options
-- Get typed confirmation for Option 4
-- Clean up worktree for Options 1 & 4 only
+- presenting merge or PR options before fresh verification exists
+- asking open-ended "what next" questions without a recommendation
+- assuming the base branch without checking
+- cleaning up a branch or worktree the user expected to keep
+- deleting work without explicit confirmation

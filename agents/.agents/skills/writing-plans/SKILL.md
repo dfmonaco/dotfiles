@@ -124,7 +124,7 @@ Use exact file paths when you verified them from the repo. If you have not verif
 ```markdown
 # <Feature Name> Implementation Plan
 
-> **For Claude:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
+> Next step after approval: use `executing-plans` to implement this plan task-by-task.
 
 **Goal:** <one sentence>
 
@@ -176,6 +176,10 @@ Use exact file paths when you verified them from the repo. If you have not verif
 After saving the plan, recommend the next step directly:
 
 **"Plan complete and saved to `docs/plans/<filename>.md`. Next step: use `executing-plans` to implement it with review checkpoints."**
+
+If the user asked only for a plan, stop after saving and reporting it. Do not force execution.
+
+When execution begins, use `test-driven-development` for behavior changes or bug fixes when tests are practical, and use `verification-before-completion` before any success claims.
 
 ## Exit Criteria
 

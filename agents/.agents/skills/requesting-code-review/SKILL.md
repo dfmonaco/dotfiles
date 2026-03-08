@@ -5,96 +5,98 @@ description: Use when completing tasks, implementing major features, or before m
 
 # Requesting Code Review
 
-Dispatch code-reviewer subagent to catch issues before they cascade.
+Bring in a second pass on the current change before issues spread downstream.
 
-**Core principle:** Review early, review often.
+This skill is for analysis and feedback, not for blindly outsourcing judgment. Use it when an extra review pass would reduce risk or improve quality.
 
-## When to Request Review
+**Core principle:** Review at meaningful checkpoints, not performatively and not too late.
 
-**Mandatory:**
-- After each task in development
-- After completing major feature
-- Before merge to main
+**Announce at start:** "I'm using the requesting-code-review skill to get a focused review of the current change set."
 
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-- After fixing complex bug
+## When to Use
 
-## How to Request
+- after a substantial feature, refactor, or bug fix reaches a stable checkpoint
+- before merge or PR creation when another review pass would reduce risk
+- during `executing-plans` at major checkpoints or when uncertainty remains
+- when you are stuck and want an independent read on the diff or design
+- do not force this for every tiny, low-risk edit unless the context is unusually sensitive
 
-**1. Get git SHAs:**
-```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
-HEAD_SHA=$(git rev-parse HEAD)
+## Core Rules
+
+- verify the current work first; do not ask for review on obviously broken or unverified code unless the point is to diagnose it
+- give the reviewer the requirement, the diff scope, and the verification context
+- use an analysis-only subagent via `task`; prefer `oracle`, or `general` if broader investigation is needed
+- review a specific range or current diff, not a vague "please look around"
+- treat review feedback as input to evaluate, not orders to obey blindly
+
+## Workflow
+
+### 1) Define the Review Scope
+
+Gather the minimum context the reviewer needs:
+
+- what changed
+- what requirement or plan it should satisfy
+- which commit range or working-tree diff to inspect
+- what verification already ran
+- any known risks or areas you especially want reviewed
+
+### 2) Launch the Review
+
+Use the `task` tool with `subagent_type: "oracle"` for a no-edits review. Use `subagent_type: "general"` only when the reviewer needs broader repository investigation.
+
+The prompt should include:
+
+- a concise summary of the change
+- the requirement or plan reference
+- the git range or files to review
+- verification already performed
+- the exact output format you want back
+
+Use `requesting-code-review/code-reviewer.md` as the base template when helpful.
+
+### 3) Triage the Feedback
+
+- fix critical issues before moving on
+- address important issues before branch finish unless you have a strong technical reason not to
+- capture minor issues for later if they are truly non-blocking
+- if feedback is unclear or questionable, switch to `receiving-code-review`
+
+## Example Review Request
+
+```text
+Review the diff from {BASE_SHA}..{HEAD_SHA} against {PLAN_OR_REQUIREMENTS}.
+Focus on correctness, missing edge cases, verification gaps, and scope drift.
+Return:
+1. strengths
+2. critical issues
+3. important issues
+4. minor issues
+5. merge readiness with reasoning
 ```
 
-**2. Dispatch code-reviewer subagent:**
+## Handoff
 
-Use Task tool with code-reviewer type, fill template at `code-reviewer.md`
+After the review returns:
 
-**Placeholders:**
-- `{WHAT_WAS_IMPLEMENTED}` - What you just built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
-- `{DESCRIPTION}` - Brief summary
+- use `receiving-code-review` to evaluate and apply the feedback rigorously
+- after fixes, use `verification-before-completion` before claiming the issues are resolved
+- if the review is clean and the user wants branch-level next steps, use `finishing-a-development-branch`
+- if the review exposes a plan or scope problem, return to `writing-plans` or `brainstorming` instead of patching blindly
 
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
+## Exit Criteria
 
-## Example
+Requesting review is complete when:
 
-```
-[Just completed Task 2: Add verification function]
+- the review scope was explicit
+- the reviewer had enough context to judge the change
+- feedback was returned and triaged
+- the next step is clear: apply feedback, verify, re-review, or finish the branch
 
-You: Let me request code review before proceeding.
+## Common Mistakes
 
-BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
-HEAD_SHA=$(git rev-parse HEAD)
-
-[Dispatch code-reviewer subagent]
-  WHAT_WAS_IMPLEMENTED: Verification and repair functions for conversation index
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/plans/deployment-plan.md
-  BASE_SHA: a7981ec
-  HEAD_SHA: 3df7661
-  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-
-[Subagent returns]:
-  Strengths: Clean architecture, real tests
-  Issues:
-    Important: Missing progress indicators
-    Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
-
-You: [Fix progress indicators]
-[Continue to Task 3]
-```
-
-## Integration with Workflows
-
-**Executing Plans:**
-- Review after each batch (3 tasks)
-- Get feedback, apply, continue
-
-**Ad-Hoc Development:**
-- Review before merge
-- Review when stuck
-
-## Red Flags
-
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-- Argue with valid technical feedback
-
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
-- Request clarification
-
-See template at: requesting-code-review/code-reviewer.md
+- requesting review with no clear diff or requirement
+- asking for review before any relevant verification ran
+- treating every nit as critical or every critical issue as optional
+- outsourcing judgment instead of evaluating the feedback technically
+- skipping follow-up verification after applying review feedback

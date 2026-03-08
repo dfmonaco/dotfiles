@@ -5,135 +5,121 @@ description: Use when about to claim work is complete, fixed, or passing, before
 
 # Verification Before Completion
 
-## Overview
+Require fresh evidence before claiming work is complete, fixed, or passing.
 
-Claiming work is complete without verification is dishonesty, not efficiency.
+This skill is a reporting gate, not a replacement for implementation, planning, or testing. Use it whenever you are about to make a success claim or take an action that assumes the work is verified.
 
 **Core principle:** Evidence before claims, always.
 
-**Violating the letter of this rule is violating the spirit of this rule.**
+**Announce at start:** "I'm using the verification-before-completion skill to verify the current claim before I report it."
 
-## The Iron Law
+## When to Use
 
-```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
-```
+- before saying code is complete, fixed, passing, ready, or successful
+- before committing, creating a PR, merging, or presenting branch-finish options
+- after delegated or subagent work, before trusting the result
+- after a TDD cycle, major fix, or plan milestone when you need to report status
+- do not use as a substitute for the actual implementation or test workflow that should produce the evidence
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+## Core Rules
 
-## The Gate Function
+- identify the exact command, checklist, or manual behavior that proves the claim
+- run the freshest complete verification that fits the claim; do not rely on old output or partial checks
+- read the actual output, exit status, and failure count before speaking
+- if evidence is mixed or incomplete, report the real state instead of stretching the claim
+- if no automated verification exists, say that explicitly and use the best available manual or scriptable evidence
 
-```
-BEFORE claiming any status or expressing satisfaction:
+## Workflow
 
-1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
-4. VERIFY: Does output confirm the claim?
-   - If NO: State actual status with evidence
-   - If YES: State claim WITH evidence
-5. ONLY THEN: Make the claim
+### 1) Identify the Claim
 
-Skip any step = lying, not verifying
-```
+Decide what you are about to claim, for example:
 
-## Common Failures
+- tests pass
+- build succeeds
+- bug is fixed
+- requirement is complete
+- agent task finished successfully
 
-| Claim | Requires | Not Sufficient |
-|-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
-| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
-| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
-| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
-| Regression test works | Red-green cycle verified | Test passes once |
-| Agent completed | VCS diff shows changes | Agent reports "success" |
-| Requirements met | Line-by-line checklist | Tests passing |
+### 2) Choose the Proving Step
 
-## Red Flags - STOP
+Pick the proof that actually matches the claim.
 
-- Using "should", "probably", "seems to"
-- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
-- About to commit/push/PR without verification
-- Trusting agent success reports
-- Relying on partial verification
-- Thinking "just this once"
-- Tired and wanting work over
-- **ANY wording implying success without having run verification**
+| Claim | Required proof | Not enough |
+|-------|----------------|------------|
+| Tests pass | Fresh test command with passing result | Old run, partial suite, confidence |
+| Linter clean | Fresh lint output with zero errors | Build output, code inspection |
+| Build succeeds | Fresh build command exit `0` | Lint passing |
+| Bug fixed | Reproduction or regression test now passes | Code changed |
+| Requirements met | Checklist against requirements plus verification | Tests passing alone |
+| Delegated task complete | Inspect diff and run relevant verification | Agent says "done" |
 
-## Rationalization Prevention
+### 3) Run and Read It
 
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler |
-| "Agent said success" | Verify independently |
-| "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
-| "Different words so rule doesn't apply" | Spirit over letter |
+For every claim:
+
+1. run the full relevant command or manual checklist
+2. read the output fully enough to know what passed and what failed
+3. verify that the evidence really supports the exact wording you plan to use
+
+### 4) Report Honestly
+
+- If the proof passes, state the result and cite the evidence.
+- If the proof fails, say what failed and what remains.
+- If proof is partial, say exactly what is verified and what is still unverified.
 
 ## Key Patterns
 
-**Tests:**
-```
-✅ [Run test command] [See: 34/34 pass] "All tests pass"
-❌ "Should pass now" / "Looks correct"
-```
+**Tests**
 
-**Regression tests (TDD Red-Green):**
-```
-✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
-❌ "I've written a regression test" (without red-green verification)
+```text
+Good: Ran `<test command>` and it passed (`34/34`).
+Bad: "Should pass now" or "Looks correct"
 ```
 
-**Build:**
-```
-✅ [Run build] [See: exit 0] "Build passes"
-❌ "Linter passed" (linter doesn't check compilation)
-```
+**Regression fix**
 
-**Requirements:**
-```
-✅ Re-read plan → Create checklist → Verify each → Report gaps or completion
-❌ "Tests pass, phase complete"
+```text
+Good: Reproduced the failure, added the regression test, and it now passes.
+Bad: "I fixed it" without proving the original symptom changed
 ```
 
-**Agent delegation:**
+**Build**
+
+```text
+Good: Ran `<build command>` and it exited `0`.
+Bad: "Lint passed" when the claim is about the build
 ```
-✅ Agent reports success → Check VCS diff → Verify changes → Report actual state
-❌ Trust agent report
+
+**Delegated work**
+
+```text
+Good: Reviewed the diff, ran verification, and reported the actual result.
+Bad: Trusting an agent's success message without checking
 ```
 
-## Why This Matters
+## Handoff
 
-From 24 failure memories:
-- your human partner said "I don't believe you" - trust broken
-- Undefined functions shipped - would crash
-- Missing requirements shipped - incomplete features
-- Time wasted on false completion → redirect → rework
-- Violates: "Honesty is a core value. If you lie, you'll be replaced."
+After verification:
 
-## When To Apply
+- if verification failed, return to `test-driven-development`, `executing-plans`, or the active implementation workflow
+- if verification passed but more implementation remains, continue that workflow instead of declaring full completion
+- if the change is substantial and another opinion would help, use `requesting-code-review`
+- if the work is fully verified and the user needs branch-level next steps, use `finishing-a-development-branch`
 
-**ALWAYS before:**
-- ANY variation of success/completion claims
-- ANY expression of satisfaction
-- ANY positive statement about work state
-- Committing, PR creation, task completion
-- Moving to next task
-- Delegating to agents
+## Exit Criteria
 
-**Rule applies to:**
-- Exact phrases
-- Paraphrases and synonyms
-- Implications of success
-- ANY communication suggesting completion/correctness
+Verification-before-completion is complete when:
 
-## The Bottom Line
+- the claim being made is explicit
+- matching evidence was gathered freshly enough for that claim
+- the reported status matches the evidence exactly
+- the next step is clear: continue implementation, request review, or finish the branch
 
-**No shortcuts for verification.**
+## Common Mistakes
 
-Run the command. Read the output. THEN claim the result.
-
-This is non-negotiable.
+- using words like "should", "probably", or "seems" instead of evidence
+- treating lint, build, tests, and manual checks as interchangeable proof
+- relying on old output, partial verification, or subagent summaries
+- claiming more than the evidence proves
+- skipping verification because the code change feels obvious

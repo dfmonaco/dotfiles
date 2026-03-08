@@ -13,6 +13,8 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+**Announce at start:** "I'm using the test-driven-development skill to drive this change from a failing test."
+
 ## When to Use
 
 **Always:**
@@ -21,12 +23,23 @@ Write the test first. Watch it fail. Write minimal code to pass.
 - Refactoring
 - Behavior changes
 
-**Exceptions (ask your human partner):**
+**Usually skip only when TDD is genuinely not practical:**
 - Throwaway prototypes
 - Generated code
 - Configuration files
+- Changes where no meaningful automated-test path exists in the repo
 
 Thinking "skip TDD just this once"? Stop. That's rationalization.
+
+If you skip TDD, say why and use `verification-before-completion` with the best available verification path instead of pretending the rule still applied.
+
+## Core Rules
+
+- start from one failing test that expresses the required behavior
+- keep each cycle small enough to understand and verify quickly
+- write the minimum production code needed to get back to green
+- refactor only while the suite remains green
+- if you cannot make the test fail for the right reason, do not continue to implementation yet
 
 ## The Iron Law
 
@@ -369,3 +382,23 @@ Otherwise → not TDD
 ```
 
 No exceptions without your human partner's permission.
+
+## Handoff
+
+When the current change is green:
+
+- if more planned work remains, return to `executing-plans` or the current implementation flow and start the next small cycle
+- before claiming the work is complete, fixed, or ready, use `verification-before-completion`
+- if a substantial checkpoint is done and another opinion would reduce risk, use `requesting-code-review`
+- if review feedback arrives, switch to `receiving-code-review` and apply the same TDD discipline to the fixes
+
+If the repo truly has no meaningful automated-test path, state that explicitly and fall back to the best manual or scriptable verification available.
+
+## Exit Criteria
+
+TDD for the current change is complete when:
+
+- at least one relevant test failed for the expected reason before production code changed
+- the minimum implementation now makes that test pass
+- related tests remain green after refactoring
+- the next step is explicit: continue the next TDD cycle, resume the plan, request review, or verify completion claims

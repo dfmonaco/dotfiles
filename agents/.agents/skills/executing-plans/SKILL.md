@@ -73,10 +73,11 @@ For the current task:
 
 1. Mark it `in_progress`.
 2. Read the referenced files and surrounding code before editing.
-3. Make the minimum change needed to satisfy the task.
-4. Follow the plan's verification steps for that task.
-5. If verification passes, mark the task complete.
-6. Report progress at the appropriate checkpoint before continuing.
+3. For behavior changes or bug fixes, use `test-driven-development` within the current task unless the repo genuinely lacks a practical automated-test path.
+4. Make the minimum change needed to satisfy the task.
+5. Follow the plan's verification steps for that task.
+6. If verification passes, mark the task complete.
+7. Report progress at the appropriate checkpoint before continuing.
 
 If a task is larger than expected, you may break it into working sub-steps for yourself, but do not silently merge, reorder, or redefine plan tasks.
 
@@ -115,14 +116,17 @@ After all tasks are complete:
 - run the plan's final verification steps
 - if the project has tests, run the relevant suite and the full suite when the plan or repo conventions call for it
 - if the project has a build step, run it when relevant
+- use `verification-before-completion` before claiming the implementation is complete, fixed, or ready
 - report implemented work, verification results, and any remaining manual checks
 
 ### 6) Finish the Branch
 
-After implementation and verification are complete:
+If implementation and verification are complete **and** the user needs a branch-level next step:
 
 - Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use finishing-a-development-branch
+- Use `finishing-a-development-branch`
+
+If the user only asked for implementation, stop after reporting the verified changes. Do not force merge, PR, or cleanup decisions.
 
 ## External Dependencies
 
@@ -150,4 +154,4 @@ Execution is complete when:
 - every plan task is either completed and verified or explicitly paused with a surfaced issue
 - plan deviations were approved instead of implied
 - final verification ran and results were reported
-- branch completion is handed off to `finishing-a-development-branch`
+- the next step is explicit: either resume planning, continue implementation later, request review, or hand off to `finishing-a-development-branch` when branch-level decisions are needed
