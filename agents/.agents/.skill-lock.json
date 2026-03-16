@@ -2,13 +2,14 @@
   "version": 3,
   "skills": {
     "skill-creator": {
-      "source": "vercel-labs/agent-browser",
+      "source": "anthropics/skills",
       "sourceType": "github",
-      "sourceUrl": "https://github.com/vercel-labs/agent-browser.git",
-      "skillPath": ".agents/skills/skill-creator/SKILL.md",
-      "skillFolderHash": "a235030e055c7292a60525ead3c8b06fb2bcf831",
+      "sourceUrl": "https://github.com/anthropics/skills.git",
+      "skillPath": "skills/skill-creator/SKILL.md",
+      "skillFolderHash": "98a510d1cfef9f82c3b1eec200229ca68725e613",
+      "pluginName": "example-skills",
       "installedAt": "2026-02-13T16:12:14.990Z",
-      "updatedAt": "2026-02-13T16:12:14.990Z"
+      "updatedAt": "2026-03-16T19:37:47.657Z"
     },
     "find-skills": {
       "source": "vercel-labs/skills",
@@ -43,10 +44,13 @@
   },
   "lastSelectedAgents": [
     "amp",
+    "cline",
     "codex",
+    "cursor",
     "gemini-cli",
     "github-copilot",
     "kimi-cli",
-    "opencode"
+    "opencode",
+    "warp"
   ]
 }
