@@ -63,7 +63,7 @@ return {
               ruby_lsp = "󰴭",   -- Ruby icon
               pyright = "󰌠",    -- Python icon
               ts_ls = "󰛦",      -- TypeScript/JavaScript icon
-              bashls = "",     -- Bash icon
+              bashls = "",     -- Bash icon
               cssls = "󰌜",      -- CSS3 icon
             }
 
@@ -81,6 +81,31 @@ return {
             return ""
           end,
           color = { fg = "#7aa2f7" },
+        },
+        -- Copilot status indicator
+        {
+          function()
+            local ok, client = pcall(vim.fn["copilot#RunningClient"])
+            if not ok or client == vim.NIL or client == 0 then
+              return " " -- not running / loading
+            end
+            if vim.fn["copilot#Enabled"]() == 1 then
+              return " " -- ready
+            else
+              return " " -- disabled for this buffer
+            end
+          end,
+          color = function()
+            local ok, client = pcall(vim.fn["copilot#RunningClient"])
+            if not ok or client == vim.NIL or client == 0 then
+              return { fg = "#e0af68" } -- yellow: not running
+            end
+            if vim.fn["copilot#Enabled"]() == 1 then
+              return { fg = "#7aa2f7" } -- blue: active
+            else
+              return { fg = "#565f89" } -- dim: disabled
+            end
+          end,
         },
         -- OpenCode statusline component
         {
