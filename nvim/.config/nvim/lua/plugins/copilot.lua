@@ -7,6 +7,10 @@ return {
     
     -- Disable default assume_mapped to have full control over keybindings
     vim.g.copilot_assume_mapped = true
+
+    -- Enable Copilot for all filetypes (overrides internal defaults that
+    -- disable gitcommit, gitrebase, etc.)
+    vim.g.copilot_filetypes = { ["*"] = true }
     
     -- ============================================================================
     -- COPILOT KEYMAPS: Arrow key navigation (insert mode only)
