@@ -2,5 +2,27 @@
   "attribution": {
     "commit": "",
     "pr": ""
+  },
+  "permissions": {
+    "allow": [
+      "Bash(RUBY_VERSION=ruby-3.4.8 ~/.asdf/installs/ruby/3.4.8/bin/bundle exec rails test test/services/computations/expression_presenter_test.rb)",
+      "Bash(~/.asdf/installs/ruby/3.4.8/bin/bundle exec:*)",
+      "Bash(node --check /home/diego/code/obra/app/javascript/controllers/expression_input_controller.js)",
+      "Bash(bin/rails test:*)",
+      "Bash(bundle exec:*)",
+      "Bash(~/.local/share/mise/shims/bundle exec:*)",
+      "Bash(ruby -e \"require ''rubygems''; puts Gem.find_files\\(''bundler''\\).first\")",
+      "Bash(PATH=\"$HOME/.rbenv/shims:$HOME/.rbenv/bin:$PATH\" bin/rails test test/services/computations/expression_presenter_test.rb)",
+      "Bash(export PATH=\"$HOME/.asdf/shims:$HOME/.asdf/bin:$PATH\")",
+      "Bash(ruby --version)",
+      "Bash(ruby -e \"require ''bundler''; puts ''ok''\")",
+      "Read(//usr/local/**)",
+      "Read(//root/**)",
+      "Bash(gem list:*)",
+      "Bash(gem env:*)",
+      "Bash(source ~/.zshrc)",
+      "Bash(source ~/.bashrc)",
+      "Bash(node --check app/javascript/controllers/expression_input_controller.js)"
+    ]
   }
 }
