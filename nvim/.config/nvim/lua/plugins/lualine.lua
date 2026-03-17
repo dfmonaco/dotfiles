@@ -85,9 +85,13 @@ return {
         -- Copilot status indicator
         {
           function()
-            local ok, client = pcall(vim.fn["copilot#RunningClient"])
-            if not ok or client == vim.NIL or client == 0 then
-              return " " -- not running / loading
+            -- Guard: functions don't exist until copilot lazy-loads on InsertEnter
+            if vim.fn.exists("*copilot#RunningClient") == 0 then
+              return " " -- not loaded yet
+            end
+            local client = vim.fn["copilot#RunningClient"]()
+            if client == vim.NIL or client == 0 then
+              return " " -- not running
             end
             if vim.fn["copilot#Enabled"]() == 1 then
               return " " -- ready
@@ -96,8 +100,11 @@ return {
             end
           end,
           color = function()
-            local ok, client = pcall(vim.fn["copilot#RunningClient"])
-            if not ok or client == vim.NIL or client == 0 then
+            if vim.fn.exists("*copilot#RunningClient") == 0 then
+              return { fg = "#565f89" } -- dim: not loaded
+            end
+            local client = vim.fn["copilot#RunningClient"]()
+            if client == vim.NIL or client == 0 then
               return { fg = "#e0af68" } -- yellow: not running
             end
             if vim.fn["copilot#Enabled"]() == 1 then
@@ -106,6 +113,7 @@ return {
               return { fg = "#565f89" } -- dim: disabled
             end
           end,
+          cond = function() return true end,
         },
         -- OpenCode statusline component
         {
