@@ -1,6 +1,5 @@
 return {
   "github/copilot.vim",
-  event = "InsertEnter", -- Lazy load when entering insert mode
   config = function()
     -- Disable Copilot's default Tab mapping (Blink handles Tab)
     vim.g.copilot_no_tab_map = true
