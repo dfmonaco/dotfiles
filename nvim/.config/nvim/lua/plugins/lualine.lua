@@ -65,6 +65,7 @@ return {
               ts_ls = "󰛦",      -- TypeScript/JavaScript icon
               bashls = "",     -- Bash icon
               cssls = "󰌜",      -- CSS3 icon
+              herb_ls = "󰌝",    -- HTML+ERB icon (Herb)
             }
 
             local icons = {}
