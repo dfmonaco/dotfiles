@@ -24,6 +24,10 @@
 --
 -- Update: npm install -g @herb-tools/language-server
 -- Verify: which herb-language-server  → ~/.asdf/shims/herb-language-server
+--
+-- HEADS-UP: If you upgrade the global Node.js version (asdf global nodejs <ver>),
+--           reinstall the package: npm install -g @herb-tools/language-server
+--           Then restart Neovim so `asdf where nodejs` resolves the new path.
 
 -- Resolve absolute path to the binary at startup via `asdf where nodejs`.
 -- This avoids the asdf shim entirely for command resolution.

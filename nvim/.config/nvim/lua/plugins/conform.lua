@@ -18,6 +18,9 @@
 --              herb-format: ERB-aware HTML+ERB formatter (EXPERIMENTAL PREVIEW)
 --              Requires .herb.yml with `formatter.enabled: true` in project root
 --              WARNING: experimental - may corrupt files in edge cases; use git!
+--              HEADS-UP: If you upgrade the global Node.js version (asdf global nodejs <ver>),
+--                        reinstall the package: npm install -g @herb-tools/formatter
+--                        Then restart Neovim so `asdf where nodejs` resolves the new path.
 --
 -- Usage:
 --   <leader>cf  - Format current buffer
