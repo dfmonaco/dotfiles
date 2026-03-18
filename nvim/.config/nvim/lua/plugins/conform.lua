@@ -14,6 +14,10 @@
 --              syntax_tree (stree) reformats code: wraps long lines, consistent style
 --              rubocop runs second for lint autocorrections
 --              Project config: .streerc (print width), .rubocop.yml (lint rules)
+--   ERB:        npm install -g @herb-tools/formatter  (asdf nodejs)
+--              herb-format: ERB-aware HTML+ERB formatter (EXPERIMENTAL PREVIEW)
+--              Requires .herb.yml with `formatter.enabled: true` in project root
+--              WARNING: experimental - may corrupt files in edge cases; use git!
 --
 -- Usage:
 --   <leader>cf  - Format current buffer
@@ -47,6 +51,9 @@ return {
       sql = { "sqlfluff" },
       -- stree reformats (line wrapping, style), rubocop fixes lint issues after
       ruby = { "syntax_tree", "rubocop" },
+      -- herb-format: ERB-aware HTML+ERB formatter (experimental preview)
+      -- Requires .herb.yml with `formatter.enabled: true` in project root
+      eruby = { "herb_format" },
     },
     default_format_opts = {
       lsp_format = "fallback",
@@ -63,6 +70,17 @@ return {
       },
       rubocop = {
         -- rubocop also needs asdf shims
+        env = {
+          PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
+        },
+      },
+      herb_format = {
+        -- herb-format is installed into asdf-managed Node.js global bin
+        command = vim.fn.expand("~/.asdf/shims/herb-format"),
+        -- herb-format accepts stdin: `cat file.erb | herb-format`
+        -- Pass '-' to explicitly signal stdin input
+        stdin = true,
+        args = { "-" },
         env = {
           PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
         },
