@@ -3,6 +3,6 @@
     "extensions.experimental.affinity": {
         "asvetliakov.vscode-neovim": 1
     },
-    "vscode-neovim.neovimInitVimPaths.linux": "~/.config/vscode/init.lua",
+    "vscode-neovim.neovimInitVimPaths.linux": "~/.config/Code/User/init.lua",
     "workbench.startupEditor": "none"
 }
