@@ -1,120 +1,122 @@
-// Global keybindings that work even when no editor is open.
+// Global keybindings that work even when no text input has focus.
 // These mirror the <leader>* mappings in init.lua so the same keys work
 // regardless of whether an editor tab is focused.
 // When an editor IS focused, vscode-neovim takes over and these are inactive.
+// !inputFocus: fires only when no input field of any kind has focus (editor,
+// chat, search, terminal, etc.) — prevents space-chords hijacking typed text.
 [
   // ── Find / Search ────────────────────────────────────────────────────────
   {
     "key": "space f f",
     "command": "workbench.action.quickOpen",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space f a",
     "command": "workbench.action.quickOpen",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space f g",
     "command": "workbench.action.quickOpen",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space f r",
     "command": "workbench.action.openRecent",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space f b",
     "command": "workbench.action.showAllEditors",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space ,",
     "command": "workbench.action.showAllEditors",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space /",
     "command": "workbench.action.findInFiles",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space s g",
     "command": "workbench.action.findInFiles",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space p",
     "command": "workbench.action.quickOpen",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Command palette ───────────────────────────────────────────────────────
   {
     "key": "space :",
     "command": "workbench.action.showCommands",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space s c",
     "command": "workbench.action.showCommands",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Git ───────────────────────────────────────────────────────────────────
   {
     "key": "space g g",
     "command": "workbench.view.scm",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space g s",
     "command": "workbench.view.scm",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space g b",
     "command": "git.checkout",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space g l",
     "command": "git.viewHistory",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
   {
     "key": "space g o",
     "command": "workbench.view.scm",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── File explorer ─────────────────────────────────────────────────────────
   {
     "key": "space e",
     "command": "workbench.view.explorer",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Terminal ──────────────────────────────────────────────────────────────
   {
     "key": "ctrl+/",
     "command": "workbench.action.terminal.toggleTerminal",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Diagnostics ───────────────────────────────────────────────────────────
   {
     "key": "space s d",
     "command": "workbench.actions.view.problems",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Tabs ──────────────────────────────────────────────────────────────────
   {
     "key": "space space",
     "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup",
-    "when": "!editorTextFocus"
+    "when": "!inputFocus"
   },
 
   // ── Window navigation (Ctrl+h/j/k/l) ─────────────────────────────────────
