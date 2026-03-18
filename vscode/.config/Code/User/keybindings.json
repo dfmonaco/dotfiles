@@ -1,0 +1,131 @@
+// Global keybindings that work even when no editor is open.
+// These mirror the <leader>* mappings in init.lua so the same keys work
+// regardless of whether an editor tab is focused.
+// When an editor IS focused, vscode-neovim takes over and these are inactive.
+[
+  // ── Find / Search ────────────────────────────────────────────────────────
+  {
+    "key": "space f f",
+    "command": "workbench.action.quickOpen",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space f a",
+    "command": "workbench.action.quickOpen",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space f g",
+    "command": "workbench.action.quickOpen",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space f r",
+    "command": "workbench.action.openRecent",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space f b",
+    "command": "workbench.action.showAllEditors",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space ,",
+    "command": "workbench.action.showAllEditors",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space /",
+    "command": "workbench.action.findInFiles",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space s g",
+    "command": "workbench.action.findInFiles",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space p",
+    "command": "workbench.action.quickOpen",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Command palette ───────────────────────────────────────────────────────
+  {
+    "key": "space :",
+    "command": "workbench.action.showCommands",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space s c",
+    "command": "workbench.action.showCommands",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Git ───────────────────────────────────────────────────────────────────
+  {
+    "key": "space g g",
+    "command": "workbench.view.scm",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space g s",
+    "command": "workbench.view.scm",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space g b",
+    "command": "git.checkout",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space g l",
+    "command": "git.viewHistory",
+    "when": "!editorTextFocus"
+  },
+  {
+    "key": "space g o",
+    "command": "workbench.view.scm",
+    "when": "!editorTextFocus"
+  },
+
+  // ── File explorer ─────────────────────────────────────────────────────────
+  {
+    "key": "space e",
+    "command": "workbench.view.explorer",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Terminal ──────────────────────────────────────────────────────────────
+  {
+    "key": "ctrl+/",
+    "command": "workbench.action.terminal.toggleTerminal",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Diagnostics ───────────────────────────────────────────────────────────
+  {
+    "key": "space s d",
+    "command": "workbench.actions.view.problems",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Tabs ──────────────────────────────────────────────────────────────────
+  {
+    "key": "space space",
+    "command": "workbench.action.quickOpenPreviousRecentlyUsedEditorInGroup",
+    "when": "!editorTextFocus"
+  },
+
+  // ── Window navigation (Ctrl+h/j/k/l) ─────────────────────────────────────
+  // These work globally: from sidebar, terminal, panels, etc.
+  // When an editor is focused, vscode-neovim handles them via init.lua.
+  {
+    "key": "ctrl+h",
+    "command": "workbench.action.navigateLeft"
+  },
+  {
+    "key": "ctrl+l",
+    "command": "workbench.action.navigateRight"
+  }
+]
