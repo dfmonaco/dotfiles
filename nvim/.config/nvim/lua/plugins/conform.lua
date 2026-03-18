@@ -20,7 +20,7 @@
 --              WARNING: experimental - may corrupt files in edge cases; use git!
 --              HEADS-UP: If you upgrade the global Node.js version (asdf global nodejs <ver>),
 --                        reinstall the package: npm install -g @herb-tools/formatter
---                        Then restart Neovim so `asdf where nodejs` resolves the new path.
+--                        Then restart Neovim so the path resolves to the new version.
 --
 -- Usage:
 --   <leader>cf  - Format current buffer
@@ -78,10 +78,13 @@ return {
         },
       },
       herb_format = {
-        -- Use absolute path to bypass the asdf shim (shim calls `asdf exec`
-        -- which requires nodejs in the project's .tool-versions).
-        -- Same issue/fix as herb_ls: resolve binary directly from asdf install.
-        command = vim.fn.trim(vim.fn.system("asdf where nodejs")) .. "/bin/herb-format",
+        -- Use absolute path to the global nodejs install to bypass the asdf shim.
+        -- `asdf where nodejs` picks up project-local versions, so we read the
+        -- global version directly from ~/.tool-versions instead.
+        command = (function()
+          local ver = vim.fn.trim(vim.fn.system("grep '^nodejs' ~/.tool-versions | awk '{print $2}'"))
+          return vim.fn.expand("~/.asdf/installs/nodejs/") .. ver .. "/bin/herb-format"
+        end)(),
         -- herb-format accepts stdin: `cat file.erb | herb-format`
         -- Pass '-' to explicitly signal stdin input
         stdin = true,

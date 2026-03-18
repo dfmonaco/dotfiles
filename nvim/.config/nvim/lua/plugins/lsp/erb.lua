@@ -20,23 +20,28 @@
 --          project's .tool-versions. Projects without it fail with exit 126.
 --          cmd_env.PATH does NOT help because Neovim resolves the `cmd`
 --          binary using its own process PATH before cmd_env is applied.
--- Fix:     Use an absolute path in `cmd` so the shim is never invoked.
+--          `asdf where nodejs` also picks up the project-local version, so
+--          it points at the wrong install dir in projects with a different
+--          nodejs version (e.g. 24.12.0 instead of 24.13.0).
+-- Fix:     Read the global nodejs version from ~/.tool-versions and build
+--          the absolute path from that, ignoring any project-local version.
 --
 -- Update: npm install -g @herb-tools/language-server
 -- Verify: which herb-language-server  → ~/.asdf/shims/herb-language-server
 --
 -- HEADS-UP: If you upgrade the global Node.js version (asdf global nodejs <ver>),
 --           reinstall the package: npm install -g @herb-tools/language-server
---           Then restart Neovim so `asdf where nodejs` resolves the new path.
+--           Then restart Neovim so the path below resolves to the new version.
 
--- Resolve absolute path to the binary at startup via `asdf where nodejs`.
--- This avoids the asdf shim entirely for command resolution.
-local asdf_nodejs_bin = vim.fn.trim(vim.fn.system("asdf where nodejs")) .. "/bin"
-local herb_ls_bin = asdf_nodejs_bin .. "/herb-language-server"
+-- Read the global nodejs version from ~/.tool-versions (not project-local).
+-- `asdf where nodejs` would pick up the project's version instead.
+local global_node_version = vim.fn.trim(vim.fn.system("grep '^nodejs' ~/.tool-versions | awk '{print $2}'"))
+local herb_ls_bin = vim.fn.expand("~/.asdf/installs/nodejs/") .. global_node_version .. "/bin/herb-language-server"
 
 vim.lsp.config("herb_ls", {
-  -- Absolute path bypasses the asdf shim (cmd_env.PATH is applied after
-  -- Neovim resolves the command, so it cannot fix shim lookup failures).
+  -- Absolute path to global nodejs install bypasses the asdf shim entirely.
+  -- Using ~/.tool-versions ensures we always use the global version, not the
+  -- project-local one (which may differ and not have the package installed).
   cmd = { herb_ls_bin, "--stdio" },
 })
 
