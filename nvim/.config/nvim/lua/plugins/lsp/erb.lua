@@ -1,0 +1,25 @@
+-- ERB/HTML Language Server Configuration (Herb)
+-- Installation (Priority Order):
+--   1. System (pacman): NOT available in pacman/AUR
+--   2. Global via npm (Recommended): npm install -g @herb-tools/language-server
+--   3. Per-project: npx @herb-tools/language-server
+--
+-- Installed via: npm (asdf nodejs 24.13.0)
+-- Command used: herb-language-server --stdio
+-- Strategy: Global npm install via asdf-managed Node.js
+--
+-- Provides LSP for:
+--   - ERB templates (.erb, .html.erb)
+--   - HTML+ERB structure, diagnostics, and completions
+--
+-- Note: ruby_lsp also attaches to .erb files for Ruby semantics.
+--       Both servers run concurrently — this is intentional and correct.
+--       herb_ls handles HTML+ERB structure; ruby_lsp handles Ruby code.
+--
+-- Note: herb-language-server is installed into the asdf-managed Node.js
+--       global bin. The shim at ~/.asdf/shims/herb-language-server is used.
+--
+-- Update: npm install -g @herb-tools/language-server
+-- Verify: which herb-language-server  → ~/.asdf/shims/herb-language-server
+
+-- Enabled via init.lua with: vim.lsp.enable("herb_ls")

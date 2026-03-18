@@ -22,7 +22,16 @@
       "Bash(gem env:*)",
       "Bash(source ~/.zshrc)",
       "Bash(source ~/.bashrc)",
-      "Bash(node --check app/javascript/controllers/expression_input_controller.js)"
+      "Bash(node --check app/javascript/controllers/expression_input_controller.js)",
+      "Bash(grep -E \"\\\\.\\(js|rb|erb|css\\)$\")",
+      "Bash(grep -l \"ExpressionInputComponent\\\\|expression.input\\\\|expression_input\" /home/diego/code/obra/test/services/computations/*)",
+      "Bash(grep -r \"expression\\\\|computation\" /home/diego/code/obra/config/locales/*.yml)",
+      "Bash(node --check /home/diego/code/obra/app/javascript/controllers/expression_input/constants.js)",
+      "Bash(node --check /home/diego/code/obra/app/javascript/controllers/expression_input/cursor.js)",
+      "Bash(node --check /home/diego/code/obra/app/javascript/controllers/expression_input/formula_sync.js)"
+    ],
+    "additionalDirectories": [
+      "/home/diego/code/obra/app/javascript/controllers"
     ]
   }
 }

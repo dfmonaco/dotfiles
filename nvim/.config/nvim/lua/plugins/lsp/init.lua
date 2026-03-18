@@ -20,6 +20,7 @@
 --   lua/plugins/lsp/css.lua        - CSS/HTML/JSON language servers
 --   lua/plugins/lsp/tailwind.lua   - Tailwind CSS language server
 --   lua/plugins/lsp/eslint.lua     - ESLint language server (conditional)
+--   lua/plugins/lsp/erb.lua        - ERB/HTML language server (Herb)
 --
 -- Keymap Quick Reference (Hybrid Scheme with Snacks.nvim):
 --   Navigation (using Snacks.nvim pickers - defined in plugins/snacks.lua):
@@ -194,9 +195,10 @@ return {
     require("plugins.lsp.css")
     require("plugins.lsp.tailwind")
     require("plugins.lsp.eslint")
+    require("plugins.lsp.erb")
 
     -- Enable simple language servers (no custom config needed)
-    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls", "tailwindcss", "eslint" }
+    local servers = { "lua_ls", "ts_ls", "pyright", "bashls", "cssls", "tailwindcss", "eslint", "herb_ls" }
     for _, server in ipairs(servers) do
       vim.lsp.enable(server)
     end
