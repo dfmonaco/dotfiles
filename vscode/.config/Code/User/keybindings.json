@@ -127,5 +127,18 @@
   {
     "key": "ctrl+l",
     "command": "workbench.action.navigateRight"
+  },
+
+  // ── AI Chat────────────────────────────────────────────────────────────────
+  // Text selected → attach selection; no selection → attach file
+  {
+    "key": "ctrl+i",
+    "command": "workbench.action.chat.attachFile",
+    "when": "!editorHasSelection"
+  },
+  {
+    "key": "ctrl+i",
+    "command": "workbench.action.chat.attachSelection",
+    "when": "editorHasSelection"
   }
 ]
