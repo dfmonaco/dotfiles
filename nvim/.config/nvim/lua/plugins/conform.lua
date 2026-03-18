@@ -75,15 +75,14 @@ return {
         },
       },
       herb_format = {
-        -- herb-format is installed into asdf-managed Node.js global bin
-        command = vim.fn.expand("~/.asdf/shims/herb-format"),
+        -- Use absolute path to bypass the asdf shim (shim calls `asdf exec`
+        -- which requires nodejs in the project's .tool-versions).
+        -- Same issue/fix as herb_ls: resolve binary directly from asdf install.
+        command = vim.fn.trim(vim.fn.system("asdf where nodejs")) .. "/bin/herb-format",
         -- herb-format accepts stdin: `cat file.erb | herb-format`
         -- Pass '-' to explicitly signal stdin input
         stdin = true,
         args = { "-" },
-        env = {
-          PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
-        },
       },
     },
   },
