@@ -1,0 +1,63 @@
+# ~/.config/worktrunk/config.toml
+# Personal user config — not committed to project repos.
+# Stowed via: stow -t "$HOME" worktrunk
+
+# ---------------------------------------------------------------------------
+# Worktree layout
+# ---------------------------------------------------------------------------
+# Standard sibling convention: creates worktrees next to the repo directory.
+# e.g. for ~/code/myproject on branch feature/auth:
+#   → ~/code/myproject.feature-auth
+worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
+
+# ---------------------------------------------------------------------------
+# Eliminate cold starts — copy gitignored files (node_modules, .venv, .env,
+# build caches) from the nearest sibling worktree on every new worktree.
+# pre-start so the files are present before any install hooks in the
+# project's .config/wt.toml fire.
+# ---------------------------------------------------------------------------
+[pre-start]
+copy = "wt step copy-ignored"
+
+# ---------------------------------------------------------------------------
+# Switch defaults
+# ---------------------------------------------------------------------------
+[switch]
+# Keep cd-on-switch enabled (default false = cd happens). Set to true if you
+# want switch to print the path only without changing directory.
+no-cd = false
+
+# ---------------------------------------------------------------------------
+# Merge defaults
+# ---------------------------------------------------------------------------
+[merge]
+squash = false  # preserve individual commits
+rebase = true   # rebase onto target before merge
+no-ff  = true   # always create a merge commit (no fast-forward)
+remove = true   # delete worktree after a successful merge
+verify = true   # run project pre-merge hooks
+
+# ---------------------------------------------------------------------------
+# LLM commit message generation
+# Uses opencode (already in your dotfiles).
+# ---------------------------------------------------------------------------
+[commit.generation]
+command = "opencode run -m github-copilot/gpt-5-mini --variant fast"
+
+# ---------------------------------------------------------------------------
+# wt list defaults
+# ---------------------------------------------------------------------------
+[list]
+# summary requires LLM — disabled by default, enable per-project if desired
+summary = false
+
+# ---------------------------------------------------------------------------
+# Per-project overrides (optional)
+# Add a [projects."github.com/you/repo"] block here to override any setting
+# for a specific project without touching its shared .config/wt.toml.
+#
+# Example:
+#   [projects."github.com/you/myapp"]
+#   merge.squash = false
+#   list.full = true
+# ---------------------------------------------------------------------------
