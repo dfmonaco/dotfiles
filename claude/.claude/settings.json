@@ -1,48 +1,5 @@
 {
   "permissions": {
-    "deny": [
-      "Read(~/.ssh/**)",
-      "Edit(~/.ssh/**)",
-      "Read(~/.gnupg/**)",
-      "Edit(~/.gnupg/**)",
-      "Read(~/.aws/**)",
-      "Edit(~/.aws/**)",
-      "Read(~/.config/gcloud/**)",
-      "Edit(~/.config/gcloud/**)",
-      "Read(~/.kube/**)",
-      "Edit(~/.kube/**)",
-      "Read(~/.netrc)",
-      "Edit(~/.netrc)",
-      "Read(~/.npmrc)",
-      "Edit(~/.npmrc)",
-
-      "Read(**/.env)",
-      "Edit(**/.env)",
-      "Read(**/.env.*)",
-      "Edit(**/.env.*)",
-      "Read(**/secrets.*)",
-      "Edit(**/secrets.*)",
-      "Read(**/credentials.*)",
-      "Edit(**/credentials.*)",
-
-      "Bash(git push --force *)",
-      "Bash(git push -f *)",
-      "Bash(git reset --hard *)",
-      "Bash(git clean -fd *)",
-      "Bash(git clean -f *)",
-
-      "Bash(rm -rf *)",
-      "Bash(rm -fr *)",
-      "Bash(sudo *)",
-      "Bash(su *)",
-      "Bash(chmod 777 *)",
-
-      "Bash(curl *)",
-      "Bash(wget *)",
-      "Bash(nc *)",
-      "Bash(ncat *)"
-    ],
-
     "allow": [
       "Bash(git status *)",
       "Bash(git status)",
@@ -56,7 +13,6 @@
       "Bash(git blame *)",
       "Bash(git stash list *)",
       "Bash(git stash list)",
-
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(git checkout *)",
@@ -74,9 +30,7 @@
       "Bash(git init *)",
       "Bash(git config --local *)",
       "Bash(git config --global --list)",
-
       "Bash(gh *)",
-
       "Bash(ls *)",
       "Bash(ls)",
       "Bash(find *)",
@@ -88,7 +42,6 @@
       "Bash(tree *)",
       "Bash(pwd)",
       "Bash(echo *)",
-
       "Bash(grep *)",
       "Bash(rg *)",
       "Bash(awk *)",
@@ -102,7 +55,6 @@
       "Bash(diff *)",
       "Bash(jq *)",
       "Bash(yq *)",
-
       "Bash(which *)",
       "Bash(type *)",
       "Bash(env)",
@@ -112,13 +64,11 @@
       "Bash(date *)",
       "Bash(id)",
       "Bash(whoami)",
-
       "Bash(* --version)",
       "Bash(* --help)",
       "Bash(* --help *)",
       "Bash(* -h)",
       "Bash(* -v)",
-
       "Bash(npm *)",
       "Bash(yarn *)",
       "Bash(pnpm *)",
@@ -131,27 +81,23 @@
       "Bash(cargo *)",
       "Bash(go *)",
       "Bash(make *)",
-
       "Bash(node *)",
       "Bash(python *)",
       "Bash(python3 *)",
       "Bash(ruby *)",
       "Bash(rustc *)",
       "Bash(tsc *)",
-
       "Bash(pytest *)",
       "Bash(jest *)",
       "Bash(vitest *)",
       "Bash(mocha *)",
       "Bash(rspec *)",
-
       "Bash(eslint *)",
       "Bash(prettier *)",
       "Bash(rubocop *)",
       "Bash(black *)",
       "Bash(ruff *)",
       "Bash(mypy *)",
-
       "Bash(source *)",
       "Bash(export *)",
       "Bash(mkdir *)",
@@ -159,9 +105,47 @@
       "Bash(mv *)",
       "Bash(touch *)",
       "Bash(chmod *)",
-
+      "Bash(bin/rails *)",
       "WebFetch",
       "WebSearch"
+    ],
+    "deny": [
+      "Read(~/.ssh/**)",
+      "Edit(~/.ssh/**)",
+      "Read(~/.gnupg/**)",
+      "Edit(~/.gnupg/**)",
+      "Read(~/.aws/**)",
+      "Edit(~/.aws/**)",
+      "Read(~/.config/gcloud/**)",
+      "Edit(~/.config/gcloud/**)",
+      "Read(~/.kube/**)",
+      "Edit(~/.kube/**)",
+      "Read(~/.netrc)",
+      "Edit(~/.netrc)",
+      "Read(~/.npmrc)",
+      "Edit(~/.npmrc)",
+      "Read(**/.env)",
+      "Edit(**/.env)",
+      "Read(**/.env.*)",
+      "Edit(**/.env.*)",
+      "Read(**/secrets.*)",
+      "Edit(**/secrets.*)",
+      "Read(**/credentials.*)",
+      "Edit(**/credentials.*)",
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean -fd *)",
+      "Bash(git clean -f *)",
+      "Bash(rm -rf *)",
+      "Bash(rm -fr *)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(chmod 777 *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(nc *)",
+      "Bash(ncat *)"
     ]
   }
 }
