@@ -5,7 +5,7 @@
 #
 # This template assumes your user config already provides:
 #   - worktree-path
-#   - pre-start copy = "wt step copy-ignored"
+#   - post-create copy = "wt step copy-ignored"
 #
 # Result:
 #   - deterministic app and db ports per branch
@@ -16,7 +16,7 @@
 [list]
 url = "http://localhost:{{ branch | hash_port }}"
 
-[pre-start]
+[post-create]
 # Write per-worktree env values used by bin/dev and config/database.yml.
 env = """
 cat > .env.local << 'EOF'
@@ -31,8 +31,8 @@ EOF
 """
 
 [post-start]
-# Start branch-isolated postgres and wait until it accepts connections.
-db = """
+# Start branch-isolated postgres, wait until ready, then boot app.
+start = """
 if ! docker container inspect {{ repo }}-{{ branch | sanitize }}-postgres >/dev/null 2>&1; then
   docker run -d --rm \
     --name {{ repo }}-{{ branch | sanitize }}-postgres \
@@ -49,11 +49,8 @@ for _ in $(seq 1 60); do
   fi
   sleep 1
 done
-"""
 
-# Use PORT from .env.local. In obra, Procfile.dev pins 3000, so make sure
-# Procfile.dev uses ${PORT:-3000} for web if you want true per-worktree ports.
-app = """
+# Use explicit env so branch-local DB/port wins regardless of dotenv load order.
 PORT={{ branch | hash_port }} \
 DATABASE_HOST=localhost \
 DATABASE_PORT={{ ('db-' ~ branch) | hash_port }} \
@@ -62,6 +59,14 @@ DATABASE_PASSWORD=dev \
 DATABASE_NAME={{ branch | sanitize_db }} \
 DATABASE_URL=postgres://postgres:dev@localhost:{{ ('db-' ~ branch) | hash_port }}/{{ branch | sanitize_db }} \
 bin/rails db:prepare && \
+PORT={{ branch | hash_port }} \
+DATABASE_HOST=localhost \
+DATABASE_PORT={{ ('db-' ~ branch) | hash_port }} \
+DATABASE_USERNAME=postgres \
+DATABASE_PASSWORD=dev \
+DATABASE_NAME={{ branch | sanitize_db }} \
+DATABASE_URL=postgres://postgres:dev@localhost:{{ ('db-' ~ branch) | hash_port }}/{{ branch | sanitize_db }} \
+rm -f tmp/pids/server.pid && \
 PORT={{ branch | hash_port }} \
 DATABASE_HOST=localhost \
 DATABASE_PORT={{ ('db-' ~ branch) | hash_port }} \

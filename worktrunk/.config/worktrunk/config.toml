@@ -13,10 +13,9 @@ worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
 # ---------------------------------------------------------------------------
 # Eliminate cold starts — copy gitignored files (node_modules, .venv, .env,
 # build caches) from the nearest sibling worktree on every new worktree.
-# pre-start so the files are present before any install hooks in the
-# project's .config/wt.toml fire.
+# post-create so files are present before post-start hooks run.
 # ---------------------------------------------------------------------------
-[pre-start]
+[post-create]
 copy = "wt step copy-ignored"
 
 # ---------------------------------------------------------------------------
@@ -50,6 +49,25 @@ command = "opencode run -m github-copilot/gpt-5-mini --variant fast"
 [list]
 # summary requires LLM — disabled by default, enable per-project if desired
 summary = false
+
+# ---------------------------------------------------------------------------
+# Convenience aliases (run from any worktree)
+# ---------------------------------------------------------------------------
+[aliases]
+# Start this worktree's database + app stack.
+up = "wt hook post-start --yes"
+
+# Stop this worktree's app + database container.
+down = "wt hook post-remove --yes"
+
+# Restart this worktree's app + database stack.
+restart = "wt step down && wt step up"
+
+# Tail the latest post-start log for this worktree.
+logs = "LOG=$(wt config state logs get --hook=project:post-start:start); if [ -n \"$LOG\" ]; then tail -f \"$LOG\"; else echo 'No post-start log found for this worktree yet.'; fi"
+
+# Show URL, active check, app listener, and db container for this branch.
+status = "echo 'Branch: {{ branch }}'; echo 'URL:    http://localhost:{{ branch | hash_port }}'; printf 'Active: '; curl -sI -o /dev/null -w '%{http_code}' --connect-timeout 2 http://localhost:{{ branch | hash_port }} && echo ' (up)' || echo ' (down)'; lsof -iTCP -sTCP:LISTEN -P | rg ':{{ branch | hash_port }}\\b' || true; docker ps --format 'table {{\"{{\"}}.Names{{\"}}\"}}\\t{{\"{{\"}}.Status{{\"}}\"}}\\t{{\"{{\"}}.Ports{{\"}}\"}}' | rg '{{ repo }}-{{ branch | sanitize }}-postgres|NAMES' || true"
 
 # ---------------------------------------------------------------------------
 # Per-project overrides (optional)
