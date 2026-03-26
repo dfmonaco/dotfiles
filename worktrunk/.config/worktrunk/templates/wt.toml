@@ -1,83 +1,83 @@
-# .config/wt.toml — Project config for Worktrunk
-# Commit this file to version control so the whole team shares it.
-# Generate with: wt config create --project
+# .config/wt.toml - Rails 8 project template for Worktrunk
 #
-# Template — copy to your project root at .config/wt.toml and adjust:
-#   cp ~/.config/worktrunk/templates/wt.toml .config/wt.toml
+# Reference profile: obra (Rails 8.1, Postgres, bin/dev + Procfile.dev).
+# Copy into a Rails repo as .config/wt.toml and commit it.
 #
-# The user config (~/.config/worktrunk/config.toml) already handles:
-#   - worktree path layout
-#   - cold-start file copying (wt step copy-ignored)
-#   - LLM commit generation
+# This template assumes your user config already provides:
+#   - worktree-path
+#   - pre-start copy = "wt step copy-ignored"
 #
-# This file adds the project-specific lifecycle: dev server + postgres per
-# worktree, local CI gate, and the wt list URL column.
+# Result:
+#   - deterministic app and db ports per branch
+#   - isolated Postgres container per worktree
+#   - generated .env.local per worktree
+#   - Rails pre-merge quality gate
 
-# ---------------------------------------------------------------------------
-# wt list — show the dev server URL for this worktree
-# The URL dims when the port is not listening.
-# ---------------------------------------------------------------------------
 [list]
 url = "http://localhost:{{ branch | hash_port }}"
 
-# ---------------------------------------------------------------------------
-# pre-start — runs BEFORE the worktree is handed to the developer.
-# Blocking — failure prevents the worktree from being used.
-#
-# Generate .env.local with the correct DATABASE_URL and DEV_PORT so that
-# every tool (test runner, migration cli, app) automatically picks up the
-# right values for this worktree.
-#
-# ('db-' ~ branch) concatenates before hashing so the db port and dev
-# server port are always different even for the same branch.
-# ---------------------------------------------------------------------------
 [pre-start]
+# Write per-worktree env values used by bin/dev and config/database.yml.
 env = """
 cat > .env.local << 'EOF'
+PORT={{ branch | hash_port }}
+DATABASE_HOST=localhost
+DATABASE_PORT={{ ('db-' ~ branch) | hash_port }}
+DATABASE_USERNAME=postgres
+DATABASE_PASSWORD=dev
+DATABASE_NAME={{ branch | sanitize_db }}
 DATABASE_URL=postgres://postgres:dev@localhost:{{ ('db-' ~ branch) | hash_port }}/{{ branch | sanitize_db }}
-DEV_PORT={{ branch | hash_port }}
 EOF
 """
 
-# ---------------------------------------------------------------------------
-# post-start — runs in the background after the worktree is ready.
-# All commands here run concurrently — dev server + postgres start in parallel.
-# ---------------------------------------------------------------------------
 [post-start]
-# Start a dedicated Postgres container for this worktree.
-# Container name is unique per repo+branch so multiple projects don't clash.
-# The database name uses sanitize_db (lowercase, underscores, hash suffix)
-# to avoid SQL reserved words and collisions.
+# Start branch-isolated postgres and wait until it accepts connections.
 db = """
-docker run -d --rm \
-  --name {{ repo }}-{{ branch | sanitize }}-postgres \
-  -p {{ ('db-' ~ branch) | hash_port }}:5432 \
-  -e POSTGRES_DB={{ branch | sanitize_db }} \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=dev \
-  postgres:16-alpine
+if ! docker container inspect {{ repo }}-{{ branch | sanitize }}-postgres >/dev/null 2>&1; then
+  docker run -d --rm \
+    --name {{ repo }}-{{ branch | sanitize }}-postgres \
+    -p {{ ('db-' ~ branch) | hash_port }}:5432 \
+    -e POSTGRES_DB={{ branch | sanitize_db }} \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=dev \
+    postgres:16-alpine
+fi
+
+for _ in $(seq 1 60); do
+  if docker exec {{ repo }}-{{ branch | sanitize }}-postgres pg_isready -U postgres >/dev/null 2>&1; then
+    break
+  fi
+  sleep 1
+done
 """
 
-# Start the dev server on a deterministic port derived from the branch name.
-# Replace `npm run dev` with your project's actual command.
-server = "npm run dev -- --port {{ branch | hash_port }}"
+# Use PORT from .env.local. In obra, Procfile.dev pins 3000, so make sure
+# Procfile.dev uses ${PORT:-3000} for web if you want true per-worktree ports.
+app = """
+PORT={{ branch | hash_port }} \
+DATABASE_HOST=localhost \
+DATABASE_PORT={{ ('db-' ~ branch) | hash_port }} \
+DATABASE_USERNAME=postgres \
+DATABASE_PASSWORD=dev \
+DATABASE_NAME={{ branch | sanitize_db }} \
+DATABASE_URL=postgres://postgres:dev@localhost:{{ ('db-' ~ branch) | hash_port }}/{{ branch | sanitize_db }} \
+bin/rails db:prepare && \
+PORT={{ branch | hash_port }} \
+DATABASE_HOST=localhost \
+DATABASE_PORT={{ ('db-' ~ branch) | hash_port }} \
+DATABASE_USERNAME=postgres \
+DATABASE_PASSWORD=dev \
+DATABASE_NAME={{ branch | sanitize_db }} \
+DATABASE_URL=postgres://postgres:dev@localhost:{{ ('db-' ~ branch) | hash_port }}/{{ branch | sanitize_db }} \
+bin/dev
+"""
 
-# ---------------------------------------------------------------------------
-# pre-merge — local CI gate. Runs after rebase, before the merge commit.
-# Failure aborts the merge. Adjust to your project's commands.
-# ---------------------------------------------------------------------------
 [pre-merge]
-lint    = "npm run lint"
-test    = "npm test"
+# Rails 8 quality gate similar to obra tooling.
+lint = "bin/rubocop"
+security = "bin/brakeman -q"
+test = "bin/rails test"
 
-# ---------------------------------------------------------------------------
-# pre-remove / post-remove — stop the dev server and drop the postgres
-# container when the worktree is removed (after wt merge or wt remove).
-#
-# pre-remove runs inside the worktree (files still present).
-# post-remove runs after deletion (uses template vars to identify resources).
-# Using post-remove for both so they run in the background and don't block.
-# ---------------------------------------------------------------------------
 [post-remove]
-stop-server = "lsof -ti :{{ branch | hash_port }} -sTCP:LISTEN | xargs kill 2>/dev/null || true"
-stop-db     = "docker stop {{ repo }}-{{ branch | sanitize }}-postgres 2>/dev/null || true"
+stop-app = "lsof -ti :{{ branch | hash_port }} -sTCP:LISTEN | xargs kill 2>/dev/null || true"
+stop-db = "docker stop {{ repo }}-{{ branch | sanitize }}-postgres 2>/dev/null || true"
