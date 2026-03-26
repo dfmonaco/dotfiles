@@ -4,5 +4,13 @@
         "asvetliakov.vscode-neovim": 1
     },
     "vscode-neovim.neovimInitVimPaths.linux": "~/.config/Code/User/init.lua",
-    "workbench.startupEditor": "none"
+    "workbench.startupEditor": "none",
+    "claudeCode.selectedModel": "opus",
+    "git.enableSmartCommit": true,
+    "chat.editing.confirmEditRequestRemoval": false,
+    "git.confirmSync": false,
+    "chat.mcp.gallery.enabled": true,
+    "languageServerHerb.formatter.enabled": true,
+    "chat.viewSessions.orientation": "stacked",
+    "diffEditor.renderSideBySide": false
 }
