@@ -38,40 +38,82 @@ This skill generates a **document**. It does not implement fixes. It defines **w
 
 ## Workflow
 
-### 1) Discovery
+### 1) Autonomous Review Mode Inference
 
-Ask the user three questions to scope the review:
+Do not stop to ask the user for review type unless the prompt explicitly asks for a constrained review and the constraint is materially ambiguous.
 
-1. **Purpose** - What is this review for? (pre-merge, refactor, quality pass, something else?)
-2. **Focus areas** - Any specific concerns? (tests, architecture, performance, security, consistency, or general)
-3. **Aggressiveness** - How aggressive should remediation recommendations be? (low-risk only, or allow medium-risk refactors too?)
+Default assumptions:
 
-My recommendation: allow medium-risk refactors, but clearly label risk level and preserve existing behavior with tests.
+- **Purpose** - `pre-merge`
+- **Focus areas** - `architecture`, `consistency`, and `correctness`
+- **Secondary checks** - tests, performance, and security when the diff makes them relevant
+- **Aggressiveness** - allow medium-risk refactors, but clearly label risk level and preserve existing behavior with tests
 
-If the user says "just review it" or gives a terse response, use sensible defaults (pre-merge, general focus, medium-risk allowed) and confirm briefly before proceeding.
+If the user prompt clearly signals a narrower lens such as security, performance, tests, or refactor quality, adapt the review accordingly without asking for confirmation.
 
-### 2) Clarification (infer branch and base)
+Treat architecture and consistency as the primary review lens by default:
 
-Infer the branch, base, and review range:
+- Surface boundary violations, misplaced responsibilities, and cohesion problems
+- Call out divergence from established project patterns even when the code is locally correct
+- Prefer findings about naming, structure, duplication, reuse, and maintainability over cosmetic style commentary
+- Treat pattern drift as a first-class review concern, especially when it makes future changes harder to reason about
+
+Record the inferred review mode in the review document rather than asking the user to confirm it.
+
+### 2) Autonomous Branch, Base, and Range Inference
+
+Infer the branch, base, and review range without waiting for user confirmation.
+
+Use this precedence for the base branch:
+
+1. A base branch explicitly named in the user prompt
+2. `develop` if it exists locally or on `origin`
+3. The upstream tracking branch if it clearly implies a different base
+4. `origin/HEAD`
+5. `main`
+6. `master`
+
+Do not assume a pull request exists. If PR metadata is available, it may be used as a hint, but the review must work fully without it.
+
+Infer values with a flow equivalent to:
 
 ```bash
 BRANCH=$(git branch --show-current)
-DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || git config --get init.defaultBranch 2>/dev/null || echo "main")
-BASE="${DEFAULT_BRANCH}"
+if git show-ref --verify --quiet refs/heads/develop; then
+  BASE="develop"
+elif git show-ref --verify --quiet refs/remotes/origin/develop; then
+  BASE="origin/develop"
+elif UPSTREAM=$(git rev-parse --abbrev-ref --symbolic-full-name @{upstream} 2>/dev/null); then
+  BASE="$UPSTREAM"
+else
+  DEFAULT_BRANCH=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@' || echo "main")
+  if git show-ref --verify --quiet "refs/heads/${DEFAULT_BRANCH}"; then
+    BASE="${DEFAULT_BRANCH}"
+  elif git show-ref --verify --quiet "refs/remotes/origin/${DEFAULT_BRANCH}"; then
+    BASE="origin/${DEFAULT_BRANCH}"
+  elif git show-ref --verify --quiet refs/heads/main; then
+    BASE="main"
+  elif git show-ref --verify --quiet refs/remotes/origin/main; then
+    BASE="origin/main"
+  elif git show-ref --verify --quiet refs/heads/master; then
+    BASE="master"
+  else
+    BASE="origin/master"
+  fi
+fi
 REVIEW_NAME="${BRANCH}"
 MERGE_BASE=$(git merge-base "$BASE" HEAD)
 RANGE="${MERGE_BASE}..HEAD"
 ```
 
-If `git merge-base` fails or the base branch does not exist, ask the user to provide the correct base branch.
+If `git merge-base` fails, no plausible base branch exists, or repository metadata is materially contradictory, ask one targeted question for the correct base branch and state your recommendation.
 
-Show the inferred values to the user:
+Otherwise, proceed immediately and record the inferred values in the review document:
+
 - Branch: `$BRANCH`
 - Base: `$BASE`
 - Merge base: `$MERGE_BASE`
 - Range: `$RANGE`
-
-Ask the user to confirm or correct before proceeding.
 
 ### 3) Analyze changes
 
