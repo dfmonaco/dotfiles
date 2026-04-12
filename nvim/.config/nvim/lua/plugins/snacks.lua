@@ -55,6 +55,7 @@ return {
     scroll = { enabled = true },
     statuscolumn = { enabled = true },
     words = { enabled = true },
+    image = { enabled = false },
     styles = {
       notification = {
         -- wo = { wrap = true } -- Wrap notifications
