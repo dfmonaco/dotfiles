@@ -20,15 +20,9 @@
 --
 -- Note: Ruby versions managed via asdf, ruby-lsp installed per Ruby version
 
--- Configure ruby_lsp with PATH environment that includes asdf shims
-vim.lsp.config("ruby_lsp", {
-  cmd_env = {
-    -- Prepend asdf shims directory to PATH for proper Ruby version detection
-    PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
-  },
-})
-
 -- Manual start with FileType autocmd for runtime command detection
+-- cmd_env is passed directly to vim.lsp.start() so it is not lost;
+-- vim.lsp.config() settings are NOT automatically merged into vim.lsp.start() calls.
 vim.api.nvim_create_autocmd("FileType", {
   pattern = { "ruby", "eruby", "eruby.html" },
   callback = function(args)
@@ -47,11 +41,7 @@ vim.api.nvim_create_autocmd("FileType", {
         end
       end
 
-      if has_ruby_lsp then
-        cmd = { "bundle", "exec", "ruby-lsp" }
-      else
-        cmd = { "ruby-lsp" }
-      end
+      cmd = has_ruby_lsp and { "bundle", "exec", "ruby-lsp" } or { "ruby-lsp" }
     else
       cmd = { "ruby-lsp" }
     end
@@ -59,11 +49,14 @@ vim.api.nvim_create_autocmd("FileType", {
     -- Find root directory
     local root_dir = vim.fs.root(args.buf, { "Gemfile", ".git" })
 
-    -- Start LSP client
+    -- Start LSP client with asdf shims in PATH for correct Ruby version detection
     vim.lsp.start({
       name = "ruby_lsp",
       cmd = cmd,
       root_dir = root_dir,
+      cmd_env = {
+        PATH = vim.fn.expand("~/.asdf/shims") .. ":" .. vim.env.PATH,
+      },
     })
   end,
 })
