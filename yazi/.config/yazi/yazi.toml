@@ -1,0 +1,85 @@
+#:schema https://yazi-rs.github.io/schemas/yazi.json
+
+[preview]
+max_width = 10000
+max_height = 10000
+
+[opener]
+view-text = [
+	{ run = "kitty --detach bat --paging=always --style=plain --color=always %s", desc = "View with bat", orphan = true, for = "linux" },
+]
+edit-text = [
+	{ run = "nvim %s", desc = "Edit with Neovim", block = true, for = "linux" },
+]
+edit-code = [
+	{ run = "code --wait %s", desc = "Edit with VS Code", block = true, for = "linux" },
+]
+view-image = [
+	{ run = "imv %s", desc = "View with imv", orphan = true, for = "linux" },
+]
+edit-image = [
+	{ run = "pinta %s", desc = "Edit with Pinta", block = true, for = "linux" },
+]
+edit-image-advanced = [
+	{ run = "gimp %s", desc = "Edit with GIMP", block = true, for = "linux" },
+]
+edit-vector = [
+	{ run = "inkscape %s", desc = "Edit with Inkscape", block = true, for = "linux" },
+]
+view-pdf = [
+	{ run = "mupdf %s1", desc = "View with MuPDF", orphan = true, for = "linux" },
+]
+view-pdf-alt = [
+	{ run = "evince %s", desc = "View with Evince", orphan = true, for = "linux" },
+]
+edit-pdf-pages = [
+	{ run = "pdfarranger %s", desc = "Arrange PDF pages", block = true, for = "linux" },
+]
+edit-pdf-content = [
+	{ run = "libreoffice --draw %s", desc = "Edit PDF with LibreOffice Draw", block = true, for = "linux" },
+]
+view-office = [
+	{ run = "libreoffice --view %s", desc = "View with LibreOffice", orphan = true, for = "linux" },
+]
+edit-office = [
+	{ run = "libreoffice %s", desc = "Edit with LibreOffice", block = true, for = "linux" },
+]
+play-audio = [
+	{ run = "mpv --no-video %s", desc = "Play audio with mpv", block = true, for = "linux" },
+]
+play-audio-alt = [
+	{ run = "vlc %s", desc = "Play audio with VLC", orphan = true, for = "linux" },
+]
+play-video = [
+	{ run = "mpv %s", desc = "Play video with mpv", orphan = true, for = "linux" },
+]
+play-video-alt = [
+	{ run = "vlc %s", desc = "Play video with VLC", orphan = true, for = "linux" },
+]
+view-browser = [
+	{ run = "xdg-open %s1", desc = "View in browser", orphan = true, for = "linux" },
+]
+
+[open]
+prepend_rules = [
+	# Specific text-like formats must precede the broad text rule.
+	{ mime = "text/html", use = [ "view-browser", "view-text", "edit-text", "edit-code" ] },
+	{ mime = "text/{csv,tab-separated-values}", use = [ "view-text", "edit-office", "edit-text" ] },
+	{ mime = "application/{json,ndjson,javascript,xml,toml,yaml,x-yaml,x-shellscript}", use = [ "view-text", "edit-text", "edit-code" ] },
+
+	# Documents.
+	{ mime = "application/pdf", use = [ "view-pdf", "view-pdf-alt", "edit-pdf-pages", "edit-pdf-content" ] },
+	{ mime = "application/epub+zip", use = [ "view-pdf" ] },
+	{ mime = "application/{msword,rtf,vnd.oasis.opendocument.text,vnd.openxmlformats-officedocument.wordprocessingml.document,vnd.ms-word.document.macroenabled.12}", use = [ "view-office", "edit-office" ] },
+	{ mime = "application/{vnd.ms-excel,vnd.oasis.opendocument.spreadsheet,vnd.openxmlformats-officedocument.spreadsheetml.sheet,vnd.ms-excel.sheet.macroenabled.12}", use = [ "view-office", "edit-office" ] },
+	{ mime = "application/{vnd.ms-powerpoint,vnd.oasis.opendocument.presentation,vnd.openxmlformats-officedocument.presentationml.presentation,vnd.ms-powerpoint.presentation.macroenabled.12}", use = [ "view-office", "edit-office" ] },
+
+	# Images and media.
+	{ mime = "image/svg+xml", use = [ "view-image", "edit-vector", "edit-text" ] },
+	{ mime = "image/*", use = [ "view-image", "edit-image", "edit-image-advanced" ] },
+	{ mime = "audio/*", use = [ "play-audio", "play-audio-alt" ] },
+	{ mime = "video/*", use = [ "play-video", "play-video-alt" ] },
+
+	# Source code and other plain text files.
+	{ mime = "text/*", use = [ "view-text", "edit-text", "edit-code" ] },
+]

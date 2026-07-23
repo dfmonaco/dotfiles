@@ -206,9 +206,6 @@ alias bkp2='rsync -va --del --modify-window=1 --progress --log-file=/home/diego/
 alias alert_helper='history|tail -n1|sed -e "s/^\s*[0-9]\+\s*//" -e "s/;\s*alert$//"'
 alias alert='notify-send -i /usr/share/icons/gnome/32×32/apps/gnome-terminal.png "[$?] $(alert_helper)"'
 
-# tmux 256 colors
-[ -z "$TMUX" ] && export TERM=xterm-256color
-
 # make .ackrc local for ack-grep
 export ACKRC=".ackrc"
 
